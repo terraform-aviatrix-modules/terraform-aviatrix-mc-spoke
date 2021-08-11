@@ -1,61 +1,7 @@
-# terraform-aviatrix-module-template
-
-This repository provides standardized instructions and conventions for creating Aviatrix modules.
-
-#### Instructions
-1. Create a new repository from this template, by clicking the green "Use this template" button. Make sure to use the [module naming convention](#module-naming-convention)
-2. Clone the repository to your system with ```git clone <repository>```
-5. Edit the repository and commit and update the new repository:
-    - Commit changes: ```git commit -am "Description of changes"```
-    - Push to repository: ```git push origin master```
-6. Update the readme.md file
-    - Remove all content above [the line](#delete-everything-above-and-including-this-line).
-    - Fill out the rest of file based on the provided template.
-7. When ready for release, create a [tag](#tagging).
-
-#### Conventions
-
-###### Repositories
-- For each module, a new reposity shall be created. This is for the purpose of:
-    - Version control per module
-    - Issue handling/feature requests per module
-    - Easier consumption of the module in projects and publication in registers like Terraform Cloud
-
-###### Module Naming convention
-We will use the following convention for naming repositories:
-
-**terraform-aviatrix-\<cloudname or mc for multi-cloud>-\<function>**
-
-Function can be a single word, or more if required to accurately describe the module function. These should be seperated by hyphens. Example:
-
-**terraform-aviatrix-aws-transit-firenet**
-
-###### Resource Naming convention
-```A naming convention for objects created through our modules needs to be decided upon and inserted here.```
-
-###### Tagging
-In order to use modules, it is best practice to tag versions when they are ready for consumption. The format to be used for this is "vx.x.x" e.g. v0.0.1. This can be done on Github by clicking "Create a new release". It is also possible to do this from your system. Make sure you committed your changes to the master branch. After that, create a new tag with ```git tag vx.x.x``` and push the tagged version to the tagged branch with ```git push origin vx.x.x```.
-
-As soon as a module is ready for publishing publicly, the tag release should move up to the first major release. A tag v1.0.0 should be created and the repository can now be altered from a private to a public.
-
-###### Module layout
-The repository contains the default file layout that is recommended to use.
-file | use
-:---|:---
-main.tf | This should contain the resources to be created
-variables.tf | This should contain all expected input variables
-output.tf | This should contain all output objects
-
-Diagram images used in the readme.md should be stored on a publicly available environment. E.g. a public s3 bucket. The reason for that is, when publishing these modules at some point (e.g. Terraform Registry), the image source should always be publicly accessible, even though the repository itself might not be.
-
-
-#### Delete everything above and including this line
-***
-
-# Repository Name
+# terraform-aviatrix-mc-spoke
 
 ### Description
-\<Provide a description of the module>
+Deploys a VPC/VNET/VCN and Aviatrix Spoke gateways. Also possible to use an existing VPC/VNET/VCN.
 
 ### Diagram
 \<Provide a diagram of the high level constructs thet will be created by this module>
@@ -64,19 +10,21 @@ Diagram images used in the readme.md should be stored on a publicly available en
 ### Compatibility
 Module version | Terraform version | Controller version | Terraform provider version
 :--- | :--- | :--- | :---
-v1.0.2 | 0.12 | 6.1 | 0.2.16
-v1.0.1 | | |
-v1.0.0 | | |
+v1.0.0 | 0.13-1.0.1 | >= 6.4 | >= 0.2.19
 
 ### Usage Example
 ```
-module "transit_aws_1" {
-  source  = "terraform-aviatrix-modules/aws-transit/aviatrix"
-  version = "1.0.0"
+module "spoke_aws_1" {
+  source  = "terraform-aviatrix-modules/aws-spoke/aviatrix"
+  version = "4.0.3"
 
-  cidr = "10.1.0.0/20"
-  region = "eu-west-1"
-  aws_account_name = "AWS"
+  cloud           = "AWS"
+  name            = "App1"
+  cidr            = "10.1.0.0/20"
+  region          = "eu-west-1"
+  account         = "AWS"
+  transit_gw      = "avx-eu-west-1-transit"
+  security_domain = "blue"
 }
 ```
 
@@ -85,13 +33,52 @@ The following variables are required:
 
 key | value
 :--- | :---
-\<keyname> | \<description of value that should be provided in this variable>
+cloud | Cloud where this is deployed. Valid values: "AWS", "Azure", "ALI", "OCI", "GCP"
+name | Name for this spoke VPC and it's gateways
+region | AWS region to deploy this VPC in
+cidr | What ip CIDR to use for this VPC (Not required when use_existing_vpc is true)
+account | The account name as known by the Aviatrix controller
+transit_gw | The name of the transit gateway we want to attach this spoke to. Not required when attached is set to false.
 
 The following variables are optional:
 
 key | default | value 
 :---|:---|:---
-\<keyname> | \<default value> | \<description of value that should be provided in this variable>
+instance_size | t3.medium/b2ms | The size of the Aviatrix spoke gateways
+ha_gw | true | Set to false if you only want to deploy a single Aviatrix spoke gateway
+insane_mode | false | Set to true to enable insane mode encryption
+az1 | "a" | concatenates with region to form az names. e.g. eu-central-1a. Used for insane mode only.
+az2 | "b" | concatenates with region to form az names. e.g. eu-central-1b. Used for insane mode only.
+active_mesh | true | Set to false to disable active mesh.
+prefix | true | Boolean to enable prefix name with avx-
+suffix | true | Boolean to enable suffix name with -spoke
+attached | true | Set to false if you don't want to attach spoke to transit_gw.
+attached_gw_egress | true | Set to false if you don't want to attach spoke to transit_gw_egress.
+security_domain | | Provide security domain name to which spoke needs to be deployed. Transit gateway must be attached and have segmentation enabled.
+single_az_ha | true | Set to false if Controller managed Gateway HA is desired
+single_ip_snat | false | Specify whether to enable Source NAT feature in single_ip mode on the gateway or not. Please disable AWS NAT instance before enabling this feature. Currently only supports AWS(1) and AZURE(8)
+customized_spoke_vpc_routes | | A list of comma separated CIDRs to be customized for the spoke VPC routes. When configured, it will replace all learned routes in VPC routing tables, including RFC1918 and non-RFC1918 CIDRs. Example: 10.0.0.0/116,10.2.0.0/16
+filtered_spoke_vpc_routes | | A list of comma separated CIDRs to be filtered from the spoke VPC route table. When configured, filtering CIDR(s) or it’s subnet will be deleted from VPC routing tables as well as from spoke gateway’s routing table. Example: 10.2.0.0/116,10.3.0.0/16
+included_advertised_spoke_routes | | A list of comma separated CIDRs to be advertised to on-prem as Included CIDR List. When configured, it will replace all advertised routes from this VPC. Example: 10.4.0.0/116,10.5.0.0/16
+vpc_subnet_pairs | 2 | Number of Public/Private subnet pairs created in the VPC.
+vpc_subnet_size | 28 | Size of the Public/Private subnets in the VPC.
+enable_encrypt_volume | false | Set to true to enable EBS volume encryption for Gateway.
+customer_managed_keys | null | Customer managed key ID for EBS Volume encryption.
+private_vpc_default_route | false | Program default route in VPC private route table.
+skip_public_route_table_update | false | Skip programming VPC public route table.
+auto_advertise_s2c_cidrs | false | Auto Advertise Spoke Site2Cloud CIDRs.
+tunnel_detection_time | null | The IPsec tunnel down detection time for the Spoke Gateway in seconds. Must be a number in the range [20-600]. Default is 60.
+tags | null | Map of tags to assign to the gateway.
+use_existing_vpc | false | Set to true to use an existing VPC in stead of having this module create one.
+vpc_id | | VPC ID, for using an existing VPC.
+gw_subnet | | Subnet CIDR, for using an existing VPC. Required when use_existing_vpc is enabled. Make sure this is a public subnet.
+hagw_subnet | | Subnet CIDR, for using an existing VPC. Required when use_existing_vpc is enabled and ha_gw is true. Make sure this is a public subnet.
+china | false | Set to true when deploying this module in AWS China
+transit_gw_egress | | Add secondary transit to attach spoke to (e.g. for dual transit firenet). When segmentation is used, transit_gw MUST be used for east/west transit.
+transit_gw_route_tables | [] | A list of route tables to propagate routes to for transit_gw attachment.
+transit_gw_egress_route_tables | [] | A list of route tables to propagate routes to for transit_gw_egress attachment.
+inspection | false | Set to true to enable east/west Firenet inspection. Only valid when transit_gw is East/West transit Firenet
+gov | false | Set to true when deploying this module in AWS GOV
 
 ### Outputs
 This module will return the following outputs:
