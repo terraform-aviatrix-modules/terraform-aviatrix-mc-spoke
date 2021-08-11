@@ -352,7 +352,7 @@ locals {
     aws   = 2,
   }
 
-  subnet_size  = var.subnet_size != 0 ? var.subnet_size : lookup(local.subnet_size_map, local.cloud, null)
+  subnet_size = var.subnet_size != 0 ? var.subnet_size : lookup(local.subnet_size_map, local.cloud, null)
   subnet_size_map = {
     azure = 28,
     aws   = 28,
