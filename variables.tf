@@ -160,13 +160,13 @@ variable "included_advertised_spoke_routes" {
   default     = ""
 }
 
-variable "vpc_subnet_pairs" {
+variable "subnet_pairs" {
   description = "Number of subnet pairs created in the VPC"
   type        = number
   default     = 0
 }
 
-variable "vpc_subnet_size" {
+variable "subnet_size" {
   description = "Size of each subnet cidr block in bits"
   type        = number
   default     = 0
