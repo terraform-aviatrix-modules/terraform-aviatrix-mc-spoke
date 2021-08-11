@@ -319,7 +319,7 @@ locals {
     aws = "${var.region}${var.az2}"
   }
 
-  cloud_type = var.china ? lookup(local.cloud_type_map_china_map, local.cloud, null) : (var.gov ? lookup(local.cloud_type_map_gov, local.cloud, null) : lookup(local.cloud_type_map, local.cloud, null))
+  cloud_type = var.china ? lookup(local.cloud_type_map_china, local.cloud, null) : (var.gov ? lookup(local.cloud_type_map_gov, local.cloud, null) : lookup(local.cloud_type_map, local.cloud, null))
   cloud_type_map = {
     azure = 8,
     aws   = 1,
