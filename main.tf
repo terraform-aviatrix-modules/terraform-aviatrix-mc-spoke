@@ -3,7 +3,7 @@ resource "aviatrix_vpc" "default" {
   count                = var.use_existing_vpc ? 0 : 1
   cloud_type           = local.cloud_type
   region               = local.cloud == "gcp" ? null : var.region
-  cidr                 = var.cidr
+  cidr                 = local.cloud == "gcp" ? null : var.cidr
   account_name         = var.account
   name                 = local.name
   aviatrix_transit_vpc = false
