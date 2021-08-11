@@ -12,11 +12,14 @@ resource "aviatrix_vpc" "default" {
   subnet_size          = local.subnet_size
   resource_group       = var.resource_group
 
-  subnets {
-    name   = local.name
-    cidr   = var.cidr
-    region = var.region
-  }
+  dynamic "subnets" {
+    for_each = local.cloud == "gcp" ? ["dummy"] : []
+    content {
+      name   = local.name
+      cidr   = var.cidr
+      region = var.region
+    }
+  }  
 
   dynamic "subnets" {
     for_each = length(var.ha_region) > 0 ? ["dummy"] : []
@@ -25,7 +28,7 @@ resource "aviatrix_vpc" "default" {
       cidr   = var.ha_cidr
       region = var.ha_region
     }
-  }  
+  }
 }
 
 #Spoke GW
