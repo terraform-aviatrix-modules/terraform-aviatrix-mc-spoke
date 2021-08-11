@@ -38,7 +38,7 @@ resource "aviatrix_spoke_gateway" "default" {
   enable_skip_public_route_table_update = var.skip_public_route_table_update
   enable_auto_advertise_s2c_cidrs       = var.auto_advertise_s2c_cidrs
   tunnel_detection_time                 = var.tunnel_detection_time
-  tags                                  = local.tags
+  tags                                  = var.tags
 }
 
 resource "aviatrix_spoke_transit_attachment" "default" {
