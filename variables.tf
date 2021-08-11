@@ -30,8 +30,20 @@ variable "region" {
   type        = string
 }
 
+variable "ha_region" {
+  description = "Secondary GCP region where subnet and HA Aviatrix Spoke Gateway will be created"
+  type        = string
+  default     = ""
+}
+
 variable "cidr" {
   description = "The CIDR range to be used for the VPC"
+  type        = string
+  default     = ""
+}
+
+variable "ha_cidr" {
+  description = "CIDR of the HA GCP subnet"
   type        = string
   default     = ""
 }
@@ -238,12 +250,6 @@ variable "hagw_subnet" {
   default     = ""
 }
 
-variable "ha_region" {
-  description = "Secondary GCP region where subnet and HA Aviatrix Spoke Gateway will be created"
-  type        = string
-  default     = ""
-}
-
 variable "china" {
   description = "Set to true if deploying this module in AWS/Azure China."
   type        = bool
@@ -254,6 +260,12 @@ variable "gov" {
   description = "Set to true if deploying this module in AWS GOV."
   type        = bool
   default     = false
+}
+
+variable "resource_group" {
+  description = "Provide the name of an existing resource group."
+  type        = string
+  default     = null
 }
 
 variable "inspection" {
@@ -300,23 +312,23 @@ locals {
     ali   = aviatrix_vpc.default[0].public_subnets[0].cidr,
   }
 
-  ha_subnet = var.use_existing_vpc ? var.hagw_subnet : (var.insane_mode ? local.ha_insane_mode_subnet : lookup(local.ha_subnet_map, local.cloud, null))
+  ha_subnet = var.use_existing_vpc ? (contains(["azure", "oci"], local.cloud) ? var.gw_subnet : var.hagw_subnet) : (var.insane_mode ? local.ha_insane_mode_subnet : lookup(local.ha_subnet_map, local.cloud, null))
   ha_subnet_map = {
     azure = aviatrix_vpc.default[0].public_subnets[0].cidr,
     aws   = aviatrix_vpc.default[0].public_subnets[1].cidr,
     gcp   = length(var.ha_region) > 0 ? aviatrix_vpc.default[0].public_subnets[1].cidr : aviatrix_vpc.default[0].public_subnets[0].cidr
     oci   = aviatrix_vpc.default[0].public_subnets[0].cidr,
-    ali   = aviatrix_vpc.default[0].public_subnets[0].cidr,
+    ali   = aviatrix_vpc.default[0].public_subnets[1].cidr,
   }
 
   insane_mode_az = var.insane_mode ? lookup(local.ha_subnet_map, local.cloud, null) : null
   insane_mode_az_map = {
-    aws = "${var.region}${var.az1}"
+    aws = "${var.region}${var.az1}",
   }
 
   ha_insane_mode_az = var.insane_mode ? lookup(local.ha_subnet_map, local.cloud, null) : null
   ha_insane_mode_az_map = {
-    aws = "${var.region}${var.az2}"
+    aws = "${var.region}${var.az2}",
   }
 
   cloud_type = var.china ? lookup(local.cloud_type_map_china, local.cloud, null) : (var.gov ? lookup(local.cloud_type_map_gov, local.cloud, null) : lookup(local.cloud_type_map, local.cloud, null))

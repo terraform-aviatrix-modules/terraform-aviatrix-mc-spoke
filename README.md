@@ -44,11 +44,11 @@ The following variables are optional:
 
 key | default | value 
 :---|:---|:---
-instance_size | t3.medium/b2ms | The size of the Aviatrix spoke gateways
+instance_size | t3.medium/Standard_B1ms | The size of the Aviatrix spoke gateways
 ha_gw | true | Set to false if you only want to deploy a single Aviatrix spoke gateway
 insane_mode | false | Set to true to enable insane mode encryption
-az1 | "a" | concatenates with region to form az names. e.g. eu-central-1a. Used for insane mode only.
-az2 | "b" | concatenates with region to form az names. e.g. eu-central-1b. Used for insane mode only.
+az1 | "a"/b/az-1 | concatenates with region to form az names. e.g. eu-central-1a. Used for insane mode only.
+az2 | "b"/c/az-2 | concatenates with region to form az names. e.g. eu-central-1b. Used for insane mode only.
 active_mesh | true | Set to false to disable active mesh.
 prefix | true | Boolean to enable prefix name with avx-
 suffix | true | Boolean to enable suffix name with -spoke
@@ -79,10 +79,14 @@ transit_gw_route_tables | [] | A list of route tables to propagate routes to for
 transit_gw_egress_route_tables | [] | A list of route tables to propagate routes to for transit_gw_egress attachment.
 inspection | false | Set to true to enable east/west Firenet inspection. Only valid when transit_gw is East/West transit Firenet
 gov | false | Set to true when deploying this module in AWS GOV
+az_support | true | Set to false if the Azure region does not support Availability Zones.
+ha_region | "" | GCP region for multi region HA. HA is multi-az single region by default, but will become multi region when this is set.
+ha_cidr | "" | The IP CIDR to be used to create ha_region spoke subnet. Only required when ha_region is set. GCP only.
 
 ### Outputs
 This module will return the following outputs:
 
 key | description
 :---|:---
-\<keyname> | \<description of object that will be returned in this output>
+vpc | The created VPC/VNET/VCN as an object with all of it's attributes (when use_existing_vnet is false). This was created using the aviatrix_vpc resource.
+spoke_gateway | The created Aviatrix spoke gateway as an object with all of it's attributes.
