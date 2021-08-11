@@ -303,22 +303,22 @@ locals {
     gcp   = "c",
   }
 
-  subnet = var.use_existing_vpc ? var.gw_subnet : (var.insane_mode ? local.insane_mode_subnet : lookup(local.subnet_map, local.cloud, null))
+  subnet = var.use_existing_vpc ? var.gw_subnet : (var.insane_mode ? local.insane_mode_subnet : aviatrix_vpc.default[0].public_subnets[lookup(local.subnet_map, local.cloud, null)].cidr)
   subnet_map = {
-    azure = aviatrix_vpc.default[0].public_subnets[0].cidr,
-    aws   = aviatrix_vpc.default[0].public_subnets[0].cidr,
-    gcp   = aviatrix_vpc.default[0].public_subnets[0].cidr,
-    oci   = aviatrix_vpc.default[0].public_subnets[0].cidr,
-    ali   = aviatrix_vpc.default[0].public_subnets[0].cidr,
+    azure = 0,
+    aws   = 0,
+    gcp   = 0,
+    oci   = 0,
+    ali   = 0,
   }
 
-  ha_subnet = var.use_existing_vpc ? (contains(["azure", "oci"], local.cloud) ? var.gw_subnet : var.hagw_subnet) : (var.insane_mode ? local.ha_insane_mode_subnet : lookup(local.ha_subnet_map, local.cloud, null))
+  ha_subnet = var.use_existing_vpc ? (contains(["azure", "oci"], local.cloud) ? var.gw_subnet : var.hagw_subnet) : (var.insane_mode ? local.ha_insane_mode_subnet : aviatrix_vpc.default[0].public_subnets[lookup(local.ha_subnet_map, local.cloud, null)])
   ha_subnet_map = {
-    azure = aviatrix_vpc.default[0].public_subnets[0].cidr,
-    aws   = aviatrix_vpc.default[0].public_subnets[1].cidr,
-    gcp   = length(var.ha_region) > 0 ? aviatrix_vpc.default[0].public_subnets[1].cidr : aviatrix_vpc.default[0].public_subnets[0].cidr
-    oci   = aviatrix_vpc.default[0].public_subnets[0].cidr,
-    ali   = aviatrix_vpc.default[0].public_subnets[1].cidr,
+    azure = 0,
+    aws   = 1,
+    gcp   = length(var.ha_region) > 0 ? 1 : 0
+    oci   = 0,
+    ali   = 1,
   }
 
   insane_mode_az = var.insane_mode ? lookup(local.ha_subnet_map, local.cloud, null) : null
