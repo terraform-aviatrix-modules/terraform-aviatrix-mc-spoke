@@ -2,7 +2,7 @@
 resource "aviatrix_vpc" "default" {
   count                = var.use_existing_vpc ? 0 : 1
   cloud_type           = local.cloud_type
-  region               = var.region
+  region               = local.cloud == "gcp" ? null : var.region
   cidr                 = var.cidr
   account_name         = var.account
   name                 = local.name
@@ -19,7 +19,7 @@ resource "aviatrix_vpc" "default" {
       cidr   = var.cidr
       region = var.region
     }
-  }  
+  }
 
   dynamic "subnets" {
     for_each = length(var.ha_region) > 0 ? ["dummy"] : []
