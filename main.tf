@@ -1,6 +1,6 @@
 # Aviatrix Spoke VPC
 resource "aviatrix_vpc" "default" {
-  count                = var.use_existing_vpc ? 0 : (local.cloud == "gcp" ? 0 : 1)
+  count                = var.use_existing_vpc ? 0 : 1
   cloud_type           = local.cloud_type
   region               = var.region
   cidr                 = var.cidr
@@ -11,17 +11,6 @@ resource "aviatrix_vpc" "default" {
   num_of_subnet_pairs  = local.subnet_pairs
   subnet_size          = local.subnet_size
   resource_group       = var.resource_group
-}
-
-resource "aviatrix_vpc" "gcp" {
-  count                = local.cloud == "gcp" ? 1 : 0
-  cloud_type           = local.cloud_type
-  region               = var.region
-  cidr                 = var.cidr
-  account_name         = var.account
-  name                 = local.name
-  aviatrix_transit_vpc = false
-  aviatrix_firenet_vpc = false
 
   subnets {
     name   = local.name
@@ -36,7 +25,7 @@ resource "aviatrix_vpc" "gcp" {
       cidr   = var.ha_cidr
       region = var.ha_region
     }
-  }
+  }  
 }
 
 #Spoke GW
@@ -46,7 +35,7 @@ resource "aviatrix_spoke_gateway" "default" {
   vpc_reg                               = var.region
   gw_name                               = local.name
   gw_size                               = local.instance_size
-  vpc_id                                = var.use_existing_vpc ? var.vpc_id : (local.cloud == "gcp" ? aviatrix_vpc.gcp[0].vpc_id : aviatrix_vpc.default[0].vpc_id)
+  vpc_id                                = var.use_existing_vpc ? var.vpc_id : aviatrix_vpc.default[0].vpc_id
   account_name                          = var.account
   subnet                                = local.subnet
   ha_subnet                             = var.ha_gw ? local.ha_subnet : null

@@ -305,20 +305,20 @@ locals {
 
   subnet = var.use_existing_vpc ? var.gw_subnet : (var.insane_mode ? local.insane_mode_subnet : lookup(local.subnet_map, local.cloud, null))
   subnet_map = {
-    azure = local.cloud == "gcp" ? "" : aviatrix_vpc.default[0].public_subnets[0].cidr,
-    aws   = local.cloud == "gcp" ? "" : aviatrix_vpc.default[0].public_subnets[0].cidr,
-    gcp   = local.cloud == "gcp" ? aviatrix_vpc.gcp[0].public_subnets[0].cidr : ""
-    oci   = local.cloud == "gcp" ? "" : aviatrix_vpc.default[0].public_subnets[0].cidr,
-    ali   = local.cloud == "gcp" ? "" : aviatrix_vpc.default[0].public_subnets[0].cidr,
+    azure = aviatrix_vpc.default[0].public_subnets[0].cidr,
+    aws   = aviatrix_vpc.default[0].public_subnets[0].cidr,
+    gcp   = aviatrix_vpc.default[0].public_subnets[0].cidr,
+    oci   = aviatrix_vpc.default[0].public_subnets[0].cidr,
+    ali   = aviatrix_vpc.default[0].public_subnets[0].cidr,
   }
 
   ha_subnet = var.use_existing_vpc ? (contains(["azure", "oci"], local.cloud) ? var.gw_subnet : var.hagw_subnet) : (var.insane_mode ? local.ha_insane_mode_subnet : lookup(local.ha_subnet_map, local.cloud, null))
   ha_subnet_map = {
-    azure = local.cloud == "gcp" ? "" : aviatrix_vpc.default[0].public_subnets[0].cidr,
-    aws   = local.cloud == "gcp" ? "" : aviatrix_vpc.default[0].public_subnets[1].cidr,
-    gcp   = local.cloud == "gcp" ? (length(var.ha_region) > 0 ? aviatrix_vpc.gcp[0].public_subnets[1].cidr : aviatrix_vpc.gcp[0].public_subnets[0].cidr) : ""
-    oci   = local.cloud == "gcp" ? "" : aviatrix_vpc.default[0].public_subnets[0].cidr,
-    ali   = local.cloud == "gcp" ? "" : aviatrix_vpc.default[0].public_subnets[1].cidr,
+    azure = aviatrix_vpc.default[0].public_subnets[0].cidr,
+    aws   = aviatrix_vpc.default[0].public_subnets[1].cidr,
+    gcp   = length(var.ha_region) > 0 ? aviatrix_vpc.default[0].public_subnets[1].cidr : aviatrix_vpc.default[0].public_subnets[0].cidr
+    oci   = aviatrix_vpc.default[0].public_subnets[0].cidr,
+    ali   = aviatrix_vpc.default[0].public_subnets[1].cidr,
   }
 
   insane_mode_az = var.insane_mode ? lookup(local.ha_subnet_map, local.cloud, null) : null
