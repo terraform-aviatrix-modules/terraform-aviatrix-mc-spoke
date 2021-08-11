@@ -8,8 +8,8 @@ resource "aviatrix_vpc" "default" {
   name                 = local.name
   aviatrix_transit_vpc = false
   aviatrix_firenet_vpc = false
-  num_of_subnet_pairs  = local.vpc_subnet_pairs
-  subnet_size          = local.vpc_subnet_size
+  num_of_subnet_pairs  = local.subnet_pairs
+  subnet_size          = local.subnet_size
 }
 #Spoke GW
 resource "aviatrix_spoke_gateway" "default" {
