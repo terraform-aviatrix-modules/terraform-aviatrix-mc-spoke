@@ -60,10 +60,10 @@ resource "aviatrix_spoke_gateway" "default" {
   enable_auto_advertise_s2c_cidrs       = var.auto_advertise_s2c_cidrs
   tunnel_detection_time                 = var.tunnel_detection_time
   tags                                  = var.tags
-  availability_domain                   = local.cloud == "oci" ? aviatrix_vpc.default.availability_domains[0] : null
-  fault_domain                          = local.cloud == "oci" ? aviatrix_vpc.default.fault_domains[0] : null
-  ha_availability_domain                = var.ha_gw ? (local.cloud == "oci" ? aviatrix_vpc.default.availability_domains[1] : null) : null
-  ha_fault_domain                       = var.ha_gw ? (local.cloud == "oci" ? aviatrix_vpc.default.fault_domains[1] : null) : null
+  availability_domain                   = local.cloud == "oci" ? aviatrix_vpc.default[0].availability_domains[0] : null
+  fault_domain                          = local.cloud == "oci" ? aviatrix_vpc.default[0].fault_domains[0] : null
+  ha_availability_domain                = var.ha_gw ? (local.cloud == "oci" ? aviatrix_vpc.default[0].availability_domains[1] : null) : null
+  ha_fault_domain                       = var.ha_gw ? (local.cloud == "oci" ? aviatrix_vpc.default[0].fault_domains[1] : null) : null
 }
 
 resource "aviatrix_spoke_transit_attachment" "default" {
