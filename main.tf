@@ -62,8 +62,8 @@ resource "aviatrix_spoke_gateway" "default" {
   tags                                  = var.tags
   availability_domain                   = local.cloud == "oci" ? aviatrix_vpc.default.availability_domains[0] : null
   fault_domain                          = local.cloud == "oci" ? aviatrix_vpc.default.fault_domains[0] : null
-  ha_availability_domain                = var.ha_gw ? ( local.cloud == "oci" ? aviatrix_vpc.default.availability_domains[1] : null) : null
-  ha_fault_domain                       = var.ha_gw ? ( local.cloud == "oci" ? aviatrix_vpc.default.fault_domains[1] : null) : null
+  ha_availability_domain                = var.ha_gw ? (local.cloud == "oci" ? aviatrix_vpc.default.availability_domains[1] : null) : null
+  ha_fault_domain                       = var.ha_gw ? (local.cloud == "oci" ? aviatrix_vpc.default.fault_domains[1] : null) : null
 }
 
 resource "aviatrix_spoke_transit_attachment" "default" {
