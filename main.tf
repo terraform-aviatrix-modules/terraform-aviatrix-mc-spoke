@@ -35,7 +35,7 @@ resource "aviatrix_vpc" "default" {
 resource "aviatrix_spoke_gateway" "default" {
   enable_active_mesh                    = var.active_mesh
   cloud_type                            = local.cloud_type
-  vpc_reg                               = var.region
+  vpc_reg                               = local.region
   gw_name                               = local.name
   gw_size                               = local.instance_size
   vpc_id                                = var.use_existing_vpc ? var.vpc_id : aviatrix_vpc.default[0].vpc_id
@@ -43,6 +43,7 @@ resource "aviatrix_spoke_gateway" "default" {
   subnet                                = local.subnet
   ha_subnet                             = var.ha_gw ? local.ha_subnet : null
   ha_gw_size                            = var.ha_gw ? local.instance_size : null
+  ha_zone                               = var.ha_gw ? local.ha_zone : null
   insane_mode                           = var.insane_mode
   insane_mode_az                        = local.insane_mode_az
   ha_insane_mode_az                     = var.ha_gw ? local.ha_insane_mode_az : null

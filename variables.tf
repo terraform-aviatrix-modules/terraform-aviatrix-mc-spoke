@@ -321,6 +321,9 @@ locals {
     ali   = 1,
   }
 
+  region  = local.cloud == "gcp" ? "${var.region}-${local.az1}" : var.region
+  ha_zone = local.cloud == "gcp" ? (length(var.ha_region) > 0 ? "${var.ha_region}-${local.az2}" : "${var.region}-${local.az2}") : null
+
   insane_mode_az = var.insane_mode ? lookup(local.ha_subnet_map, local.cloud, null) : null
   insane_mode_az_map = {
     aws = "${var.region}${var.az1}",
