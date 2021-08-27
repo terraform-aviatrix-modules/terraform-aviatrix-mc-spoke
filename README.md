@@ -41,17 +41,17 @@ account | The account name as known by the Aviatrix controller
 transit_gw | The name of the transit gateway we want to attach this spoke to. Not required when attached is set to false.
 
 The following variables are optional:
-
+<br><br><br>
 <table>
     <tr>
-      <td colspan="5" align="center"><b>Supported CSP's</b></td>
-      </tr>
+      <th style="transform: rotate(-90deg);white-space:nowrap;column-width: 10px;">AWS</th>
+      <th style="transform: rotate(-90deg);white-space:nowrap;column-width: 10px;">Azure</th>
+      <th style="transform: rotate(-90deg);white-space:nowrap;column-width: 10px;">GCP</th>
+      <th style="transform: rotate(-90deg);white-space:nowrap;column-width: 10px;">OCI</th>
+      <th style="transform: rotate(-90deg);white-space:nowrap;column-width: 10px;">Alibaba</th>      
+    </tr>
     <tr>
-      <th style="transform: rotate(-90deg);">AWS</th>
-      <th style="transform: rotate(-90deg);">Azure</th>
-      <th style="transform: rotate(-90deg);">GCP</th>
-      <th style="transform: rotate(-90deg);">OCI</th>
-      <th style="transform: rotate(-90deg);">Alibaba</th>    
+      <td colspan="5" align="center"><b>Supported CSP's</b></td>    
       <th>Key</th>
       <th>Default</th>
       <th>Description</th>
