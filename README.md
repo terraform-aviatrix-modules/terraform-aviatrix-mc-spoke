@@ -40,48 +40,247 @@ cidr | What ip CIDR to use for this VPC (Not required when use_existing_vpc is t
 account | The account name as known by the Aviatrix controller
 transit_gw | The name of the transit gateway we want to attach this spoke to. Not required when attached is set to false.
 
-The following variables are optional:
 
-key | default | value 
-:---|:---|:---
-instance_size | t3.medium/Standard_B1ms | The size of the Aviatrix spoke gateways
-ha_gw | true | Set to false if you only want to deploy a single Aviatrix spoke gateway
-insane_mode | false | Set to true to enable insane mode encryption
-az1 | "a"/b/az-1 | concatenates with region to form az names. e.g. eu-central-1a. Used for insane mode only.
-az2 | "b"/c/az-2 | concatenates with region to form az names. e.g. eu-central-1b. Used for insane mode only.
-active_mesh | true | Set to false to disable active mesh.
-prefix | true | Boolean to enable prefix name with avx-
-suffix | true | Boolean to enable suffix name with -spoke
-attached | true | Set to false if you don't want to attach spoke to transit_gw.
-attached_gw_egress | true | Set to false if you don't want to attach spoke to transit_gw_egress.
-security_domain | | Provide security domain name to which spoke needs to be deployed. Transit gateway must be attached and have segmentation enabled.
-single_az_ha | true | Set to false if Controller managed Gateway HA is desired
-single_ip_snat | false | Specify whether to enable Source NAT feature in single_ip mode on the gateway or not. Please disable AWS NAT instance before enabling this feature. Currently only supports AWS(1) and AZURE(8)
-customized_spoke_vpc_routes | | A list of comma separated CIDRs to be customized for the spoke VPC routes. When configured, it will replace all learned routes in VPC routing tables, including RFC1918 and non-RFC1918 CIDRs. Example: 10.0.0.0/116,10.2.0.0/16
-filtered_spoke_vpc_routes | | A list of comma separated CIDRs to be filtered from the spoke VPC route table. When configured, filtering CIDR(s) or it’s subnet will be deleted from VPC routing tables as well as from spoke gateway’s routing table. Example: 10.2.0.0/116,10.3.0.0/16
-included_advertised_spoke_routes | | A list of comma separated CIDRs to be advertised to on-prem as Included CIDR List. When configured, it will replace all advertised routes from this VPC. Example: 10.4.0.0/116,10.5.0.0/16
-subnet_pairs | 2 | Number of Public/Private subnet pairs created in the VPC.
-subnet_size | 28 | Size of the Public/Private subnets in the VPC.
-enable_encrypt_volume | false | Set to true to enable EBS volume encryption for Gateway.
-customer_managed_keys | null | Customer managed key ID for EBS Volume encryption.
-private_vpc_default_route | false | Program default route in VPC private route table.
-skip_public_route_table_update | false | Skip programming VPC public route table.
-auto_advertise_s2c_cidrs | false | Auto Advertise Spoke Site2Cloud CIDRs.
-tunnel_detection_time | null | The IPsec tunnel down detection time for the Spoke Gateway in seconds. Must be a number in the range [20-600]. Default is 60.
-tags | null | Map of tags to assign to the gateway.
-use_existing_vpc | false | Set to true to use an existing VPC in stead of having this module create one.
-vpc_id | | VPC ID, for using an existing VPC.
-gw_subnet | | Subnet CIDR, for using an existing VPC. Required when use_existing_vpc is enabled. Make sure this is a public subnet.
-hagw_subnet | | Subnet CIDR, for using an existing VPC. Required when use_existing_vpc is enabled and ha_gw is true. Make sure this is a public subnet.
-china | false | Set to true when deploying this module in AWS China
-transit_gw_egress | | Add secondary transit to attach spoke to (e.g. for dual transit firenet). When segmentation is used, transit_gw MUST be used for east/west transit.
-transit_gw_route_tables | [] | A list of route tables to propagate routes to for transit_gw attachment.
-transit_gw_egress_route_tables | [] | A list of route tables to propagate routes to for transit_gw_egress attachment.
-inspection | false | Set to true to enable east/west Firenet inspection. Only valid when transit_gw is East/West transit Firenet
-gov | false | Set to true when deploying this module in AWS GOV
-az_support | true | Set to false if the Azure region does not support Availability Zones.
-ha_region | "" | GCP region for multi region HA. HA is multi-az single region by default, but will become multi region when this is set.
-ha_cidr | "" | The IP CIDR to be used to create ha_region spoke subnet. Only required when ha_region is set. GCP only.
+
+<style>
+  .verticalTableHeader {
+    white-space:nowrap;
+    transform: rotate(-90deg);
+    column-width: 10px;
+  }
+  .aws {
+    background-color: #FF9900;
+    color: #000000
+  }  
+  .azure {
+    background-color: #008AD7;
+    color: #FFFFFF
+  }  
+  .gcp {
+    background-color: #33AA33;
+    color: #FFFFFF
+  }  
+  .oci {
+    background-color: #FF0000;
+    color: #FFFFFF
+  }      
+  .alibaba {
+    background-color: #ff6a00;
+    color: #000000
+  }    
+  .unsupported {
+    opacity: 0.2;
+  }     
+</style>
+
+
+The following variables are optional:
+<br><br><br>
+<table>
+    <tr>
+      <th class="aws verticalTableHeader">AWS</th>
+      <th class="azure verticalTableHeader">Azure</th>
+      <th class="gcp verticalTableHeader">GCP</th>
+      <th class="oci verticalTableHeader">OCI</th>
+      <th class="alibaba verticalTableHeader">Alibaba</th>
+    </tr>
+  <tr>
+    <td colspan="5" align="center"><b>Supported CSP's</b></td>
+      <th>Key</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+    <tr><td class="aws"></td><td class="azure"></td><td class="gcp"></td><td class="oci"></td><td class="alibaba"></td>
+      <td>instance_size</td>
+      <td>t3.medium/Standard_B1ms</td>
+      <td>The size of the Aviatrix spoke gateways</td>
+    </tr>
+    <tr><td class="aws"></td><td class="azure"></td><td class="gcp"></td><td class="oci"></td><td class="alibaba"></td>
+      <td>ha_gw</td>
+      <td>true</td>
+      <td>Set to false if you only want to deploy a single Aviatrix spoke gateway</td>
+    </tr>  
+    <tr><td class="aws"></td><td class="azure"></td><td class="gcp"></td><td class="oci"></td><td class="alibaba unsupported"></td>
+      <td>insane_mode</td>
+      <td>false</td>
+      <td>Set to true to enable insane mode encryption</td>
+    </tr>      
+    <tr><td class="aws"></td><td class="azure"></td><td class="gcp"></td><td class="oci unsupported"></td><td class="alibaba unsupported"></td>
+      <td>az1</td>
+      <td>"a"/b/az-1</td>
+      <td>concatenates with region to form az names. e.g. eu-central-1a. Used for insane mode only.</td>
+    </tr>  
+    <tr><td class="aws"></td><td class="azure"></td><td class="gcp"></td><td class="oci unsupported"></td><td class="alibaba unsupported"></td>
+      <td>az2</td>
+      <td>"b"/c/az-2</td>
+      <td>concatenates with region to form az names. e.g. eu-central-1b. Used for insane mode only.</td>
+    </tr>  
+    <tr><td class="aws"></td><td class="azure"></td><td class="gcp"></td><td class="oci"></td><td class="alibaba"></td>
+      <td>active_mesh</td>
+      <td>true</td>
+      <td>Set to false to disable active mesh.</td>
+    </tr>    
+    <tr><td class="aws"></td><td class="azure"></td><td class="gcp"></td><td class="oci"></td><td class="alibaba"></td>
+      <td>prefix</td>
+      <td>true</td>
+      <td>Boolean to enable prefix name with avx-</td>
+    </tr>  
+    <tr><td class="aws"></td><td class="azure"></td><td class="gcp"></td><td class="oci"></td><td class="alibaba"></td>
+      <td>suffix</td>
+      <td>true</td>
+      <td>Boolean to enable suffix name with -spoke</td>
+    </tr>
+    <tr><td class="aws"></td><td class="azure"></td><td class="gcp"></td><td class="oci"></td><td class="alibaba"></td>
+      <td>attached</td>
+      <td>true</td>
+      <td>Set to false if you don't want to attach spoke to transit_gw.</td>
+    </tr>
+    <tr><td class="aws"></td><td class="azure"></td><td class="gcp"></td><td class="oci"></td><td class="alibaba"></td>
+      <td>attached_gw_egress</td>
+      <td>true</td>
+      <td>Set to false if you don't want to attach spoke to transit_gw_egress.</td>
+    </tr>
+    <tr><td class="aws"></td><td class="azure"></td><td class="gcp"></td><td class="oci"></td><td class="alibaba"></td>
+      <td>security_domain</td>
+      <td></td>
+      <td>Provide security domain name to which spoke needs to be deployed. Transit gateway must be attached and have segmentation enabled.</td>
+    </tr>
+    <tr><td class="aws"></td><td class="azure"></td><td class="gcp"></td><td class="oci"></td><td class="alibaba"></td>
+      <td>single_az_ha</td>
+      <td>true</td>
+      <td>Set to false if Controller managed Gateway HA is desired</td>
+    </tr>
+    <tr><td class="aws"></td><td class="azure"></td><td class="gcp"></td><td class="oci"></td><td class="alibaba"></td>
+      <td>single_ip_snat</td>
+      <td>false</td>
+      <td>Specify whether to enable Source NAT feature in single_ip mode on the gateway or not. Please disable AWS NAT instance before enabling this feature. Currently only supports AWS(1) and AZURE(8)</td>
+    </tr>
+    <tr><td class="aws"></td><td class="azure"></td><td class="gcp"></td><td class="oci"></td><td class="alibaba"></td>
+      <td>customized_spoke_vpc_routes</td>
+      <td></td>
+      <td>A list of comma separated CIDRs to be customized for the spoke VPC routes. When configured, it will replace all learned routes in VPC routing tables, including RFC1918 and non-RFC1918 CIDRs. Example: 10.0.0.0/116,10.2.0.0/16</td>
+    </tr>  
+    <tr><td class="aws"></td><td class="azure"></td><td class="gcp"></td><td class="oci"></td><td class="alibaba"></td>
+      <td>filtered_spoke_vpc_routes</td>
+      <td></td>
+      <td>A list of comma separated CIDRs to be filtered from the spoke VPC route table. When configured, filtering CIDR(s) or it’s subnet will be deleted from VPC routing tables as well as from spoke gateway’s routing table. Example: 10.2.0.0/116,10.3.0.0/16</td>
+    </tr>  
+    <tr><td class="aws"></td><td class="azure"></td><td class="gcp"></td><td class="oci"></td><td class="alibaba"></td>
+      <td>included_advertised_spoke_routes</td>
+      <td></td>
+      <td>A list of comma separated CIDRs to be advertised to on-prem as Included CIDR List. When configured, it will replace all advertised routes from this VPC. Example: 10.4.0.0/116,10.5.0.0/16</td>
+    </tr>  
+    <tr><td class="aws"></td><td class="azure"></td><td class="gcp unsupported"></td><td class="oci unsupported"></td><td class="alibaba unsupported"></td>
+      <td>subnet_pairs</td>
+      <td>2</td>
+      <td>Number of Public/Private subnet pairs created in the VPC.</td>
+    </tr>  
+    <tr><td class="aws"></td><td class="azure"></td><td class="gcp unsupported"></td><td class="oci unsupported"></td><td class="alibaba unsupported"></td>
+      <td>subnet_size</td>
+      <td>28</td>
+      <td>Size of the Public/Private subnets in the VPC.</td>
+    </tr>  
+    <tr><td class="aws"></td><td class="azure unsupported"></td><td class="gcp unsupported"></td><td class="oci unsupported"></td><td class="alibaba unsupported"></td>
+      <td>enable_encrypt_volume</td>
+      <td>false</td>
+      <td>Set to true to enable EBS volume encryption for Gateway.</td>
+    </tr>         
+    <tr><td class="aws"></td><td class="azure unsupported"></td><td class="gcp unsupported"></td><td class="oci unsupported"></td><td class="alibaba unsupported"></td>
+      <td>customer_managed_keys</td>
+      <td>null</td>
+      <td>Customer managed key ID for EBS Volume encryption.</td>
+    </tr>         
+    <tr><td class="aws"></td><td class="azure"></td><td class="gcp"></td><td class="oci"></td><td class="alibaba"></td>
+      <td>private_vpc_default_route</td>
+      <td>false</td>
+      <td>Program default route in VPC private route table.</td>
+    </tr>   
+    <tr><td class="aws"></td><td class="azure"></td><td class="gcp"></td><td class="oci"></td><td class="alibaba"></td>
+      <td>skip_public_route_table_update</td>
+      <td>false</td>
+      <td>Skip programming VPC public route table.</td>
+    </tr>   
+    <tr><td class="aws"></td><td class="azure"></td><td class="gcp"></td><td class="oci"></td><td class="alibaba"></td>
+      <td>auto_advertise_s2c_cidrs</td>
+      <td>false</td>
+      <td>Auto Advertise Spoke Site2Cloud CIDRs.</td>
+    </tr>   
+    <tr><td class="aws"></td><td class="azure"></td><td class="gcp"></td><td class="oci"></td><td class="alibaba"></td>
+      <td>tunnel_detection_time</td>
+      <td>null</td>
+      <td>The IPsec tunnel down detection time for the Spoke Gateway in seconds. Must be a number in the range [20-600]. Default is 60.</td>
+    </tr>   
+    <tr><td class="aws"></td><td class="azure"></td><td class="gcp unsupported"></td><td class="oci unsupported"></td><td class="alibaba unsupported"></td>
+      <td>tags</td>
+      <td>null</td>
+      <td>Map of tags to assign to the gateway.</td>
+    </tr>   
+    <tr><td class="aws"></td><td class="azure"></td><td class="gcp"></td><td class="oci"></td><td class="alibaba"></td>
+      <td>use_existing_vpc</td>
+      <td>false</td>
+      <td>Set to true to use an existing VPC in stead of having this module create one.</td>
+    </tr>        
+    <tr><td class="aws"></td><td class="azure"></td><td class="gcp"></td><td class="oci"></td><td class="alibaba"></td>
+      <td>vpc_id</td>
+      <td></td>
+      <td>VPC ID, for using an existing VPC.</td>
+    </tr>  
+    <tr><td class="aws"></td><td class="azure"></td><td class="gcp"></td><td class="oci"></td><td class="alibaba"></td>
+      <td>gw_subnet</td>
+      <td></td>
+      <td>Subnet CIDR, for using an existing VPC. Required when use_existing_vpc is enabled. Make sure this is a public subnet.</td>
+    </tr>  
+    <tr><td class="aws"></td><td class="azure"></td><td class="gcp"></td><td class="oci"></td><td class="alibaba"></td>
+      <td>hagw_subnet</td>
+      <td></td>
+      <td>Subnet CIDR, for using an existing VPC. Required when use_existing_vpc is enabled and ha_gw is true. Make sure this is a public subnet.</td>
+    </tr>  
+    <tr><td class="aws"></td><td class="azure"></td><td class="gcp unsupported"></td><td class="oci unsupported"></td><td class="alibaba unsupported"></td>
+      <td>china</td>
+      <td>false</td>
+      <td>Set to true when deploying this module in mainland China regions</td>
+    </tr>  
+    <tr><td class="aws"></td><td class="azure"></td><td class="gcp"></td><td class="oci"></td><td class="alibaba"></td>
+      <td>transit_gw_egress</td>
+      <td></td>
+      <td>Add secondary transit to attach spoke to (e.g. for dual transit firenet). When segmentation is used, transit_gw MUST be used for east/west transit.</td>
+    </tr>  
+    <tr><td class="aws"></td><td class="azure"></td><td class="gcp"></td><td class="oci"></td><td class="alibaba"></td>
+      <td>transit_gw_route_tables</td>
+      <td>[]</td>
+      <td>A list of route tables to propagate routes to for transit_gw attachment.</td>
+    </tr>  
+    <tr><td class="aws"></td><td class="azure"></td><td class="gcp"></td><td class="oci"></td><td class="alibaba"></td>
+      <td>transit_gw_egress_route_tables</td>
+      <td>[]</td>
+      <td>A list of route tables to propagate routes to for transit_gw_egress attachment.</td>
+    </tr>  
+    <tr><td class="aws"></td><td class="azure"></td><td class="gcp"></td><td class="oci"></td><td class="alibaba"></td>
+      <td>inspection</td>
+      <td>false</td>
+      <td>Set to true to enable east/west Firenet inspection. Only valid when transit_gw is East/West transit Firenet</td>
+    </tr>                                                                                                    
+    <tr><td class="aws"></td><td class="azure unsupported"></td><td class="gcp unsupported"></td><td class="oci unsupported"></td><td class="alibaba unsupported"></td>
+      <td>gov</td>
+      <td>false</td>
+      <td>Set to true when deploying this module in AWS GOV</td>
+    </tr>     
+    <tr><td class="aws unsupported"></td><td class="azure"></td><td class="gcp unsupported"></td><td class="oci unsupported"></td><td class="alibaba unsupported"></td>
+      <td>az_support</td>
+      <td>true</td>
+      <td>Set to false if the region does not support Availability Zones.</td>
+    </tr>     
+    <tr><td class="aws unsupported"></td><td class="azure unsupported"></td><td class="gcp"></td><td class="oci unsupported"></td><td class="alibaba unsupported"></td>
+      <td>ha_region</td>
+      <td></td>
+      <td>Region for multi region HA. HA is multi-az single region by default, but will become multi region when this is set</td>
+    </tr>     
+    <tr><td class="aws unsupported"></td><td class="azure unsupported"></td><td class="gcp"></td><td class="oci unsupported"></td><td class="alibaba unsupported"></td>
+      <td>ha_cidr</td>
+      <td></td>
+      <td>The IP CIDR to be used to create ha_region spoke subnet. Only required when ha_region is set.</td>
+    </tr>     
+</table>
 
 ### Outputs
 This module will return the following outputs:
