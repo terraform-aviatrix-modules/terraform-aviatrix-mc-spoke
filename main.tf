@@ -13,7 +13,7 @@ resource "aviatrix_vpc" "default" {
   resource_group       = var.resource_group
 
   dynamic "subnets" {
-    for_each = local.cloud == "gcp" ? ["dummy"] : []
+    for_each = local.cloud == "gcp" ? ["dummy"] : [] #Trick to make block conditional. Count not available on dynamic blocks.
     content {
       name   = local.name
       cidr   = var.cidr
@@ -22,7 +22,7 @@ resource "aviatrix_vpc" "default" {
   }
 
   dynamic "subnets" {
-    for_each = length(var.ha_region) > 0 ? ["dummy"] : []
+    for_each = length(var.ha_region) > 0 ? ["dummy"] : [] #Trick to make block conditional. Count not available on dynamic blocks.
     content {
       name   = "${local.name}-ha"
       cidr   = var.ha_cidr
