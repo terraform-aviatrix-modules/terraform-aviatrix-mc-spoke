@@ -257,7 +257,7 @@ variable "china" {
 }
 
 variable "gov" {
-  description = "Set to true if deploying this module in AWS GOV."
+  description = "Set to true if deploying this module in AWS/Azure GOV."
   type        = bool
   default     = false
 }
@@ -349,7 +349,8 @@ locals {
   }
 
   cloud_type_map_gov = {
-    aws = 256,
+    azure = 32,
+    aws   = 256,
   }
 
   instance_size = length(var.instance_size) > 0 ? var.instance_size : lookup(local.instance_size_map, local.cloud, null)
