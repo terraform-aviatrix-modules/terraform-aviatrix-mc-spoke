@@ -10,21 +10,37 @@ Deploys a VPC/VNET/VCN and Aviatrix Spoke gateways. Also possible to use an exis
 ### Compatibility
 Module version | Terraform version | Controller version | Terraform provider version
 :--- | :--- | :--- | :---
-v1.0.0 | 0.13-1.0.1 | >= 6.4 | >= 0.2.19
+v1.0.0 | 0.13-1.x | >= 6.4 | >= 0.2.19
 
-### Usage Example
+### Usage Example AWS
 ```
 module "spoke_aws_1" {
-  source  = "terraform-aviatrix-modules/aws-spoke/aviatrix"
-  version = "4.0.3"
+  source  = "terraform-aviatrix-modules/mc-spoke/aviatrix"
+  version = "1.0.0"
 
   cloud           = "AWS"
   name            = "App1"
   cidr            = "10.1.0.0/20"
   region          = "eu-west-1"
-  account         = "AWS"
+  account         = "AWS-Account"
   transit_gw      = "avx-eu-west-1-transit"
   security_domain = "blue"
+}
+```
+
+### Usage Example Azure
+```
+module "spoke_aws_1" {
+  source  = "terraform-aviatrix-modules/mc-spoke/aviatrix"
+  version = "1.0.0"
+
+  cloud           = "Azure"
+  name            = "App1"
+  cidr            = "10.1.0.0/20"
+  region          = "West Europe"
+  account         = "Azure-Account"
+  transit_gw      = "avx-west-europe-transit"
+  security_domain = "gren"
 }
 ```
 
@@ -34,9 +50,9 @@ The following variables are required:
 key | value
 :--- | :---
 cloud | Cloud where this is deployed. Valid values: "AWS", "Azure", "ALI", "OCI", "GCP"
-name | Name for this spoke VPC and it's gateways
-region | AWS region to deploy this VPC in
-cidr | What ip CIDR to use for this VPC (Not required when use_existing_vpc is true)
+name | Name for this spoke VPC/VNET/VCN and it's gateways
+region | Cloud region to deploy this VPC/VNET/VCN in
+cidr | What ip CIDR to use for this VPC/VNET/VCN (Not required when use_existing_vpc is true)
 account | The account name as known by the Aviatrix controller
 transit_gw | The name of the transit gateway we want to attach this spoke to. Not required when attached is set to false.
 

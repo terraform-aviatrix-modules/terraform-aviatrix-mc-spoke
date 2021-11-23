@@ -69,11 +69,6 @@ variable "insane_mode" {
   description = "Set to true to enable Aviatrix high performance encryption."
   type        = bool
   default     = false
-
-  # validation {
-  #   condition     = !contains(["aws", "azure", "oci", "gcp"], lower(var.cloud)) ? (var.insane_mode ? true : false) : true
-  #   error_message = "Insane mode not supported for ${var.cloud}"
-  # }
 }
 
 variable "az1" {
@@ -175,13 +170,13 @@ variable "included_advertised_spoke_routes" {
 variable "subnet_pairs" {
   description = "Number of subnet pairs created in the VPC"
   type        = number
-  default     = 0
+  default     = null
 }
 
 variable "subnet_size" {
   description = "Size of each subnet cidr block in bits"
   type        = number
-  default     = 0
+  default     = null
 }
 
 variable "enable_encrypt_volume" {
