@@ -12,41 +12,8 @@ Module version | Terraform version | Controller version | Terraform provider ver
 :--- | :--- | :--- | :---
 v1.0.0 | 0.13-1.x | >= 6.4 | >= 0.2.19
 
-### Usage Example AWS
-```
-module "spoke_aws_1" {
-  source  = "terraform-aviatrix-modules/mc-spoke/aviatrix"
-  version = "1.0.0"
-
-  cloud           = "AWS"
-  name            = "App1"
-  cidr            = "10.1.0.0/20"
-  region          = "eu-west-1"
-  account         = "AWS-Account"
-  transit_gw      = "avx-eu-west-1-transit"
-  security_domain = "blue"
-}
-```
-
-### Usage Example Azure - Existing VNET
-```
-module "spoke_aws_1" {
-  source  = "terraform-aviatrix-modules/mc-spoke/aviatrix"
-  version = "1.0.0"
-
-  cloud            = "Azure"
-  name             = "App1"
-  cidr             = "10.1.0.0/20"
-  region           = "West Europe"
-  account          = "Azure-Account"
-  transit_gw       = "avx-west-europe-transit"
-  security_domain  = "green"
-  use_existing_vpc = true
-  vpc_id           = "${data.azurerm_virtual_network.example.name}:${data.azurerm_virtual_network.example.resource_group_name}"
-  gw_subnet        = data.azurerm_subnet.example.id
-  hagw_subnet      = data.azurerm_subnet.example.id #Can be the same subnet, as in Azure subnets stretch AZ's.
-}
-```
+### Usage Examples
+See examples
 
 ### Variables
 The following variables are required:
