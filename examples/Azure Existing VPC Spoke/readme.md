@@ -16,7 +16,7 @@ module "spoke_aws_1" {
   security_domain  = "green"
   use_existing_vpc = true
   vpc_id           = "${data.azurerm_virtual_network.example.name}:${data.azurerm_virtual_network.example.resource_group_name}"
-  gw_subnet        = data.azurerm_subnet.example.id
-  hagw_subnet      = data.azurerm_subnet.example.id #Can be the same subnet, as in Azure subnets stretch AZ's.
+  gw_subnet        = data.azurerm_subnet.example.address_prefixes[0]
+  hagw_subnet      = data.azurerm_subnet.example.address_prefixes[0] #Can be the same subnet, as in Azure subnets stretch AZ's.
 }
 ```
