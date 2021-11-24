@@ -357,13 +357,13 @@ locals {
     ali   = "ecs.g5ne.large",
   }
 
-  subnet_pairs = var.subnet_pairs != 0 ? var.subnet_pairs : lookup(local.subnet_pairs_map, local.cloud, null)
+  subnet_pairs = var.subnet_pairs != null ? var.subnet_pairs : lookup(local.subnet_pairs_map, local.cloud, null)
   subnet_pairs_map = {
     azure = 2,
     aws   = 2,
   }
 
-  subnet_size = var.subnet_size != 0 ? var.subnet_size : lookup(local.subnet_size_map, local.cloud, null)
+  subnet_size = var.subnet_size != null ? var.subnet_size : lookup(local.subnet_size_map, local.cloud, null)
   subnet_size_map = {
     azure = 28,
     aws   = 28,
