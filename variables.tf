@@ -321,12 +321,12 @@ locals {
 
   insane_mode_az = var.insane_mode ? lookup(local.insane_mode_az_map, local.cloud, null) : null
   insane_mode_az_map = {
-    aws = "${var.region}${var.az1}",
+    aws = "${var.region}${local.az1}",
   }
 
   ha_insane_mode_az = var.insane_mode ? lookup(local.ha_insane_mode_az_map, local.cloud, null) : null
   ha_insane_mode_az_map = {
-    aws = "${var.region}${var.az2}",
+    aws = "${var.region}${local.az2}",
   }
 
   cloud_type = var.china ? lookup(local.cloud_type_map_china, local.cloud, null) : (var.gov ? lookup(local.cloud_type_map_gov, local.cloud, null) : lookup(local.cloud_type_map, local.cloud, null))
