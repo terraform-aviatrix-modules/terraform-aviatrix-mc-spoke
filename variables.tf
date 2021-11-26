@@ -316,9 +316,9 @@ locals {
     ali   = 1,
   }
 
-  region  = local.cloud == "gcp" ? "${var.region}-${local.az1}" : var.region
+  region = local.cloud == "gcp" ? "${var.region}-${local.az1}" : var.region
 
-  zone    = local.cloud == "azure" ? local.az1 : null
+  zone = local.cloud == "azure" ? local.az1 : null
 
   ha_zone = lookup(local.ha_zone_map, local.cloud, null)
   ha_zone_map = {
