@@ -317,8 +317,8 @@ locals {
   }
 
   region  = local.cloud == "gcp" ? "${var.region}-${local.az1}" : var.region
-  zone    = local.cloud == "azure" ? (var.az_support ? var.az1 : null) : null
-  ha_zone = local.cloud == "gcp" ? (length(var.ha_region) > 0 ? "${var.ha_region}-${local.az2}" : "${var.region}-${local.az2}") : (local.cloud == "azure" ? (var.az_support ? var.az2 : null) : null)
+  zone    = local.cloud == "azure" ? local.az1 : null
+  ha_zone = local.cloud == "gcp" ? (length(var.ha_region) > 0 ? "${var.ha_region}-${local.az2}" : "${var.region}-${local.az2}") : (local.cloud == "azure" ? local.az2 : null)
 
   insane_mode_az = var.insane_mode ? lookup(local.insane_mode_az_map, local.cloud, null) : null
   insane_mode_az_map = {
