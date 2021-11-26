@@ -41,6 +41,7 @@ resource "aviatrix_spoke_gateway" "default" {
   vpc_id                                = var.use_existing_vpc ? var.vpc_id : (local.cloud == "oci" ? aviatrix_vpc.default[0].name : aviatrix_vpc.default[0].vpc_id)
   account_name                          = var.account
   subnet                                = local.subnet
+  zone                                  = local.zone
   ha_subnet                             = var.ha_gw ? local.ha_subnet : null
   ha_gw_size                            = var.ha_gw ? local.instance_size : null
   ha_zone                               = var.ha_gw ? local.ha_zone : null
