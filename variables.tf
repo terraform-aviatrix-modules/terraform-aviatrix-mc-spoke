@@ -323,17 +323,17 @@ locals {
   ha_zone = lookup(local.ha_zone_map, local.cloud, null)
   ha_zone_map = {
     azure = local.az2,
-    gcp   = length(var.ha_region) > 0 ? "${var.ha_region}-${local.az2}" : "${var.region}-${local.az2}"
+    gcp   = local.cloud == "gcp" ? length(var.ha_region) > 0 ? "${var.ha_region}-${local.az2}" : "${var.region}-${local.az2}" : null
   }
 
   insane_mode_az = var.insane_mode ? lookup(local.insane_mode_az_map, local.cloud, null) : null
   insane_mode_az_map = {
-    aws = "${var.region}${local.az1}",
+    aws = local.cloud == "aws" ? "${var.region}${local.az1}" : null,
   }
 
   ha_insane_mode_az = var.insane_mode ? lookup(local.ha_insane_mode_az_map, local.cloud, null) : null
   ha_insane_mode_az_map = {
-    aws = "${var.region}${local.az2}",
+    aws = local.cloud == "aws" ? "${var.region}${local.az2}" : null,
   }
 
   cloud_type = var.china ? lookup(local.cloud_type_map_china, local.cloud, null) : (var.gov ? lookup(local.cloud_type_map_gov, local.cloud, null) : lookup(local.cloud_type_map, local.cloud, null))
