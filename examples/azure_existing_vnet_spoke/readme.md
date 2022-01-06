@@ -9,7 +9,6 @@ module "spoke_aws_1" {
 
   cloud            = "Azure"
   name             = "App1"
-  cidr             = "10.1.0.0/20"
   region           = "West Europe"
   account          = "Azure-Account"
   transit_gw       = "avx-west-europe-transit"
