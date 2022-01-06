@@ -46,7 +46,7 @@ module "vnet" {
   vnet_location       = var.region
   resource_group_name = azurerm_resource_group.this.name
   address_space       = [var.gw_subnet, var.vnet_cidr] #Use a separate CIDR for gateways, to optimize usable IP space for workloads.
-  subnet_prefixes     = [
+  subnet_prefixes = [
     var.gw_subnet,
     cidrsubnet(var.vnet_cidr, 3, 0),
     cidrsubnet(var.vnet_cidr, 3, 1),
@@ -55,18 +55,18 @@ module "vnet" {
     cidrsubnet(var.vnet_cidr, 3, 4),
     cidrsubnet(var.vnet_cidr, 3, 5),
     cidrsubnet(var.vnet_cidr, 3, 6),
-    cidrsubnet(var.vnet_cidr, 3, 7)    
+    cidrsubnet(var.vnet_cidr, 3, 7)
   ]
-  subnet_names        = [
+  subnet_names = [
     "AviatrixGateway",
     "Internal1",
     "Internal2",
     "Internal3",
-    "Internal4",    
+    "Internal4",
     "External1",
     "External2",
     "External3",
-    "External4",    
+    "External4",
   ]
 
   route_tables_ids = {
@@ -74,11 +74,11 @@ module "vnet" {
     Internal1       = azurerm_route_table.this["internal1"].id
     Internal2       = azurerm_route_table.this["internal2"].id
     Internal3       = azurerm_route_table.this["internal1"].id
-    Internal4       = azurerm_route_table.this["internal2"].id    
+    Internal4       = azurerm_route_table.this["internal2"].id
     External1       = azurerm_route_table.this["public1"].id
     External2       = azurerm_route_table.this["public2"].id
     External3       = azurerm_route_table.this["public1"].id
-    External4       = azurerm_route_table.this["public2"].id    
+    External4       = azurerm_route_table.this["public2"].id
   }
 
   depends_on = [
