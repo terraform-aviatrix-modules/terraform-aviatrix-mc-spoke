@@ -11,18 +11,11 @@ variable "cloud" {
 variable "name" {
   description = "Name for this spoke VPC and it's gateways"
   type        = string
-}
 
-variable "prefix" {
-  description = "Boolean to determine if name will be prepended with avx-"
-  type        = bool
-  default     = true
-}
-
-variable "suffix" {
-  description = "Boolean to determine if name will be appended with -spoke"
-  type        = bool
-  default     = true
+  validation {
+    condition = length(var.name) <= 50
+    error_message = "Name is too long. Max length is 50 characters."
+  }
 }
 
 variable "region" {
@@ -40,12 +33,22 @@ variable "cidr" {
   description = "The CIDR range to be used for the VPC"
   type        = string
   default     = ""
+
+  validation {
+    condition     = var.cidr != "" ? can(cidrnetmask(var.cidr)) : true
+    error_message = "This does not like a valid CIDR."
+  }
 }
 
 variable "ha_cidr" {
   description = "CIDR of the HA GCP subnet"
   type        = string
   default     = ""
+
+  validation {
+    condition     = var.ha_cidr != "" ? can(cidrnetmask(var.ha_cidr)) : true
+    error_message = "This does not like a valid CIDR."
+  }
 }
 
 variable "account" {
@@ -213,6 +216,11 @@ variable "tunnel_detection_time" {
   description = "The IPsec tunnel down detection time for the Spoke Gateway in seconds. Must be a number in the range [20-600]."
   type        = number
   default     = null
+
+  validation {
+    condition = var.tunnel_detection_time != null ? (var.tunnel_detection_time >= 20 && var.tunnel_detection_time <= 600) : true
+    error_message = "Invalid value. Must be in range 20-600."
+  }
 }
 
 variable "tags" {
@@ -237,24 +245,22 @@ variable "gw_subnet" {
   description = "Subnet CIDR, for using an existing VPC. Required when use_existing_vpc is true"
   type        = string
   default     = ""
+
+  validation {
+    condition     = var.gw_subnet != "" ? can(cidrnetmask(var.gw_subnet)) : true
+    error_message = "This does not like a valid CIDR."
+  }  
 }
 
 variable "hagw_subnet" {
   description = "Subnet CIDR, for using an existing VPC. Required when use_existing_vpc is true and ha_gw is true"
   type        = string
   default     = ""
-}
-
-variable "china" {
-  description = "Set to true if deploying this module in AWS/Azure China."
-  type        = bool
-  default     = false
-}
-
-variable "gov" {
-  description = "Set to true if deploying this module in AWS/Azure GOV."
-  type        = bool
-  default     = false
+  
+  validation {
+    condition     = var.hagw_subnet != "" ? can(cidrnetmask(var.hagw_subnet)) : true
+    error_message = "This does not like a valid CIDR."
+  }    
 }
 
 variable "resource_group" {
@@ -270,13 +276,8 @@ variable "inspection" {
 }
 
 locals {
-  cloud = lower(var.cloud)
-
-  prefix     = var.prefix ? "avx-" : ""
-  suffix     = var.suffix ? "-spoke" : ""
-  lower_name = replace(lower(var.name), " ", "-")
-  name       = "${local.prefix}${local.lower_name}${local.suffix}"
-
+  cloud                 = lower(var.cloud)
+  name                  = replace(var.name, " ", "-")                     #Replace spaces with dash
   cidr                  = var.use_existing_vpc ? "10.0.0.0/20" : var.cidr #Set dummy if existing VPC is used.
   cidrbits              = tonumber(split("/", local.cidr)[1])
   newbits               = 26 - local.cidrbits
@@ -336,7 +337,10 @@ locals {
     aws = local.cloud == "aws" ? "${var.region}${local.az2}" : null,
   }
 
-  cloud_type = var.china ? lookup(local.cloud_type_map_china, local.cloud, null) : (var.gov ? lookup(local.cloud_type_map_gov, local.cloud, null) : lookup(local.cloud_type_map, local.cloud, null))
+  is_china = can(regex("^cn-|^China ", var.region))
+  is_gov   = can(regex("^us-gov|^US Gov ", var.region))
+
+  cloud_type = local.is_china ? lookup(local.cloud_type_map_china, local.cloud, null) : (local.is_gov ? lookup(local.cloud_type_map_gov, local.cloud, null) : lookup(local.cloud_type_map, local.cloud, null))
   cloud_type_map = {
     azure = 8,
     aws   = 1,
