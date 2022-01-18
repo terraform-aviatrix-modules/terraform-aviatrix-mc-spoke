@@ -1,8 +1,3 @@
-### Usage Example Azure Existing VPC Spoke
-
-In this example, the module deploys the Aviatrix spoke gateways in an existing VNET.
-
-```
 variable "resource_group_name" {
   default = "App1"
 }
@@ -37,4 +32,3 @@ module "spoke_aws_1" {
   gw_subnet        = data.azurerm_subnet.example.address_prefixes[0]
   hagw_subnet      = data.azurerm_subnet.example.address_prefixes[0] #Can be the same subnet, as in Azure subnets stretch AZ's.
 }
-```
