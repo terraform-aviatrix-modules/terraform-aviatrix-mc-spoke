@@ -4,15 +4,11 @@
 Deploys a VPC/VNET/VCN and Aviatrix Spoke gateways. It is also possible to use an existing VPC/VNET/VCN.
 China and government regions are supported in both AWS and Azure and auto detected based on region name.
 
-### Diagram
-\<Provide a diagram of the high level constructs thet will be created by this module>
-<img src="<IMG URL>"  height="250">
-
 ### Compatibility
 Module version | Terraform version | Controller version | Terraform provider version
 :--- | :--- | :--- | :---
-v1.0.1 | 0.13-1.x | >= 6.4 | >= 0.2.19
-v1.0.0 | 0.13-1.x | >= 6.4 | >= 0.2.19
+v1.0.1 | 0.13-1.x | >= 6.4 | >= 2.19.0
+v1.0.0 | 0.13-1.x | >= 6.4 | >= 2.19.0
 
 ### Usage Examples
 See examples
