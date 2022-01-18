@@ -13,7 +13,7 @@ variable "name" {
   type        = string
 
   validation {
-    condition = length(var.name) <= 50
+    condition     = length(var.name) <= 50
     error_message = "Name is too long. Max length is 50 characters."
   }
 }
@@ -218,7 +218,7 @@ variable "tunnel_detection_time" {
   default     = null
 
   validation {
-    condition = var.tunnel_detection_time != null ? (var.tunnel_detection_time >= 20 && var.tunnel_detection_time <= 600) : true
+    condition     = var.tunnel_detection_time != null ? (var.tunnel_detection_time >= 20 && var.tunnel_detection_time <= 600) : true
     error_message = "Invalid value. Must be in range 20-600."
   }
 }
@@ -249,18 +249,18 @@ variable "gw_subnet" {
   validation {
     condition     = var.gw_subnet != "" ? can(cidrnetmask(var.gw_subnet)) : true
     error_message = "This does not like a valid CIDR."
-  }  
+  }
 }
 
 variable "hagw_subnet" {
   description = "Subnet CIDR, for using an existing VPC. Required when use_existing_vpc is true and ha_gw is true"
   type        = string
   default     = ""
-  
+
   validation {
     condition     = var.hagw_subnet != "" ? can(cidrnetmask(var.hagw_subnet)) : true
     error_message = "This does not like a valid CIDR."
-  }    
+  }
 }
 
 variable "resource_group" {
