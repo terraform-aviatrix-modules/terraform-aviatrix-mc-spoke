@@ -11,6 +11,7 @@ China and government regions are supported in both AWS and Azure and auto detect
 ### Compatibility
 Module version | Terraform version | Controller version | Terraform provider version
 :--- | :--- | :--- | :---
+v1.0.1 | 0.13-1.x | >= 6.4 | >= 0.2.19
 v1.0.0 | 0.13-1.x | >= 6.4 | >= 0.2.19
 
 ### Usage Examples
