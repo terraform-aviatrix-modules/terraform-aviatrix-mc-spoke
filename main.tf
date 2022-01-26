@@ -33,7 +33,6 @@ resource "aviatrix_vpc" "default" {
 
 #Spoke GW
 resource "aviatrix_spoke_gateway" "default" {
-  enable_active_mesh                    = var.active_mesh
   cloud_type                            = local.cloud_type
   vpc_reg                               = local.region
   gw_name                               = local.name

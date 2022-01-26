@@ -116,12 +116,6 @@ variable "transit_gw_egress_route_tables" {
   default     = []
 }
 
-variable "active_mesh" {
-  description = "Set to false to disable active mesh."
-  type        = bool
-  default     = true
-}
-
 variable "attached" {
   description = "Set to false if you don't want to attach spoke to transit_gw."
   type        = bool
