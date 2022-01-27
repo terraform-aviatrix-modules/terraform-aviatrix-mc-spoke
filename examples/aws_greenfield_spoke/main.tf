@@ -1,6 +1,6 @@
 module "spoke_aws_1" {
   source  = "terraform-aviatrix-modules/mc-spoke/aviatrix"
-  version = "1.0.1"
+  version = "1.1.0"
 
   cloud           = "AWS"
   name            = "App1"

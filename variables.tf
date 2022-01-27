@@ -269,6 +269,87 @@ variable "inspection" {
   default     = false
 }
 
+variable "enable_bgp" {
+  description = "Enable BGP for this spoke gateway."
+  type        = bool
+  default     = true
+}
+
+variable "spoke_bgp_manual_advertise_cidrs" {
+  description = "Intended CIDR list to be advertised to external BGP router."
+  type        = string
+  default     = ""
+}
+
+variable "bgp_ecmp" {
+  description = "Enable Equal Cost Multi Path (ECMP) routing"
+  type        = bool
+  default     = false
+}
+
+variable "enable_active_standby" {
+  description = "Enables Active-Standby Mode. Available only with HA enabled."
+  type        = bool
+  default     = false
+}
+
+variable "prepend_as_path" {
+  description = "List of AS numbers to populate BGP AS_PATH field when it advertises to VGW or peer devices."
+  type        = list(number)
+  default     = null
+}
+
+variable "bgp_polling_time" {
+  description = "BGP route polling time. Unit is in seconds."
+  type        = number
+  default     = null
+
+  validation {
+    condition     = var.bgp_polling_time != null ? (var.bgp_polling_time >= 10 && var.bgp_polling_time <= 50) : true
+    error_message = "Invalid value. Must be in range 10-50."
+  }
+}
+
+variable "bgp_hold_time" {
+  description = "BGP hold time. Unit is in seconds."
+  type        = number
+  default     = null
+
+  validation {
+    condition     = var.bgp_hold_time != null ? (var.bgp_hold_time >= 12 && var.bgp_hold_time <= 360) : true
+    error_message = "Invalid value. Must be in range 12-360."
+  }
+}
+
+variable "enable_learned_cidrs_approval" {
+  description = "Switch to enable/disable CIDR approval for BGP Spoke Gateway."
+  type        = bool
+  default     = false
+}
+
+variable "learned_cidrs_approval_mode" {
+  description = "Learned CIDRs approval mode. Either \"gateway\" (approval on a per-gateway basis) or \"connection\" (approval on a per-connection basis)."
+  type        = string
+  default     = null
+
+  validation {
+    condition     = var.learned_cidrs_approval_mode != null ? contains(["connection", "gateway"], lower(var.learned_cidrs_approval_mode)) : true
+    error_message = "Invalid approval mode. Choose connection or gateway."
+  }
+}
+
+variable "approved_learned_cidrs" {
+  description = "A list of approved learned CIDRs."
+  type        = list(string)
+  default     = null
+}
+
+variable "local_as_number" {
+  description = "Changes the Aviatrix Spoke Gateway ASN number before you setup Aviatrix Spoke Gateway connection configurations."
+  type        = number
+  default     = null
+}
+
 locals {
   cloud                 = lower(var.cloud)
   name                  = replace(var.name, " ", "-")                     #Replace spaces with dash

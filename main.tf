@@ -64,6 +64,17 @@ resource "aviatrix_spoke_gateway" "default" {
   fault_domain                          = local.cloud == "oci" ? aviatrix_vpc.default[0].fault_domains[0] : null
   ha_availability_domain                = var.ha_gw ? (local.cloud == "oci" ? aviatrix_vpc.default[0].availability_domains[1] : null) : null
   ha_fault_domain                       = var.ha_gw ? (local.cloud == "oci" ? aviatrix_vpc.default[0].fault_domains[1] : null) : null
+  enable_bgp                            = var.enable_bgp
+  spoke_bgp_manual_advertise_cidrs      = var.spoke_bgp_manual_advertise_cidrs
+  bgp_ecmp                              = var.bgp_ecmp
+  enable_active_standby                 = var.enable_active_standby
+  prepend_as_path                       = var.prepend_as_path
+  bgp_polling_time                      = var.bgp_polling_time
+  bgp_hold_time                         = var.bgp_hold_time
+  enable_learned_cidrs_approval         = var.enable_learned_cidrs_approval
+  learned_cidrs_approval_mode           = var.learned_cidrs_approval_mode
+  approved_learned_cidrs                = var.approved_learned_cidrs
+  local_as_number                       = var.local_as_number
 }
 
 resource "aviatrix_spoke_transit_attachment" "default" {
