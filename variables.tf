@@ -272,13 +272,13 @@ variable "inspection" {
 variable "enable_bgp" {
   description = "Enable BGP for this spoke gateway."
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "spoke_bgp_manual_advertise_cidrs" {
   description = "Intended CIDR list to be advertised to external BGP router."
-  type        = string
-  default     = ""
+  type        = list(string)
+  default     = null
 }
 
 variable "bgp_ecmp" {
