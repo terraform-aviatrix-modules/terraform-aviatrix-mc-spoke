@@ -352,8 +352,8 @@ variable "local_as_number" {
 
 variable "subnet_groups" {
   description = "Map of subnet groups to create for this spoke."
-  type        = map(string)
-  default     = null
+  type        = map(any)
+  default     = {}
 }
 
 locals {
