@@ -380,7 +380,20 @@ locals {
     gcp   = "c",
   }
 
-  subnet = var.use_existing_vpc ? var.gw_subnet : (var.insane_mode && contains(["aws", "azure"], local.cloud) ? local.insane_mode_subnet : (local.cloud == "gcp" ? aviatrix_vpc.default[0].subnets[local.subnet_map[local.cloud]].cidr : aviatrix_vpc.default[0].public_subnets[local.subnet_map[local.cloud]].cidr))
+  subnet = (var.use_existing_vpc ?
+    var.gw_subnet
+    :
+    (var.insane_mode && contains(["aws", "azure"], local.cloud) ?
+      local.insane_mode_subnet
+      :
+      (local.cloud == "gcp" ?
+        aviatrix_vpc.default[0].subnets[local.subnet_map[local.cloud]].cidr
+        :
+        aviatrix_vpc.default[0].public_subnets[local.subnet_map[local.cloud]].cidr
+      )
+    )
+  )
+
   subnet_map = {
     azure = 0,
     aws   = 0,
@@ -389,7 +402,24 @@ locals {
     ali   = 0,
   }
 
-  ha_subnet = var.use_existing_vpc ? (contains(["azure", "oci"], local.cloud) ? var.gw_subnet : var.hagw_subnet) : (var.insane_mode && contains(["aws", "azure"], local.cloud) ? local.ha_insane_mode_subnet : (local.cloud == "gcp" ? aviatrix_vpc.default[0].subnets[local.ha_subnet_map[local.cloud]].cidr : aviatrix_vpc.default[0].public_subnets[local.ha_subnet_map[local.cloud]].cidr))
+  ha_subnet = (var.use_existing_vpc ?
+    (contains(["azure", "oci"], local.cloud) ?
+      var.gw_subnet
+      :
+      var.hagw_subnet
+    )
+    :
+    (var.insane_mode && contains(["aws", "azure"], local.cloud) ?
+      local.ha_insane_mode_subnet
+      :
+      (local.cloud == "gcp" ?
+        aviatrix_vpc.default[0].subnets[local.ha_subnet_map[local.cloud]].cidr
+        :
+        aviatrix_vpc.default[0].public_subnets[local.ha_subnet_map[local.cloud]].cidr
+      )
+    )
+  )
+
   ha_subnet_map = {
     azure = 0,
     aws   = 1,
@@ -405,7 +435,15 @@ locals {
   ha_zone = lookup(local.ha_zone_map, local.cloud, null)
   ha_zone_map = {
     azure = local.az2,
-    gcp   = local.cloud == "gcp" ? length(var.ha_region) > 0 ? "${var.ha_region}-${local.az2}" : "${var.region}-${local.az2}" : null
+    gcp = (local.cloud == "gcp" ?
+      (length(var.ha_region) > 0 ?
+        "${var.ha_region}-${local.az2}"
+        :
+        "${var.region}-${local.az2}"
+      )
+      :
+      null
+    )
   }
 
   insane_mode_az = var.insane_mode ? lookup(local.insane_mode_az_map, local.cloud, null) : null

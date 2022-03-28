@@ -109,7 +109,12 @@ resource "aviatrix_transit_firenet_policy" "default" {
 resource "aviatrix_spoke_gateway_subnet_group" "subnet_groups" {
   for_each = var.subnet_groups
 
-  name     = each.key
-  gw_name  = aviatrix_spoke_gateway.default.gw_name
-  subnets  = each.value
+  name    = each.key
+  gw_name = aviatrix_spoke_gateway.default.gw_name
+  subnets = each.value
+
+  depends_on = [
+    aviatrix_spoke_transit_attachment.default,
+    aviatrix_spoke_transit_attachment.transit_gw_egress,
+  ]
 }
