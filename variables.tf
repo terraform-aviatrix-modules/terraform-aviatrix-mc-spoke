@@ -350,6 +350,12 @@ variable "local_as_number" {
   default     = null
 }
 
+variable "subnet_groups" {
+  description = "Map of subnet groups to create for this spoke."
+  type        = map(string)
+  default     = null
+}
+
 locals {
   cloud                 = lower(var.cloud)
   name                  = replace(var.name, " ", "-")                     #Replace spaces with dash

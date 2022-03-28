@@ -105,3 +105,12 @@ resource "aviatrix_transit_firenet_policy" "default" {
   inspected_resource_name      = "SPOKE:${aviatrix_spoke_gateway.default.gw_name}"
   depends_on                   = [aviatrix_spoke_transit_attachment.default] #Let's make sure this cannot create a race condition
 }
+
+resource "aviatrix_spoke_gateway_subnet_group" "subnet_groups" {
+  for_each = var.subnet_groups
+  content {
+    name    = each.key
+    gw_name = aviatrix_spoke_gateway.default.gw_name
+    subnets = each.value
+  }
+}
