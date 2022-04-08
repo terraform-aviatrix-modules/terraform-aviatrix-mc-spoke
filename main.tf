@@ -79,14 +79,14 @@ resource "aviatrix_spoke_gateway" "default" {
 
 resource "aviatrix_spoke_transit_attachment" "default" {
   count           = var.attached ? 1 : 0
-  spoke_gw_name   = aviatrix_spoke_gateway.default.gw_name
+  spoke_gw_name   = aviatrix_spoke_gateway.default.id
   transit_gw_name = var.transit_gw
   route_tables    = var.transit_gw_route_tables
 }
 
 resource "aviatrix_spoke_transit_attachment" "transit_gw_egress" {
   count           = length(var.transit_gw_egress) > 0 ? (var.attached_gw_egress ? 1 : 0) : 0
-  spoke_gw_name   = aviatrix_spoke_gateway.default.gw_name
+  spoke_gw_name   = aviatrix_spoke_gateway.default.id
   transit_gw_name = var.transit_gw_egress
   route_tables    = var.transit_gw_egress_route_tables
 }
