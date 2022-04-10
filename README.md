@@ -7,15 +7,13 @@ China and government regions are supported in both AWS and Azure and auto detect
 ### Compatibility
 Module version | Terraform version | Controller version | Terraform provider version
 :--- | :--- | :--- | :---
-v1.1.3 | 0.13-1.x | x | x
-v1.1.2 | 0.13-1.x | >= 6.6.5545 | ~> 2.21.2
-v1.1.1 | 0.13-1.x | >= 6.6.5404 | 2.21.1-6.6.ga
-v1.1.0 | 0.13-1.x | >= 6.6 | 2.21.0-6.6.ga
-v1.0.1 | 0.13-1.x | 6.5 - 6.6 | >= 2.19.0
-v1.0.0 | 0.13-1.x | 6.5 - 6.6 | >= 2.19.0
+v1.1.3 | 0.13-1.x | >= 6.6.5545 | ~> 2.21.2
+
+Check [release notes](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-spoke/blob/master/RELEASE_NOTES.md) for more details.
+Check [Compatibility list](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-spoke/blob/master/COMPATIBILITY.md) for older versions.
 
 ### Usage Examples
-See examples
+See [examples](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-spoke/blob/master/examples/)
 
 ### Variables
 The following variables are required:
