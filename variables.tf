@@ -282,8 +282,8 @@ locals {
   cidrbits              = tonumber(split("/", local.cidr)[1])
   newbits               = 26 - local.cidrbits
   netnum                = pow(2, local.newbits)
-  insane_mode_subnet    = cidrsubnet(local.cidr, local.newbits, local.netnum - 2)
-  ha_insane_mode_subnet = cidrsubnet(local.cidr, local.newbits, local.netnum - 1)
+  insane_mode_subnet    = var.insane_mode ? cidrsubnet(local.cidr, local.newbits, local.netnum - 2) : null #Only calculate if insane_mode is true
+  ha_insane_mode_subnet = var.insane_mode ? cidrsubnet(local.cidr, local.newbits, local.netnum - 1) : null #Only calculate if insane_mode is true
 
   az1 = length(var.az1) > 0 ? var.az1 : lookup(local.az1_map, local.cloud, null)
   az1_map = {
