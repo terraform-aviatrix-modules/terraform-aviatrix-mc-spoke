@@ -75,6 +75,7 @@ resource "aviatrix_spoke_gateway" "default" {
   learned_cidrs_approval_mode           = var.learned_cidrs_approval_mode
   approved_learned_cidrs                = var.approved_learned_cidrs
   local_as_number                       = var.local_as_number
+  rx_queue_size                         = var.rx_queue_size
 }
 
 resource "aviatrix_spoke_transit_attachment" "default" {
@@ -91,10 +92,10 @@ resource "aviatrix_spoke_transit_attachment" "transit_gw_egress" {
   route_tables    = var.transit_gw_egress_route_tables
 }
 
-resource "aviatrix_segmentation_security_domain_association" "default" {
-  count                = var.attached ? (length(var.security_domain) > 0 ? 1 : 0) : 0 #Only create resource when attached and security_domain is set.
+resource "aviatrix_segmentation_network_domain_association" "default" {
+  count                = var.attached ? (length(var.network_domain) > 0 ? 1 : 0) : 0 #Only create resource when attached and network_domain is set.
   transit_gateway_name = var.transit_gw
-  security_domain_name = var.security_domain
+  network_domain_name  = var.network_domain
   attachment_name      = aviatrix_spoke_gateway.default.gw_name
   depends_on           = [aviatrix_spoke_transit_attachment.default] #Let's make sure this cannot create a race condition
 }

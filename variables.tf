@@ -128,8 +128,8 @@ variable "attached_gw_egress" {
   default     = true
 }
 
-variable "security_domain" {
-  description = "Provide security domain name to which spoke needs to be deployed. Transit gateway mus tbe attached and have segmentation enabled."
+variable "network_domain" {
+  description = "Provide network domain name to which spoke needs to be deployed. Transit gateway must be attached and have segmentation enabled."
   type        = string
   default     = ""
 }
@@ -354,6 +354,17 @@ variable "subnet_groups" {
   description = "Map of subnet groups to create for this spoke."
   type        = map(any)
   default     = {}
+}
+
+variable "rx_queue_size" {
+  description = "Gateway ethernet interface RX queue size. Once set, can't be deleted or disabled."
+  type        = string
+  default     = null
+
+  validation {
+    condition     = var.rx_queue_size != null ? contains(["1K", "2K", "4K", "8K", "16K"], var.rx_queue_size) : true
+    error_message = "Expected rx_queue_size to be one of [1K 2K 4K 8K 16K]."
+  }
 }
 
 locals {

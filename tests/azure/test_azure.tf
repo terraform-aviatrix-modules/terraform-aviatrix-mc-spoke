@@ -9,6 +9,8 @@ terraform {
   }
 }
 
+provider "aviatrix" {}
+
 module "non_ha" {
   source = "../.."
 

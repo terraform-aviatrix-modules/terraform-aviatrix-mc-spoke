@@ -9,6 +9,8 @@ terraform {
   }
 }
 
+provider "aviatrix" {}
+
 module "ali_non_ha_spoke" {
   source = "../.."
 
