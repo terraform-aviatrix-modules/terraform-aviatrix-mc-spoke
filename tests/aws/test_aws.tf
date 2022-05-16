@@ -23,16 +23,16 @@ module "non_ha" {
   ha_gw    = false
 }
 
-# module "ha" {
-#   source = "../.."
+module "ha" {
+  source = "../.."
 
-#   cloud    = "aws"
-#   name     = "ha"
-#   region   = "eu-central-1"
-#   cidr     = "10.1.102.0/24"
-#   account  = "AWS"
-#   attached = false
-# }
+  cloud    = "aws"
+  name     = "ha"
+  region   = "eu-central-1"
+  cidr     = "10.1.102.0/24"
+  account  = "AWS"
+  attached = false
+}
 
 resource "test_assertions" "cloud_type_non_ha" {
   component = "cloud_type_non_ha"
@@ -44,12 +44,12 @@ resource "test_assertions" "cloud_type_non_ha" {
   }
 }
 
-# resource "test_assertions" "cloud_type_ha" {
-#   component = "cloud_type_ha"
+resource "test_assertions" "cloud_type_ha" {
+  component = "cloud_type_ha"
 
-#   equal "cloud_type_ha" {
-#     description = "Module output is equal to check map."
-#     got         = module.ha.spoke_gateway.cloud_type
-#     want        = 1
-#   }
-# }
+  equal "cloud_type_ha" {
+    description = "Module output is equal to check map."
+    got         = module.ha.spoke_gateway.cloud_type
+    want        = 1
+  }
+}
