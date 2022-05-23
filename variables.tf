@@ -535,10 +535,10 @@ locals {
   }
 
   #Determine OCI Availability domains
-  default_availability_domain    = local.cloud == "oci" ? aviatrix_vpc.default.availability_domains[0] : null
-  default_fault_domain           = local.cloud == "oci" ? aviatrix_vpc.default.fault_domains[0] : null
-  default_ha_availability_domain = var.ha_gw && local.cloud == "oci" ? (try(aviatrix_vpc.default.availability_domains[1], aviatrix_vpc.default.availability_domains[0])) : null
-  default_ha_fault_domain        = var.ha_gw && local.cloud == "oci" ? aviatrix_vpc.default.fault_domains[1] : null
+  default_availability_domain    = var.use_existing_vpc ? null : (local.cloud == "oci" ? aviatrix_vpc.default[0].availability_domains[0] : null)
+  default_fault_domain           = var.use_existing_vpc ? null : (local.cloud == "oci" ? aviatrix_vpc.default[0].fault_domains[0] : null)
+  default_ha_availability_domain = var.use_existing_vpc ? null : (var.ha_gw && local.cloud == "oci" ? (try(aviatrix_vpc.default[0].availability_domains[1], aviatrix_vpc.default[0].availability_domains[0])) : null)
+  default_ha_fault_domain        = var.use_existing_vpc ? null : (var.ha_gw && local.cloud == "oci" ? aviatrix_vpc.default[0].fault_domains[1] : null)
 
   availability_domain    = var.availability_domain != null ? var.availability_domain : local.default_availability_domain
   ha_availability_domain = var.ha_availability_domain != null ? var.ha_availability_domain : local.default_ha_availability_domain
