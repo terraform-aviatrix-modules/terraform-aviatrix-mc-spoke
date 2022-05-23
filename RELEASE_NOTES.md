@@ -1,5 +1,19 @@
 # terraform-aviatrix-mc-spoke release notes
 
+## v1.2.1
+
+### Make OCI availability and fault domains user configurable.
+New variables available for configuration:
+```
+availability_domain
+ha_availability_domain
+fault_domain
+ha_fault_domain
+```
+
+### Fix OCI availability domains selection for single AD regions.
+Previously, the module assumed multiple AD's available in every region. As per this release, it can handle single AD regions as well.
+
 ## v1.2.0
 
 ### Add support for controller version 6.7.1186 and provider version 2.22.0.

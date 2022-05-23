@@ -367,6 +367,30 @@ variable "rx_queue_size" {
   }
 }
 
+variable "availability_domain" {
+  description = "Availability domain in OCI."
+  type        = string
+  default     = null
+}
+
+variable "ha_availability_domain" {
+  description = "Availability domain in OCI for HA GW."
+  type        = string
+  default     = null
+}
+
+variable "fault_domain" {
+  description = "Fault domain in OCI."
+  type        = string
+  default     = null
+}
+
+variable "ha_fault_domain" {
+  description = "Fault domain in OCI for HA GW."
+  type        = string
+  default     = null
+}
+
 locals {
   cloud                 = lower(var.cloud)
   name                  = replace(var.name, " ", "-")                     #Replace spaces with dash
@@ -509,4 +533,15 @@ locals {
     azure = 28,
     aws   = 28,
   }
+
+  #Determine OCI Availability domains
+  default_availability_domain    = local.cloud == "oci" ? aviatrix_vpc.default.availability_domains[0] : null
+  default_fault_domain           = local.cloud == "oci" ? aviatrix_vpc.default.fault_domains[0] : null
+  default_ha_availability_domain = var.ha_gw && local.cloud == "oci" ? (try(aviatrix_vpc.default.availability_domains[1], aviatrix_vpc.default.availability_domains[0])) : null
+  default_ha_fault_domain        = var.ha_gw && local.cloud == "oci" ? aviatrix_vpc.default.fault_domains[1] : null
+
+  availability_domain    = var.availability_domain != null ? var.availability_domain : local.default_availability_domain
+  ha_availability_domain = var.ha_availability_domain != null ? var.ha_availability_domain : local.default_ha_availability_domain
+  fault_domain           = var.fault_domain != null ? var.fault_domain : local.default_fault_domain
+  ha_fault_domain        = var.ha_fault_domain != null ? var.ha_fault_domain : local.default_ha_fault_domain
 }
