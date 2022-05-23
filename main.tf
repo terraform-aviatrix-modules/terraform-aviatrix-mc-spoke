@@ -86,14 +86,14 @@ resource "aviatrix_spoke_transit_attachment" "default" {
 }
 
 resource "aviatrix_spoke_transit_attachment" "transit_gw_egress" {
-  count           = length(var.transit_gw_egress) > 0 ? (var.attached_gw_egress ? 1 : 0) : 0
+  count           = length(var.transit_gw_egress) > 0 && var.attached_gw_egress ? 1 : 0
   spoke_gw_name   = aviatrix_spoke_gateway.default.id
   transit_gw_name = var.transit_gw_egress
   route_tables    = var.transit_gw_egress_route_tables
 }
 
 resource "aviatrix_segmentation_network_domain_association" "default" {
-  count                = var.attached ? (length(var.network_domain) > 0 ? 1 : 0) : 0 #Only create resource when attached and network_domain is set.
+  count                = length(var.network_domain) > 0 && var.attached ? 1 : 0 #Only create resource when attached and network_domain is set.
   transit_gateway_name = var.transit_gw
   network_domain_name  = var.network_domain
   attachment_name      = aviatrix_spoke_gateway.default.gw_name
@@ -101,7 +101,7 @@ resource "aviatrix_segmentation_network_domain_association" "default" {
 }
 
 resource "aviatrix_transit_firenet_policy" "default" {
-  count                        = var.inspection ? (var.attached ? 1 : 0) : 0
+  count                        = var.inspection && var.attached ? 1 : 0
   transit_firenet_gateway_name = var.transit_gw
   inspected_resource_name      = "SPOKE:${aviatrix_spoke_gateway.default.gw_name}"
   depends_on                   = [aviatrix_spoke_transit_attachment.default] #Let's make sure this cannot create a race condition
