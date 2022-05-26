@@ -421,7 +421,7 @@ locals {
   subnet = (var.use_existing_vpc ?
     var.gw_subnet
     :
-    (var.insane_mode && contains(["aws", "azure"], local.cloud) ?
+    (var.insane_mode && contains(["aws", "azure", "oci"], local.cloud) ?
       local.insane_mode_subnet
       :
       (local.cloud == "gcp" ?
@@ -447,7 +447,7 @@ locals {
       var.hagw_subnet
     )
     :
-    (var.insane_mode && contains(["aws", "azure"], local.cloud) ?
+    (var.insane_mode && contains(["aws", "azure", "oci"], local.cloud) ?
       local.ha_insane_mode_subnet
       :
       (local.cloud == "gcp" ?

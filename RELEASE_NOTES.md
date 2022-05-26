@@ -5,6 +5,9 @@
 ### Automatically disable AZ support for Azure Gov and DoD regions
 As availability zones are not supported in the Aviatrix controller for Gov and DoD regions, the module automatically selects az_support = false, for these regions.
 
+### Fix issue where deployment in OCI was failing when insane mode was enabled
+In previous versions, the wrong subnet was selected for deploying the spoke gateway(s).
+
 ## v1.2.1
 
 ### Make OCI availability and fault domains user configurable.
