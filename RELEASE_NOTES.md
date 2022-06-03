@@ -27,8 +27,8 @@ Previously, the module assumed multiple AD's available in every region. As per t
 ### Add support for controller version 6.7.1186 and provider version 2.22.0.
 
 ### Updated security domain resource
-As per this note, in 6.7 and provider version 2.22.0, the aviatrix_segmentation_network_domain_association resource has been renamed to aviatrix_segmentation_network_domain_association.
-Follow the guidance in the note to migrate to this module version. Failure to do so, may result in downtime, as upgrading to this module version will force the existing aviatrix_segmentation_network_domain_association to be removed while the aviatrix_segmentation_network_domain_association may not yet be in place.
+As per this note, in 6.7 and provider version 2.22.0, the aviatrix_segmentation_security_domain_association resource has been renamed to aviatrix_segmentation_network_domain_association.
+Follow the guidance in the note to migrate to this module version. Failure to do so, may result in downtime, as upgrading to this module version will force the existing aviatrix_segmentation_security_domain_association to be removed while the aviatrix_segmentation_network_domain_association may not yet be in place.
 
 ### Add support for rx_queue_size
 This option allows you to increase the receive buffer size. This may be required in scenarios where traffic is particularly bursty.
