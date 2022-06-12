@@ -11,7 +11,7 @@ In previous versions, the wrong subnet was selected for deploying the spoke gate
 ### Automatically truncate VPC/VNET/VCN names at 30 characters
 Controller does not allow for names longer than 30 characters for VPC's, VNET'sand VCN's. As of this version, any names longer than that are automatically truncated.
 
-### Set output aviatrix_transit_gateway to sensitive for terragrunt compatibility.
+### Set output aviatrix_spoke_gateway to sensitive for terragrunt compatibility.
 
 ## v1.2.1
 
