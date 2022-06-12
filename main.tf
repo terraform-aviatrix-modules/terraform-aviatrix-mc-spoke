@@ -5,7 +5,7 @@ resource "aviatrix_vpc" "default" {
   region               = local.cloud == "gcp" ? null : var.region
   cidr                 = local.cloud == "gcp" ? null : var.cidr
   account_name         = var.account
-  name                 = local.name
+  name                 = substr(local.name, 0, 30)
   aviatrix_transit_vpc = false
   aviatrix_firenet_vpc = false
   num_of_subnet_pairs  = local.subnet_pairs
