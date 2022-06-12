@@ -8,6 +8,9 @@ As availability zones are not supported in the Aviatrix controller for Gov and D
 ### Fix issue where deployment in OCI was failing when insane mode was enabled
 In previous versions, the wrong subnet was selected for deploying the spoke gateway(s).
 
+### Automatically truncate VPC/VNET/VCN names at 30 characters
+Controller does not allow for names longer than 30 characters for VPC's, VNET'sand VCN's. As of this version, any names longer than that are automatically truncated.
+
 ## v1.2.1
 
 ### Make OCI availability and fault domains user configurable.
