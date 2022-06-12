@@ -391,6 +391,12 @@ variable "ha_fault_domain" {
   default     = null
 }
 
+variable "enable_preserve_as_path" {
+  description = "Enable preserve as_path when advertising manual summary cidrs on BGP spoke gateway."
+  type        = bool
+  default     = null
+}
+
 locals {
   cloud                 = lower(var.cloud)
   name                  = replace(var.name, " ", "-")                     #Replace spaces with dash

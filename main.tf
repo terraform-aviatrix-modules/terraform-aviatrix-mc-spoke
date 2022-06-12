@@ -76,6 +76,7 @@ resource "aviatrix_spoke_gateway" "default" {
   approved_learned_cidrs                = var.approved_learned_cidrs
   local_as_number                       = var.local_as_number
   rx_queue_size                         = var.rx_queue_size
+  enable_preserve_as_path               = var.enable_preserve_as_path
 }
 
 resource "aviatrix_spoke_transit_attachment" "default" {

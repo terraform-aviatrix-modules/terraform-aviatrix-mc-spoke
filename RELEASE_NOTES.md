@@ -1,5 +1,11 @@
 # terraform-aviatrix-mc-spoke release notes
 
+## v1.2.3
+
+### Add support for provider 2.22.1.
+
+### Add support for new argument enable_preserve_as_path
+
 ## v1.2.2
 
 ### Automatically disable AZ support for Azure Gov and DoD regions
