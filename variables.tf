@@ -18,6 +18,23 @@ variable "name" {
   }
 }
 
+variable "gw_name" {
+  description = "Name for the transit gateway"
+  type        = string
+  default     = ""
+  nullable    = false
+
+  validation {
+    condition     = length(var.gw_name) <= 50
+    error_message = "Name is too long. Max length is 50 characters."
+  }
+
+  validation {
+    condition     = can(regex("^[a-zA-Z0-9-_]*$", var.gw_name))
+    error_message = "Only a-z, A-Z, 0-9 and hyphens and underscores are allowed."
+  }
+}
+
 variable "region" {
   description = "The region to deploy this module in"
   type        = string
@@ -400,6 +417,7 @@ variable "enable_preserve_as_path" {
 locals {
   cloud                 = lower(var.cloud)
   name                  = replace(var.name, " ", "-")                     #Replace spaces with dash
+  gw_name               = coalesce(var.gw_name, local.name)
   cidr                  = var.use_existing_vpc ? "10.0.0.0/20" : var.cidr #Set dummy if existing VPC is used.
   cidrbits              = tonumber(split("/", local.cidr)[1])
   newbits               = 26 - local.cidrbits
