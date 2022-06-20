@@ -35,7 +35,7 @@ resource "aviatrix_vpc" "default" {
 resource "aviatrix_spoke_gateway" "default" {
   cloud_type                            = local.cloud_type
   vpc_reg                               = local.region
-  gw_name                               = local.name
+  gw_name                               = local.gw_name
   gw_size                               = local.instance_size
   vpc_id                                = var.use_existing_vpc ? var.vpc_id : aviatrix_vpc.default[0].vpc_id
   account_name                          = var.account
