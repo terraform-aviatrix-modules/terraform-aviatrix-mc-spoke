@@ -1,5 +1,13 @@
 # terraform-aviatrix-mc-spoke release notes
 
+## v1.2.4
+
+### Add support for explicit spoke gateway name configuration
+By default this module will use the name argument for both VPC/VNET creation as well as spoke gateway. You can now override the gateway name with the gw_name argument.
+
+### Input variables non-nullable
+Most input variables that have a default value, have been set to be non-nullable as of this release. This allows parent or root modules calling this module to set arguments to null without changing the internal behavior of the module. This should cause no impact to existing usage.
+
 ## v1.2.3
 
 ### Add support for provider 2.22.1.

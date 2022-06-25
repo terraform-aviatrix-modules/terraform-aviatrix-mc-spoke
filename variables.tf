@@ -44,12 +44,14 @@ variable "ha_region" {
   description = "Secondary GCP region where subnet and HA Aviatrix Spoke Gateway will be created"
   type        = string
   default     = ""
+  nullable    = false
 }
 
 variable "cidr" {
   description = "The CIDR range to be used for the VPC"
   type        = string
   default     = ""
+  nullable    = false
 
   validation {
     condition     = var.cidr != "" ? can(cidrnetmask(var.cidr)) : true
@@ -61,6 +63,7 @@ variable "ha_cidr" {
   description = "CIDR of the HA GCP subnet"
   type        = string
   default     = ""
+  nullable    = false
 
   validation {
     condition     = var.ha_cidr != "" ? can(cidrnetmask(var.ha_cidr)) : true
@@ -77,108 +80,126 @@ variable "instance_size" {
   description = "Instance size for the Aviatrix gateways"
   type        = string
   default     = ""
+  nullable    = false
 }
 
 variable "ha_gw" {
   description = "Boolean to determine if module will be deployed in HA or single mode"
   type        = bool
   default     = true
+  nullable    = false
 }
 
 variable "insane_mode" {
   description = "Set to true to enable Aviatrix high performance encryption."
   type        = bool
   default     = false
+  nullable    = false
 }
 
 variable "az1" {
   description = "Concatenates with region to form az names. e.g. eu-central-1a. Only used for insane mode"
   type        = string
   default     = ""
+  nullable    = false
 }
 
 variable "az2" {
   description = "Concatenates with region to form az names. e.g. eu-central-1b. Only used for insane mode"
   type        = string
   default     = ""
+  nullable    = false
 }
 
 variable "az_support" {
   description = "Set to true if the Azure region supports AZ's"
   type        = bool
   default     = true
+  nullable    = false
 }
 
 variable "transit_gw" {
   description = "Name of the transit gateway to attach this spoke to"
   type        = string
   default     = ""
+  nullable    = false
 }
 
 variable "transit_gw_egress" {
   description = "Name of the transit gateway to attach this spoke to"
   type        = string
   default     = ""
+  nullable    = false
 }
 
 variable "transit_gw_route_tables" {
   description = "Route tables to propagate routes to for transit_gw attachment"
   type        = list(string)
   default     = []
+  nullable    = false
 }
 
 variable "transit_gw_egress_route_tables" {
   description = "Route tables to propagate routes to for transit_gw_egress attachment"
   type        = list(string)
   default     = []
+  nullable    = false
 }
 
 variable "attached" {
   description = "Set to false if you don't want to attach spoke to transit_gw."
   type        = bool
   default     = true
+  nullable    = false
 }
 
 variable "attached_gw_egress" {
   description = "Set to false if you don't want to attach spoke to transit_gw2."
   type        = bool
   default     = true
+  nullable    = false
 }
 
 variable "network_domain" {
   description = "Provide network domain name to which spoke needs to be deployed. Transit gateway must be attached and have segmentation enabled."
   type        = string
   default     = ""
+  nullable    = false
 }
 
 variable "single_az_ha" {
   description = "Set to true if Controller managed Gateway HA is desired"
   type        = bool
   default     = true
+  nullable    = false
 }
 
 variable "single_ip_snat" {
   description = "Specify whether to enable Source NAT feature in single_ip mode on the gateway or not. Please disable AWS NAT instance before enabling this feature. Currently only supports AWS(1) and AZURE(8). Valid values: true, false."
   type        = bool
   default     = false
+  nullable    = false
 }
 
 variable "customized_spoke_vpc_routes" {
   description = "A list of comma separated CIDRs to be customized for the spoke VPC routes. When configured, it will replace all learned routes in VPC routing tables, including RFC1918 and non-RFC1918 CIDRs. It applies to this spoke gateway only​. Example: 10.0.0.0/116,10.2.0.0/16"
   type        = string
   default     = ""
+  nullable    = false
 }
 
 variable "filtered_spoke_vpc_routes" {
   description = "A list of comma separated CIDRs to be filtered from the spoke VPC route table. When configured, filtering CIDR(s) or it’s subnet will be deleted from VPC routing tables as well as from spoke gateway’s routing table. It applies to this spoke gateway only. Example: 10.2.0.0/116,10.3.0.0/16"
   type        = string
   default     = ""
+  nullable    = false
 }
 
 variable "included_advertised_spoke_routes" {
   description = "A list of comma separated CIDRs to be advertised to on-prem as Included CIDR List. When configured, it will replace all advertised routes from this VPC. Example: 10.4.0.0/116,10.5.0.0/16"
   type        = string
   default     = ""
+  nullable    = false
 }
 
 variable "subnet_pairs" {
@@ -197,6 +218,7 @@ variable "enable_encrypt_volume" {
   description = "Enable EBS volume encryption for Gateway. Only supports AWS and AWSGOV provider. Valid values: true, false. Default value: false"
   type        = bool
   default     = false
+  nullable    = false
 }
 
 variable "customer_managed_keys" {
@@ -209,18 +231,21 @@ variable "private_vpc_default_route" {
   description = "Program default route in VPC private route table."
   type        = bool
   default     = false
+  nullable    = false
 }
 
 variable "skip_public_route_table_update" {
   description = "Skip programming VPC public route table."
   type        = bool
   default     = false
+  nullable    = false
 }
 
 variable "auto_advertise_s2c_cidrs" {
   description = "Auto Advertise Spoke Site2Cloud CIDRs."
   type        = bool
   default     = false
+  nullable    = false
 }
 
 variable "tunnel_detection_time" {
@@ -244,18 +269,21 @@ variable "use_existing_vpc" {
   description = "Set to true to use existing VPC."
   type        = bool
   default     = false
+  nullable    = false
 }
 
 variable "vpc_id" {
   description = "VPC ID, for using an existing VPC."
   type        = string
   default     = ""
+  nullable    = false
 }
 
 variable "gw_subnet" {
   description = "Subnet CIDR, for using an existing VPC. Required when use_existing_vpc is true"
   type        = string
   default     = ""
+  nullable    = false
 
   validation {
     condition     = var.gw_subnet != "" ? can(cidrnetmask(var.gw_subnet)) : true
@@ -267,6 +295,7 @@ variable "hagw_subnet" {
   description = "Subnet CIDR, for using an existing VPC. Required when use_existing_vpc is true and ha_gw is true"
   type        = string
   default     = ""
+  nullable    = false
 
   validation {
     condition     = var.hagw_subnet != "" ? can(cidrnetmask(var.hagw_subnet)) : true
@@ -284,12 +313,14 @@ variable "inspection" {
   description = "Set to true to enable east/west Firenet inspection. Only valid when transit_gw is East/West transit Firenet"
   type        = bool
   default     = false
+  nullable    = false
 }
 
 variable "enable_bgp" {
   description = "Enable BGP for this spoke gateway."
   type        = bool
   default     = false
+  nullable    = false
 }
 
 variable "spoke_bgp_manual_advertise_cidrs" {
@@ -302,12 +333,14 @@ variable "bgp_ecmp" {
   description = "Enable Equal Cost Multi Path (ECMP) routing"
   type        = bool
   default     = false
+  nullable    = false
 }
 
 variable "enable_active_standby" {
   description = "Enables Active-Standby Mode. Available only with HA enabled."
   type        = bool
   default     = false
+  nullable    = false
 }
 
 variable "prepend_as_path" {
@@ -342,6 +375,7 @@ variable "enable_learned_cidrs_approval" {
   description = "Switch to enable/disable CIDR approval for BGP Spoke Gateway."
   type        = bool
   default     = false
+  nullable    = false
 }
 
 variable "learned_cidrs_approval_mode" {
@@ -371,6 +405,7 @@ variable "subnet_groups" {
   description = "Map of subnet groups to create for this spoke."
   type        = map(any)
   default     = {}
+  nullable    = false
 }
 
 variable "rx_queue_size" {
