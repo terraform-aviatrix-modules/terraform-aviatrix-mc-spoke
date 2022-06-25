@@ -416,7 +416,7 @@ variable "enable_preserve_as_path" {
 
 locals {
   cloud                 = lower(var.cloud)
-  name                  = replace(var.name, " ", "-")                     #Replace spaces with dash
+  name                  = replace(var.name, " ", "-") #Replace spaces with dash
   gw_name               = coalesce(var.gw_name, local.name)
   cidr                  = var.use_existing_vpc ? "10.0.0.0/20" : var.cidr #Set dummy if existing VPC is used.
   cidrbits              = tonumber(split("/", local.cidr)[1])
