@@ -97,7 +97,8 @@ module "spoke1_azure" {
   transit_gw       = "avx-west-europe-transit"
   security_domain  = "green"
   use_existing_vpc = true
-  vpc_id           = "${module.vnet.vnet_name}:${azurerm_resource_group.this.name}"
+  vpc_id           = format("%s:%s", module.vnet.vnet_name, azurerm_resource_group.this.name)
   gw_subnet        = var.gw_subnet
   hagw_subnet      = var.gw_subnet #Can be the same subnet, as in Azure subnets stretch AZ's.
 }
+
