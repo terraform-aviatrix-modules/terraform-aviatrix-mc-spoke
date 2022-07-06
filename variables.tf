@@ -19,7 +19,7 @@ variable "name" {
 }
 
 variable "gw_name" {
-  description = "Name for the transit gateway"
+  description = "Name for the spoke gateway"
   type        = string
   default     = ""
   nullable    = false
