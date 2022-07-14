@@ -2,7 +2,7 @@
 
 In this example, the module deploys the Aviatrix spoke gateways in an existing VNET.
 
-```
+```hcl
 variable "resource_group_name" {
   default = "App1"
 }

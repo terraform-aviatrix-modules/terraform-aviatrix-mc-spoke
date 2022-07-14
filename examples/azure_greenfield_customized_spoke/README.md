@@ -2,7 +2,7 @@
 
 In this example, the module deploys the Aviatrix spoke gateways in a new and customized Azure VNET.
 
-```
+```hcl
 variable "region" {
   default = "West Europe"
 }
