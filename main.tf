@@ -77,6 +77,11 @@ resource "aviatrix_spoke_gateway" "default" {
   local_as_number                       = var.local_as_number
   rx_queue_size                         = var.rx_queue_size
   enable_preserve_as_path               = var.enable_preserve_as_path
+
+  #Private mode settings
+  private_mode_lb_vpc_id      = var.private_mode_lb_vpc_id
+  private_mode_subnet_zone    = var.private_mode_subnet_zone
+  ha_private_mode_subnet_zone = var.ha_private_mode_subnet_zone
 }
 
 resource "aviatrix_spoke_transit_attachment" "default" {

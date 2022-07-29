@@ -1,5 +1,11 @@
 # terraform-aviatrix-mc-spoke release notes
 
+## v1.3.0
+
+### Add support for 6.8 and provider version 2.23.0.
+
+### Add support for private mode
+
 ## v1.2.4
 
 ### Add support for explicit spoke gateway name configuration
