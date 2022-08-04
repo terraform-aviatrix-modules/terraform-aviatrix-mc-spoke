@@ -6,6 +6,8 @@
 
 ### Add support for private mode
 
+### Add support for enable_max_performance on transit attachment
+
 ## v1.2.4
 
 ### Add support for explicit spoke gateway name configuration

@@ -467,6 +467,12 @@ variable "ha_private_mode_subnet_zone" {
   default     = null
 }
 
+variable "enable_max_performance" {
+  description = "Indicates whether the maximum amount of HPE tunnels will be created. Only valid when transit and spoke gateways are each launched in Insane Mode and in the same cloud type."
+  type        = bool
+  default     = null
+}
+
 locals {
   cloud                 = lower(var.cloud)
   name                  = replace(var.name, " ", "-") #Replace spaces with dash

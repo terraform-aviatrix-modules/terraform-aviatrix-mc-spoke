@@ -92,10 +92,11 @@ resource "aviatrix_spoke_transit_attachment" "default" {
 }
 
 resource "aviatrix_spoke_transit_attachment" "transit_gw_egress" {
-  count           = length(var.transit_gw_egress) > 0 && var.attached_gw_egress ? 1 : 0
-  spoke_gw_name   = aviatrix_spoke_gateway.default.id
-  transit_gw_name = var.transit_gw_egress
-  route_tables    = var.transit_gw_egress_route_tables
+  count                  = length(var.transit_gw_egress) > 0 && var.attached_gw_egress ? 1 : 0
+  spoke_gw_name          = aviatrix_spoke_gateway.default.id
+  transit_gw_name        = var.transit_gw_egress
+  route_tables           = var.transit_gw_egress_route_tables
+  enable_max_performance = var.enable_max_performance
 }
 
 resource "aviatrix_segmentation_network_domain_association" "default" {
