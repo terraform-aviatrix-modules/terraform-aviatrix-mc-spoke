@@ -5,8 +5,17 @@
 ### Add support for 6.8 and provider version 2.23.0.
 
 ### Add support for private mode
+These arguments were added to support this:
 
-### Add support for enable_max_performance on transit attachment
+private_mode_subnets
+private_mode_lb_vpc_id
+private_mode_subnet_zone
+ha_private_mode_subnet_zone
+
+### Add support for new arguments on transit attachment
+- enable_max_performance
+- spoke_prepend_as_path
+- transit_prepend_as_path
 
 ## v1.2.4
 

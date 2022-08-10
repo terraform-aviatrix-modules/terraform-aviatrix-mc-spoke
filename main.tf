@@ -11,6 +11,7 @@ resource "aviatrix_vpc" "default" {
   num_of_subnet_pairs  = local.subnet_pairs
   subnet_size          = local.subnet_size
   resource_group       = var.resource_group
+  private_mode_subnets = var.private_mode_subnets
 
   dynamic "subnets" {
     for_each = local.cloud == "gcp" ? ["dummy"] : [] #Trick to make block conditional. Count not available on dynamic blocks.
@@ -85,18 +86,22 @@ resource "aviatrix_spoke_gateway" "default" {
 }
 
 resource "aviatrix_spoke_transit_attachment" "default" {
-  count           = var.attached ? 1 : 0
-  spoke_gw_name   = aviatrix_spoke_gateway.default.id
-  transit_gw_name = var.transit_gw
-  route_tables    = var.transit_gw_route_tables
+  count                   = var.attached ? 1 : 0
+  spoke_gw_name           = aviatrix_spoke_gateway.default.id
+  transit_gw_name         = var.transit_gw
+  route_tables            = var.transit_gw_route_tables
+  spoke_prepend_as_path   = var.spoke_prepend_as_path
+  transit_prepend_as_path = var.transit_prepend_as_path
 }
 
 resource "aviatrix_spoke_transit_attachment" "transit_gw_egress" {
-  count                  = length(var.transit_gw_egress) > 0 && var.attached_gw_egress ? 1 : 0
-  spoke_gw_name          = aviatrix_spoke_gateway.default.id
-  transit_gw_name        = var.transit_gw_egress
-  route_tables           = var.transit_gw_egress_route_tables
-  enable_max_performance = var.enable_max_performance
+  count                   = length(var.transit_gw_egress) > 0 && var.attached_gw_egress ? 1 : 0
+  spoke_gw_name           = aviatrix_spoke_gateway.default.id
+  transit_gw_name         = var.transit_gw_egress
+  route_tables            = var.transit_gw_egress_route_tables
+  enable_max_performance  = var.enable_max_performance
+  spoke_prepend_as_path   = var.spoke_prepend_as_path
+  transit_prepend_as_path = var.transit_prepend_as_path
 }
 
 resource "aviatrix_segmentation_network_domain_association" "default" {

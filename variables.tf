@@ -473,6 +473,24 @@ variable "enable_max_performance" {
   default     = null
 }
 
+variable "private_mode_subnets" {
+  description = "Switch to only launch private subnets. Only available when Private Mode is enabled on the Controller."
+  type        = bool
+  default     = null
+}
+
+variable "spoke_prepend_as_path" {
+  description = "Connection based AS Path Prepend."
+  type        = list(string)
+  default     = null
+}
+
+variable "transit_prepend_as_path" {
+  description = "Connection based AS Path Prepend."
+  type        = list(string)
+  default     = null
+}
+
 locals {
   cloud                 = lower(var.cloud)
   name                  = replace(var.name, " ", "-") #Replace spaces with dash
