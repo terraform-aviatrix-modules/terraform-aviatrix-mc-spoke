@@ -7,10 +7,10 @@
 ### Add support for private mode
 These arguments were added to support this:
 
-private_mode_subnets
-private_mode_lb_vpc_id
-private_mode_subnet_zone
-ha_private_mode_subnet_zone
+- private_mode_subnets
+- private_mode_lb_vpc_id
+- private_mode_subnet_zone
+- ha_private_mode_subnet_zone
 
 ### Add support for new arguments on transit attachment
 - enable_max_performance
