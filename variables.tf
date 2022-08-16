@@ -455,18 +455,6 @@ variable "private_mode_lb_vpc_id" {
   default     = null
 }
 
-variable "private_mode_subnet_zone" {
-  description = "Availability Zone of the subnet. Required when Private Mode is enabled on the Controller and cloud_type is AWS or AWSGov."
-  type        = string
-  default     = null
-}
-
-variable "ha_private_mode_subnet_zone" {
-  description = "Availability Zone of the HA subnet. Required when Private Mode is enabled on the Controller and cloud_type is AWS or AWSGov."
-  type        = string
-  default     = null
-}
-
 variable "enable_max_performance" {
   description = "Indicates whether the maximum amount of HPE tunnels will be created. Only valid when transit and spoke gateways are each launched in Insane Mode and in the same cloud type."
   type        = bool
@@ -476,7 +464,8 @@ variable "enable_max_performance" {
 variable "private_mode_subnets" {
   description = "Switch to only launch private subnets. Only available when Private Mode is enabled on the Controller."
   type        = bool
-  default     = null
+  default     = false
+  nullable    = false
 }
 
 variable "spoke_prepend_as_path" {
@@ -499,8 +488,8 @@ locals {
   cidrbits              = tonumber(split("/", local.cidr)[1])
   newbits               = 26 - local.cidrbits
   netnum                = pow(2, local.newbits)
-  insane_mode_subnet    = var.insane_mode ? cidrsubnet(local.cidr, local.newbits, local.netnum - 2) : null #Only calculate if insane_mode is true
-  ha_insane_mode_subnet = var.insane_mode ? cidrsubnet(local.cidr, local.newbits, local.netnum - 1) : null #Only calculate if insane_mode is true
+  insane_mode_subnet    = var.insane_mode || var.private_mode_subnets ? cidrsubnet(local.cidr, local.newbits, local.netnum - 2) : null #Only calculate if insane_mode is true
+  ha_insane_mode_subnet = var.insane_mode || var.private_mode_subnets ? cidrsubnet(local.cidr, local.newbits, local.netnum - 1) : null #Only calculate if insane_mode is true
 
   #Auto disable AZ support for gov and dod regions in Azure
   az_support = local.is_gov ? false : var.az_support
@@ -522,7 +511,7 @@ locals {
   subnet = (var.use_existing_vpc ?
     var.gw_subnet
     :
-    (var.insane_mode && contains(["aws", "azure", "oci"], local.cloud) ?
+    ((var.insane_mode && contains(["aws", "azure", "oci"], local.cloud)) || (var.private_mode_subnets && contains(["aws", "azure"], local.cloud)) ?
       local.insane_mode_subnet
       :
       (local.cloud == "gcp" ?
@@ -548,7 +537,7 @@ locals {
       var.hagw_subnet
     )
     :
-    (var.insane_mode && contains(["aws", "azure", "oci"], local.cloud) ?
+    ((var.insane_mode && contains(["aws", "azure", "oci"], local.cloud)) || (var.private_mode_subnets && contains(["aws", "azure"], local.cloud)) ?
       local.ha_insane_mode_subnet
       :
       (local.cloud == "gcp" ?
