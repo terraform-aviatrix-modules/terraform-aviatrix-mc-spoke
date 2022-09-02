@@ -90,6 +90,7 @@ resource "aviatrix_spoke_transit_attachment" "default" {
   spoke_gw_name           = aviatrix_spoke_gateway.default.id
   transit_gw_name         = var.transit_gw
   route_tables            = var.transit_gw_route_tables
+  enable_max_performance  = var.enable_max_performance
   spoke_prepend_as_path   = var.spoke_prepend_as_path
   transit_prepend_as_path = var.transit_prepend_as_path
 }
