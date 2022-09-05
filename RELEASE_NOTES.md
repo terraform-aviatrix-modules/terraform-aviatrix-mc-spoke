@@ -1,5 +1,9 @@
 # terraform-aviatrix-mc-spoke release notes
 
+## v1.3.1
+
+### Fix an issue with enable_max_performance argument
+
 ## v1.3.0
 
 ### Add support for 6.8 and provider version 2.23.0.

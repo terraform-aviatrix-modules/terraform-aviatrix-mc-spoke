@@ -19,7 +19,7 @@ data "azurerm_subnet" "example" {
 
 module "spoke_aws_1" {
   source  = "terraform-aviatrix-modules/mc-spoke/aviatrix"
-  version = "1.3.0"
+  version = "1.3.1"
 
   cloud            = "Azure"
   name             = "App1"
