@@ -4,6 +4,8 @@
 
 ### Fix an issue with enable_max_performance argument
 
+### Change private mode behavior (better logic and automation)
+
 ## v1.3.0
 
 ### Add support for 6.8 and provider version 2.23.0.
