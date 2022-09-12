@@ -531,7 +531,7 @@ locals {
   }
 
   ha_subnet = (var.use_existing_vpc ?
-    (contains(["azure", "oci"], local.cloud) ?
+    (contains(["azure", "oci"], local.cloud) && var.hagw_subnet == "" ? #If HAGW Subnet is not provided, use gw_subnet. This is acceptable for Azure and OCI, because a subnet can stretch AZ's/Fault domains.
       var.gw_subnet
       :
       var.hagw_subnet
