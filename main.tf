@@ -93,6 +93,12 @@ resource "aviatrix_spoke_transit_attachment" "default" {
   enable_max_performance  = var.enable_max_performance
   spoke_prepend_as_path   = var.spoke_prepend_as_path
   transit_prepend_as_path = var.transit_prepend_as_path
+
+  lifecycle {
+    replace_triggered_by = [
+      aviatrix_spoke_gateway.default.ha_subnet, #Attachment needs to be replaced as well, if HA Subnet changes (due to toggling HA on or off)
+    ]
+  }
 }
 
 resource "aviatrix_spoke_transit_attachment" "transit_gw_egress" {
@@ -103,6 +109,12 @@ resource "aviatrix_spoke_transit_attachment" "transit_gw_egress" {
   enable_max_performance  = var.enable_max_performance
   spoke_prepend_as_path   = var.spoke_prepend_as_path
   transit_prepend_as_path = var.transit_prepend_as_path
+
+  lifecycle {
+    replace_triggered_by = [
+      aviatrix_spoke_gateway.default.ha_subnet, #Attachment needs to be replaced as well, if HA Subnet changes (due to toggling HA on or off)
+    ]
+  }
 }
 
 resource "aviatrix_segmentation_network_domain_association" "default" {
@@ -111,6 +123,12 @@ resource "aviatrix_segmentation_network_domain_association" "default" {
   network_domain_name  = var.network_domain
   attachment_name      = aviatrix_spoke_gateway.default.id
   depends_on           = [aviatrix_spoke_transit_attachment.default] #Let's make sure this cannot create a race condition
+
+  lifecycle {
+    replace_triggered_by = [
+      aviatrix_spoke_transit_attachment.default, #If transit attachment gets recreated, network domain needs to follow along
+    ]
+  }
 }
 
 resource "aviatrix_transit_firenet_policy" "default" {

@@ -6,6 +6,9 @@
 In scenario's where the spoke gateway needs to be recreated (e.g. moving from non-HPE to HPE), the new gateway would not be reattached to the network domain.
 Switching from gw_name to id as reference resolves this.
 
+### [Issue#10](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-spoke/issues/10) - Improve lifecycle handing 
+In certain scenario's spoke attachment and network domain association need to be recreated. This is handled with the replace_triggered_by argument added in Terraform 1.2.0.
+
 ## v1.3.1
 
 ### Fix an issue with enable_max_performance argument
