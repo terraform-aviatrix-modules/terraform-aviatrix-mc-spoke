@@ -1,5 +1,11 @@
 # terraform-aviatrix-mc-spoke release notes
 
+## v1.3.2
+
+### [Issue#8](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-spoke/issues/8) - Fix network segmentation on GW recreation 
+In scenario's where the spoke gateway needs to be recreated (e.g. moving from non-HPE to HPE), the new gateway would not be reattached to the network domain.
+Switching from gw_name to id as reference resolves this.
+
 ## v1.3.1
 
 ### Fix an issue with enable_max_performance argument

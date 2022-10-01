@@ -109,7 +109,7 @@ resource "aviatrix_segmentation_network_domain_association" "default" {
   count                = length(var.network_domain) > 0 && var.attached ? 1 : 0 #Only create resource when attached and network_domain is set.
   transit_gateway_name = var.transit_gw
   network_domain_name  = var.network_domain
-  attachment_name      = aviatrix_spoke_gateway.default.gw_name
+  attachment_name      = aviatrix_spoke_gateway.default.id
   depends_on           = [aviatrix_spoke_transit_attachment.default] #Let's make sure this cannot create a race condition
 }
 
