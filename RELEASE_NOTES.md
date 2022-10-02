@@ -1,5 +1,9 @@
 # terraform-aviatrix-mc-spoke release notes
 
+## 1.4.0
+
+### Controller version 6.9 / Terraform provider version 2.24.x compatibility
+
 ## v1.3.2
 
 ### [Issue#8](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-spoke/issues/8) - Fix network segmentation on GW recreation 
