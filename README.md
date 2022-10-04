@@ -7,7 +7,7 @@ China and government regions are supported in both AWS and Azure and auto detect
 ### Compatibility
 Module version | Terraform version | Controller version | Terraform provider version
 :--- | :--- | :--- | :---
-v1.4.0 | >= 1.1.0 | >= 6.9 | ~> 2.24.0
+v1.4.1 | >= 1.1.0 | >= 6.9 | ~> 2.24.0
 
 Check [release notes](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-spoke/blob/master/RELEASE_NOTES.md) for more details.
 Check [Compatibility list](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-spoke/blob/master/COMPATIBILITY.md) for older versions.

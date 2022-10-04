@@ -1,8 +1,13 @@
 # terraform-aviatrix-mc-spoke release notes
 
-## 1.4.0
+## 1.4.1
 
 ### Controller version 6.9 / Terraform provider version 2.24.x compatibility
+
+## 1.4.0
+
+### ~~Controller version 6.9 / Terraform provider version 2.24.x compatibility~~
+This version was pulled because of a bug
 
 ## v1.3.2
 
