@@ -134,7 +134,7 @@ resource "aviatrix_segmentation_network_domain_association" "default" {
 resource "aviatrix_transit_firenet_policy" "default" {
   count                        = var.inspection && var.attached ? 1 : 0
   transit_firenet_gateway_name = var.transit_gw
-  inspected_resource_name      = "SPOKE:${aviatrix_spoke_gateway.default.gw_name}"
+  inspected_resource_name      = "SPOKE:${aviatrix_spoke_gateway.default.id}"
   depends_on                   = [aviatrix_spoke_transit_attachment.default] #Let's make sure this cannot create a race condition
 }
 
@@ -142,7 +142,7 @@ resource "aviatrix_spoke_gateway_subnet_group" "subnet_groups" {
   for_each = var.subnet_groups
 
   name    = each.key
-  gw_name = aviatrix_spoke_gateway.default.gw_name
+  gw_name = aviatrix_spoke_gateway.default.id
   subnets = each.value
 
   depends_on = [
