@@ -1,5 +1,9 @@
 # terraform-aviatrix-mc-spoke release notes
 
+## 1.4.2
+
+Switch from gw_name to id attribute for resources referring to the spoke gateway. This provides better lifecycle handling.
+
 ## 1.4.1
 
 ### Controller version 6.9 / Terraform provider version 2.24.x compatibility

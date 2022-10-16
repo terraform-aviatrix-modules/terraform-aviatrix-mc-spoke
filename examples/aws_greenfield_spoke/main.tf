@@ -1,6 +1,6 @@
 module "spoke_aws_1" {
   source  = "terraform-aviatrix-modules/mc-spoke/aviatrix"
-  version = "1.4.1"
+  version = "1.4.2"
 
   cloud           = "AWS"
   name            = "App1"
@@ -8,5 +8,5 @@ module "spoke_aws_1" {
   region          = "eu-west-1"
   account         = "AWS-Account"
   transit_gw      = "avx-eu-west-1-transit"
-  security_domain = "blue"
+  network_domain = "blue"
 }

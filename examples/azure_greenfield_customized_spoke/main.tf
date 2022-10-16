@@ -88,14 +88,14 @@ module "vnet" {
 
 module "spoke1_azure" {
   source  = "terraform-aviatrix-modules/mc-spoke/aviatrix"
-  version = "1.4.1"
+  version = "1.4.2"
 
   cloud            = "Azure"
   name             = var.name
   region           = var.region
   account          = "Azure"
   transit_gw       = "avx-west-europe-transit"
-  security_domain  = "green"
+  network_domain  = "green"
   use_existing_vpc = true
   vpc_id           = format("%s:%s", module.vnet.vnet_name, azurerm_resource_group.this.name)
   gw_subnet        = var.gw_subnet

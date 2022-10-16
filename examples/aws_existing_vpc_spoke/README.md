@@ -5,14 +5,14 @@ In this example, the module deploys the Aviatrix spoke gateways in an existing V
 ```hcl
 module "spoke_aws_1" {
   source  = "terraform-aviatrix-modules/mc-spoke/aviatrix"
-  version = "1.4.1"
+  version = "1.4.2"
 
   cloud            = "AWS"
   name             = "App1"
   region           = "eu-west-1"
   account          = "AWS-Account"
   transit_gw       = "avx-eu-west-1-transit"
-  security_domain  = "blue"
+  network_domain  = "blue"
   use_existing_vpc = true
   vpc_id           = data.aws_vpc.example.vpc_id
   gw_subnet        = data.aws_subnet.example_gw.cidr_block
