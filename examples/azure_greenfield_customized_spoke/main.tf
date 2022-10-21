@@ -95,7 +95,7 @@ module "spoke1_azure" {
   region           = var.region
   account          = "Azure"
   transit_gw       = "avx-west-europe-transit"
-  network_domain  = "green"
+  network_domain   = "green"
   use_existing_vpc = true
   vpc_id           = format("%s:%s", module.vnet.vnet_name, azurerm_resource_group.this.name)
   gw_subnet        = var.gw_subnet

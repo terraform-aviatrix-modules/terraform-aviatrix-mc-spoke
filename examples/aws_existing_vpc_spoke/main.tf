@@ -20,7 +20,7 @@ module "spoke_aws_1" {
   region           = "eu-west-1"
   account          = "AWS-Account"
   transit_gw       = "avx-eu-west-1-transit"
-  network_domain  = "blue"
+  network_domain   = "blue"
   use_existing_vpc = true
   vpc_id           = data.aws_vpc.example.vpc_id
   gw_subnet        = data.aws_subnet.example_gw.cidr_block

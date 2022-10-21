@@ -26,7 +26,7 @@ module "spoke_aws_1" {
   region           = "West Europe"
   account          = "Azure-Account"
   transit_gw       = "avx-west-europe-transit"
-  network_domain  = "green"
+  network_domain   = "green"
   use_existing_vpc = true
   vpc_id           = format("%s:%s", data.azurerm_virtual_network.example.name, data.azurerm_virtual_network.example.resource_group_name)
   gw_subnet        = data.azurerm_subnet.example.address_prefixes[0]
