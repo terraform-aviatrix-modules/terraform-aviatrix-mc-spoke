@@ -480,6 +480,12 @@ variable "transit_prepend_as_path" {
   default     = null
 }
 
+variable "enable_monitor_gateway_subnets" {
+  description = "Enables Monitor Gateway Subnet feature in AWS"
+  type        = bool
+  default     = false
+}
+
 locals {
   cloud                 = lower(var.cloud)
   name                  = replace(var.name, " ", "-") #Replace spaces with dash

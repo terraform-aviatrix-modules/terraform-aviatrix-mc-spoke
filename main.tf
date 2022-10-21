@@ -78,6 +78,7 @@ resource "aviatrix_spoke_gateway" "default" {
   local_as_number                       = var.local_as_number
   rx_queue_size                         = var.rx_queue_size
   enable_preserve_as_path               = var.enable_preserve_as_path
+  enable_monitor_gateway_subnets        = var.enable_monitor_gateway_subnets
 
   #Private mode settings
   private_mode_lb_vpc_id      = var.private_mode_lb_vpc_id

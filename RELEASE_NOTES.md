@@ -2,7 +2,9 @@
 
 ## 1.4.2
 
-Switch from gw_name to id attribute for resources referring to the spoke gateway. This provides better lifecycle handling.
+### Switch from gw_name to id attribute for resources referring to the spoke gateway. This provides better lifecycle handling.
+
+### Add support for gateway subnet monitoring in AWS
 
 ## 1.4.1
 
