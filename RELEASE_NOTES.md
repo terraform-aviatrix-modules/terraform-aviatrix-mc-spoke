@@ -1,5 +1,10 @@
 # terraform-aviatrix-mc-spoke release notes
 
+## 1.5.0
+
+### Add support for Controller version 7.0 and Terraform provider 3.0.0.
+This release is purely providing compatibility with these versions. New features that are part of the 7.0.0/3.0.0 release will be part of subsequent releases.
+
 ## 1.4.2
 
 ### Switch from gw_name to id attribute for resources referring to the spoke gateway. This provides better lifecycle handling.
