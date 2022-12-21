@@ -42,12 +42,8 @@ resource "aviatrix_spoke_gateway" "default" {
   account_name                          = var.account
   subnet                                = local.subnet
   zone                                  = local.zone
-  ha_subnet                             = var.ha_gw ? local.ha_subnet : null
-  ha_gw_size                            = var.ha_gw ? local.instance_size : null
-  ha_zone                               = var.ha_gw ? local.ha_zone : null
   insane_mode                           = var.insane_mode
   insane_mode_az                        = local.insane_mode_az
-  ha_insane_mode_az                     = var.ha_gw ? local.ha_insane_mode_az : null
   single_az_ha                          = var.single_az_ha
   single_ip_snat                        = var.single_ip_snat
   customized_spoke_vpc_routes           = var.customized_spoke_vpc_routes
@@ -62,8 +58,6 @@ resource "aviatrix_spoke_gateway" "default" {
   tags                                  = var.tags
   availability_domain                   = local.availability_domain
   fault_domain                          = local.fault_domain
-  ha_availability_domain                = local.ha_availability_domain
-  ha_fault_domain                       = local.ha_fault_domain
   enable_bgp                            = var.enable_bgp
   spoke_bgp_manual_advertise_cidrs      = var.spoke_bgp_manual_advertise_cidrs
   bgp_ecmp                              = var.bgp_ecmp
@@ -79,10 +73,50 @@ resource "aviatrix_spoke_gateway" "default" {
   enable_preserve_as_path               = var.enable_preserve_as_path
   enable_monitor_gateway_subnets        = var.enable_monitor_gateway_subnets
 
+  #HA Settings - only apply when ha_gw is enabled and group mode is disabled (legacy behavior)
+  ha_subnet              = local.ha_gw ? local.ha_subnet : null
+  ha_gw_size             = local.ha_gw ? local.instance_size : null
+  ha_zone                = local.ha_gw ? local.ha_zone : null
+  ha_availability_domain = local.ha_gw ? local.ha_availability_domain : null
+  ha_fault_domain        = local.ha_gw ? local.ha_fault_domain : null
+  ha_insane_mode_az      = local.ha_gw ? local.ha_insane_mode_az : null
+  manage_ha_gateway      = local.manage_ha_gateway
+
   #Private mode settings
   private_mode_lb_vpc_id      = var.private_mode_lb_vpc_id
   private_mode_subnet_zone    = var.private_mode_subnets && local.cloud == "aws" ? format("%s%s", var.region, local.az1) : null
-  ha_private_mode_subnet_zone = var.private_mode_subnets && local.cloud == "aws" && var.ha_gw ? format("%s%s", var.region, local.az2) : null
+  ha_private_mode_subnet_zone = var.private_mode_subnets && local.cloud == "aws" && local.ha_gw ? format("%s%s", var.region, local.az2) : null
+}
+
+resource "aviatrix_spoke_ha_gateway" "hagw" {
+  count = var.group_mode && var.spoke_gw_amount > 1 ? 1 : 0
+
+  primary_gw_name     = aviatrix_spoke_gateway.default.id
+  gw_name             = format("%s-hagw", local.gw_name)
+  gw_size             = local.instance_size
+  subnet              = local.ha_subnet
+  zone                = local.ha_zone
+  availability_domain = local.ha_availability_domain
+  fault_domain        = local.ha_fault_domain
+  insane_mode         = var.insane_mode
+  insane_mode_az      = local.ha_insane_mode_az
+  #eip                 = null #Future
+}
+
+#Additional gateways will be balanced across subnets/az's/zones etc. Only in case of insane mode a list of additional subnets is expected.
+resource "aviatrix_spoke_ha_gateway" "additional" {
+  count = var.group_mode ? max(var.spoke_gw_amount - 2, 0) : 0
+
+  primary_gw_name     = aviatrix_spoke_gateway.default.id
+  gw_name             = format("%s-%s", local.gw_name, count.index + 3)
+  gw_size             = local.instance_size
+  subnet              = var.insane_mode ? var.insane_mode_subnets[count.index] : [local.subnet, local.ha_subnet][count.index % 2]
+  zone                = [local.zone, local.ha_zone][count.index % 2]
+  availability_domain = [local.availability_domain, local.ha_availability_domain][count.index % 2]
+  fault_domain        = [local.fault_domain, local.ha_fault_domain][count.index % 2]
+  insane_mode         = var.insane_mode
+  insane_mode_az      = [local.insane_mode_az, local.ha_insane_mode_az][count.index % 2]
+  #eip                 = null #Future
 }
 
 resource "aviatrix_spoke_transit_attachment" "default" {

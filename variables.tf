@@ -486,6 +486,30 @@ variable "enable_monitor_gateway_subnets" {
   default     = false
 }
 
+variable "group_mode" {
+  description = "Toggle to true if you are looking to use the new horizontal spoke gateway scaling."
+  type        = bool
+  default     = false
+}
+
+variable "spoke_gw_amount" {
+  description = "The amount of spoke gateways to be created. group_mode needs to be true."
+  type        = number
+  default     = 2
+}
+
+variable "manage_ha_gateway" {
+  description = "Determines if the aviatrix_spoke_gateway resource manages the HA gateway."
+  type        = bool
+  default     = true
+}
+
+variable "group_mode_insane_mode_subnets" {
+  description = "A list of subnets for insane mode spokes, when deploying more than 2 spoke gateways (group_mode). Should contain subnets for gateway 3-n."
+  type        = list(string)
+  default     = []
+}
+
 locals {
   cloud                 = lower(var.cloud)
   name                  = replace(var.name, " ", "-") #Replace spaces with dash
@@ -496,6 +520,8 @@ locals {
   netnum                = pow(2, local.newbits)
   insane_mode_subnet    = var.insane_mode || var.private_mode_subnets ? cidrsubnet(local.cidr, local.newbits, local.netnum - 2) : null #Only calculate if insane_mode is true
   ha_insane_mode_subnet = var.insane_mode || var.private_mode_subnets ? cidrsubnet(local.cidr, local.newbits, local.netnum - 1) : null #Only calculate if insane_mode is true
+  ha_gw                 = var.group_mode ? false : var.ha_gw
+  manage_ha_gateway     = var.group_mode ? false : var.manage_ha_gateway
 
   #Auto disable AZ support for gov and dod regions in Azure
   az_support = local.is_gov ? false : var.az_support
