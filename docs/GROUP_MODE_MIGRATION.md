@@ -15,6 +15,7 @@ Moving from legacy HA to group mode is very simple. Follow the steps below:
 Once you have migrated from a legacy to group based HA, you can expand the amount of spoke gateways using the `spoke_gateway_amount` argument. This defaults to 2, creating 1+1 gateways. By increasing this number to the desired total number of gateways in the spoke, it will add instances of the `aviatrix_spoke_ha_gateway` resource.
 
 ## Limitations
-- For backward compatibility (in order to import), the second gateway will always be appended with -hagw. Any additional gateways will simple get a number (3 and up) to identify it.
+- For backward compatibility (in order to be able to import), the second gateway will always be appended with -hagw. Any additional gateways will simple get a number (3 and up) to identify it.
 - Any additional gateways deployed will be distributed over the same AZ's/zones as the first 2 gateways. This module currently does not support a 3 or more AZ distribution.
 - When using insane_mode, /26 subnets for the gateways 3-n need to be supplied as an additional list using the `group_mode_insane_mode_subnets` argument.
+- Deploying additional gateways has to be done one by one. Increasing the `spoke_gateway_amount` by more than one will result in an error. Either increase one by one or apply multiple times.
