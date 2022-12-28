@@ -504,7 +504,7 @@ variable "manage_ha_gateway" {
   default     = true
 }
 
-variable "group_mode_insane_mode_subnets" {
+variable "insane_mode_subnets" {
   description = "A list of subnets for insane mode spokes, when deploying more than 2 spoke gateways (group_mode). Should contain subnets for gateway 3-n."
   type        = list(string)
   default     = []
