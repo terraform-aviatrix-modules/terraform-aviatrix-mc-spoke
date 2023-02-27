@@ -49,6 +49,7 @@ module "vnet" {
   source              = "Azure/vnet/azurerm"
   vnet_name           = var.name
   vnet_location       = var.region
+  use_for_each        = true
   resource_group_name = azurerm_resource_group.this.name
   address_space       = [var.gw_subnet, var.vnet_cidr] #Use a separate CIDR for gateways, to optimize usable IP space for workloads.
   subnet_prefixes = [
