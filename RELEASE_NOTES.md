@@ -1,5 +1,9 @@
 # terraform-aviatrix-mc-spoke release notes
 
+## 1.5.1
+
+### Add outputs for all ha gateways
+
 ## 1.5.0
 
 ### Add support for Controller version 7.0 and Terraform provider 3.0.0.
