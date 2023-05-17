@@ -73,6 +73,9 @@ resource "aviatrix_spoke_gateway" "default" {
   enable_preserve_as_path               = var.enable_preserve_as_path
   enable_monitor_gateway_subnets        = var.enable_monitor_gateway_subnets
 
+  #Global VPC for GCP
+  enable_global_vpc = var.enable_global_vpc && local.cloud == "gcp" ? true : false
+
   #HA Settings - only apply when ha_gw is enabled and group mode is disabled (legacy behavior)
   ha_subnet              = local.ha_gw ? local.ha_subnet : null
   ha_gw_size             = local.ha_gw ? local.instance_size : null

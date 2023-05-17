@@ -510,6 +510,12 @@ variable "insane_mode_subnets" {
   default     = []
 }
 
+variable "enable_global_vpc" {
+  description = "Enable global VPC. Only supported for GCP spoke gateways."
+  type = bool
+  default = false
+}
+
 locals {
   cloud                 = lower(var.cloud)
   name                  = replace(var.name, " ", "-") #Replace spaces with dash
