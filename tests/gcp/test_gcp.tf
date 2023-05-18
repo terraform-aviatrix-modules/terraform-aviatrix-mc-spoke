@@ -26,12 +26,13 @@ module "non_ha" {
 module "ha" {
   source = "../.."
 
-  cloud    = "gcp"
-  name     = "ha"
-  region   = "us-east1"
-  cidr     = "10.1.102.0/24"
-  account  = "GCP"
-  attached = false
+  cloud             = "gcp"
+  name              = "ha"
+  region            = "us-east1"
+  cidr              = "10.1.102.0/24"
+  account           = "GCP"
+  attached          = false
+  enable_global_vpc = true
 }
 
 resource "test_assertions" "cloud_type_non_ha" {

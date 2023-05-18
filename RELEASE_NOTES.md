@@ -1,5 +1,9 @@
 # terraform-aviatrix-mc-spoke release notes
 
+## 1.5.2
+
+Enable Global VPC support in GCP Spoke Gateways.
+
 ## 1.5.1
 
 ### Add outputs for all ha gateways
