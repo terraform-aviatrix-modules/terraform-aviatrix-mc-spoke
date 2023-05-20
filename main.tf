@@ -124,8 +124,8 @@ resource "aviatrix_spoke_ha_gateway" "additional" {
   fault_domain                  = [local.fault_domain, local.ha_fault_domain][count.index % 2]
   insane_mode                   = var.insane_mode
   insane_mode_az                = local.group_mode_az_list[(count.index + 2) % local.group_mode_az_list_length]
-  eip                           = var.allocate_new_eip ? var.additional_group_mode_eips[count.index] : null
-  azure_eip_name_resource_group = var.allocate_new_eip && local.cloud == "azure" ? var.additional_group_mode_azure_eip_name_resource_groups[count.index] : null
+  eip                           = var.allocate_new_eip != null ? var.additional_group_mode_eips[count.index] : null
+  azure_eip_name_resource_group = var.allocate_new_eip != null && local.cloud == "azure" ? var.additional_group_mode_azure_eip_name_resource_groups[count.index] : null
 
   depends_on = [
     aviatrix_spoke_ha_gateway.hagw

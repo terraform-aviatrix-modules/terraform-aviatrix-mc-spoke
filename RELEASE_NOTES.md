@@ -18,7 +18,7 @@ New supported arguments for this feature:
 For beter readability, the locals are no longer part of variables.tf and can now be found in locals.tf.
 
 ### Implemented support for group mode
-This feature allows for more than 2 spoke gateways to be deployed in a spoke. For details on migrating from traditional to group mode, check this [doc](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-spoke/blob/master/docs/GROUP_MODE_MIGRATION/md).
+This feature allows for more than 2 spoke gateways to be deployed in a spoke. For details on migrating from traditional to group mode, check this [doc](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-spoke/blob/master/docs/GROUP_MODE_MIGRATION.md).
 
 New supported arguments for this feature:
 * additional_group_mode_subnets

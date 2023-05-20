@@ -519,7 +519,7 @@ variable "additional_group_mode_azs" {
 variable "allocate_new_eip" {
   description = "When value is false, reuse an idle address in Elastic IP pool for this gateway. Otherwise, allocate a new Elastic IP and use it for this gateway."
   type        = bool
-  default     = false
+  default     = null
 }
 
 variable "eip" {
