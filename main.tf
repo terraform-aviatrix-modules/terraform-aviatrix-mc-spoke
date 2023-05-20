@@ -23,7 +23,7 @@ resource "aviatrix_vpc" "default" {
   }
 
   dynamic "subnets" {
-    for_each = length(var.ha_region) > 0 ? ["dummy"] : [] #Trick to make block conditional. Count not available on dynamic blocks.
+    for_each = local.cloud == "gcp" && length(var.ha_region) > 0 ? ["dummy"] : [] #Trick to make block conditional. Count not available on dynamic blocks.
     content {
       name   = "${local.name}-ha"
       cidr   = var.ha_cidr
@@ -110,13 +110,17 @@ resource "aviatrix_spoke_ha_gateway" "additional" {
   primary_gw_name     = aviatrix_spoke_gateway.default.id
   gw_name             = format("%s-%s", local.gw_name, count.index + 3)
   gw_size             = local.instance_size
-  subnet              = var.insane_mode ? var.insane_mode_subnets[count.index] : [local.subnet, local.ha_subnet][count.index % 2]
+  subnet              = var.insane_mode || var.use_existing_vpc ? var.additional_group_mode_subnets[count.index] : local.group_mode_subnet_list[((count.index + 2) % local.group_mode_subnet_list_length)]
   zone                = [local.zone, local.ha_zone][count.index % 2]
   availability_domain = [local.availability_domain, local.ha_availability_domain][count.index % 2]
   fault_domain        = [local.fault_domain, local.ha_fault_domain][count.index % 2]
   insane_mode         = var.insane_mode
-  insane_mode_az      = [local.insane_mode_az, local.ha_insane_mode_az][count.index % 2]
+  insane_mode_az      = local.group_mode_az_list[(count.index + 2) % local.group_mode_az_list_length]
   #eip                 = null #Future
+
+  depends_on = [
+    aviatrix_spoke_ha_gateway.hagw
+  ]
 }
 
 resource "aviatrix_spoke_transit_attachment" "default" {

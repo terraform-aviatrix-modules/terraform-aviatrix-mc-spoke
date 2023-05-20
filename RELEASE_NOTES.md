@@ -4,6 +4,20 @@
 
 ### Add outputs for all ha gateways
 
+### Broken out locals to separate file
+For beter readability, the locals are no longer part of variables.tf and can now be found in locals.tf.
+
+### Implemented support for group mode
+This feature allows for more than 2 spoke gateways to be deployed in a spoke. For details on migrating from traditional to group mode, check this [doc](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-spoke/blob/master/docs/GROUP_MODE_MIGRATION/md).
+
+New supported arguments for this feeature:
+* additional_group_mode_subnets
+* additional_group_mode_azs
+* group_mode
+* spoke_gw_amount
+* manage_ha_gateway
+
+
 ## 1.5.0
 
 ### Add support for Controller version 7.0 and Terraform provider 3.0.0.
