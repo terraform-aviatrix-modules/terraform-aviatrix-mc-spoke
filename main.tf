@@ -86,37 +86,46 @@ resource "aviatrix_spoke_gateway" "default" {
   private_mode_lb_vpc_id      = var.private_mode_lb_vpc_id
   private_mode_subnet_zone    = var.private_mode_subnets && local.cloud == "aws" ? format("%s%s", var.region, local.az1) : null
   ha_private_mode_subnet_zone = var.private_mode_subnets && local.cloud == "aws" && local.ha_gw ? format("%s%s", var.region, local.az2) : null
+
+  #Custom EIP settings
+  allocate_new_eip                 = var.allocate_new_eip
+  eip                              = var.eip
+  ha_eip                           = local.ha_gw ? var.ha_eip : null
+  azure_eip_name_resource_group    = var.azure_eip_name_resource_group
+  ha_azure_eip_name_resource_group = local.ha_gw ? var.azure_eip_name_resource_group : null
 }
 
 resource "aviatrix_spoke_ha_gateway" "hagw" {
   count = var.group_mode && var.spoke_gw_amount > 1 ? 1 : 0
 
-  primary_gw_name     = aviatrix_spoke_gateway.default.id
-  gw_name             = format("%s-hagw", local.gw_name)
-  gw_size             = local.instance_size
-  subnet              = local.ha_subnet
-  zone                = local.ha_zone
-  availability_domain = local.ha_availability_domain
-  fault_domain        = local.ha_fault_domain
-  insane_mode         = var.insane_mode
-  insane_mode_az      = local.ha_insane_mode_az
-  #eip                 = null #Future
+  primary_gw_name               = aviatrix_spoke_gateway.default.id
+  gw_name                       = format("%s-hagw", local.gw_name)
+  gw_size                       = local.instance_size
+  subnet                        = local.ha_subnet
+  zone                          = local.ha_zone
+  availability_domain           = local.ha_availability_domain
+  fault_domain                  = local.ha_fault_domain
+  insane_mode                   = var.insane_mode
+  insane_mode_az                = local.ha_insane_mode_az
+  eip                           = var.ha_eip
+  azure_eip_name_resource_group = var.ha_azure_eip_name_resource_group
 }
 
 #Additional gateways will be balanced across subnets/az's/zones etc. Only in case of insane mode a list of additional subnets is expected.
 resource "aviatrix_spoke_ha_gateway" "additional" {
   count = var.group_mode ? max(var.spoke_gw_amount - 2, 0) : 0
 
-  primary_gw_name     = aviatrix_spoke_gateway.default.id
-  gw_name             = format("%s-%s", local.gw_name, count.index + 3)
-  gw_size             = local.instance_size
-  subnet              = var.insane_mode || var.use_existing_vpc ? var.additional_group_mode_subnets[count.index] : local.group_mode_subnet_list[((count.index + 2) % local.group_mode_subnet_list_length)]
-  zone                = [local.zone, local.ha_zone][count.index % 2]
-  availability_domain = [local.availability_domain, local.ha_availability_domain][count.index % 2]
-  fault_domain        = [local.fault_domain, local.ha_fault_domain][count.index % 2]
-  insane_mode         = var.insane_mode
-  insane_mode_az      = local.group_mode_az_list[(count.index + 2) % local.group_mode_az_list_length]
-  #eip                 = null #Future
+  primary_gw_name               = aviatrix_spoke_gateway.default.id
+  gw_name                       = format("%s-%s", local.gw_name, count.index + 3)
+  gw_size                       = local.instance_size
+  subnet                        = var.insane_mode || var.use_existing_vpc ? var.additional_group_mode_subnets[count.index] : local.group_mode_subnet_list[((count.index + 2) % local.group_mode_subnet_list_length)]
+  zone                          = [local.zone, local.ha_zone][count.index % 2]
+  availability_domain           = [local.availability_domain, local.ha_availability_domain][count.index % 2]
+  fault_domain                  = [local.fault_domain, local.ha_fault_domain][count.index % 2]
+  insane_mode                   = var.insane_mode
+  insane_mode_az                = local.group_mode_az_list[(count.index + 2) % local.group_mode_az_list_length]
+  eip                           = var.allocate_new_eip ? var.additional_group_mode_eips[count.index] : null
+  azure_eip_name_resource_group = var.allocate_new_eip && local.cloud == "azure" ? var.additional_group_mode_azure_eip_name_resource_groups[count.index] : null
 
   depends_on = [
     aviatrix_spoke_ha_gateway.hagw

@@ -511,7 +511,49 @@ variable "additional_group_mode_subnets" {
 }
 
 variable "additional_group_mode_azs" {
-  description = "A list of AZ's for when deploying more than 2 spoke gateways (group_mode) in insane mode. Should contain AZ's for gateways 3-n. If not set, az1 and az2 will be used for subnet creation."
+  description = "A list of AZ's for when deploying more than 2 spoke gateways (group_mode). Should contain AZ's for gateways 3-n. If not set, az1 and az2 will be used for subnet creation."
+  type        = list(string)
+  default     = []
+}
+
+variable "allocate_new_eip" {
+  description = "When value is false, reuse an idle address in Elastic IP pool for this gateway. Otherwise, allocate a new Elastic IP and use it for this gateway."
+  type        = bool
+  default     = false
+}
+
+variable "eip" {
+  description = "Required when allocate_new_eip is false. It uses the specified EIP for this gateway."
+  type        = string
+  default     = null
+}
+
+variable "ha_eip" {
+  description = "Required when allocate_new_eip is false. It uses the specified EIP for this gateway."
+  type        = string
+  default     = null
+}
+
+variable "azure_eip_name_resource_group" {
+  description = "Name of public IP Address resource and its resource group in Azure to be assigned to the Spoke Gateway instance."
+  type        = string
+  default     = null
+}
+
+variable "ha_azure_eip_name_resource_group" {
+  description = "Name of public IP Address resource and its resource group in Azure to be assigned to the Spoke Gateway instance."
+  type        = string
+  default     = null
+}
+
+variable "additional_group_mode_eips" {
+  description = "A list of EIP's for when deploying more than 2 spoke gateways (group_mode). Should contain EIP's for gateways 3-n. Required when allocate_new_eip is set to false."
+  type        = list(string)
+  default     = []
+}
+
+variable "additional_group_mode_azure_eip_name_resource_groups" {
+  description = "A list of Names of public IP Address resource and its resource group in Azure to be assigned to the Spoke Gateway instances. For when deploying more than 2 spoke gateways (group_mode). Should contain entries for gateways 3-n. Required when allocate_new_eip is set to false."
   type        = list(string)
   default     = []
 }
