@@ -1,5 +1,9 @@
 # terraform-aviatrix-mc-spoke release notes
 
+## 1.5.2
+
+### Add support for disable_route_propagation
+
 ## 1.5.1
 
 ### Add support for custom EIP's
