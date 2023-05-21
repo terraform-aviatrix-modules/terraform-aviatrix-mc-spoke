@@ -557,3 +557,9 @@ variable "additional_group_mode_azure_eip_name_resource_groups" {
   type        = list(string)
   default     = []
 }
+
+variable "disable_route_propagation" {
+  description = "Disables route propagation on BGP Spoke to attached Transit Gateway."
+  type        = bool
+  default     = null
+}
