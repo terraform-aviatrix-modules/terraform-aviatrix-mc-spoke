@@ -79,7 +79,7 @@ locals {
   #Group mode subnetting
   additional_group_mode_subnets = try(coalescelist(var.additional_group_mode_subnets, lookup(local.additional_group_mode_subnets_map, local.cloud, [])), [])
   additional_group_mode_subnets_map = {
-    aws = var.use_existing_vpc ? [] : slice(aviatrix_vpc.default[0].public_subnets.*.cidr, 2, length(aviatrix_vpc.default[0].public_subnets)), #Get the rest of the public subnets, minus the first 2.
+    aws = local.cloud == "aws" ? (var.use_existing_vpc ? [] : slice(aviatrix_vpc.default[0].public_subnets.*.cidr, 2, length(aviatrix_vpc.default[0].public_subnets))) : null #Get the rest of the public subnets, minus the first 2.
   }
 
   group_mode_subnet_list = concat(
