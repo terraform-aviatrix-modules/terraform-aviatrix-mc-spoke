@@ -1,5 +1,10 @@
 # terraform-aviatrix-mc-spoke release notes
 
+## 1.6.1
+
+### Fix issue on non-aws clouds on destroy
+│ Error: Invalid function argument │ │ on .terraform/modules/spoke_1/locals.tf line 82, in locals: │ 82: aws = var.use_existing_vpc ? [] : slice(aviatrix_vpc.default[0].public_subnets.*.cidr, 2, length(aviatrix_vpc.default[0].public_subnets)), #Get the rest of the public subnets, minus the first 2.
+
 ## 1.6.0
 
 ### Compatibility with controller version 7.1 and Terraform provider version 3.1.x
