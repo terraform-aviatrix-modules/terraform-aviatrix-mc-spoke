@@ -12,7 +12,7 @@ data "aws_subnet" "example_hagw" {
 
 module "spoke_aws_1" {
   source  = "terraform-aviatrix-modules/mc-spoke/aviatrix"
-  version = "1.5.2"
+  version = "1.6.0"
 
   cloud            = "AWS"
   name             = "App1"

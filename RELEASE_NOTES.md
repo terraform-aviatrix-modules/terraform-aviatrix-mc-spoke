@@ -1,5 +1,14 @@
 # terraform-aviatrix-mc-spoke release notes
 
+## 1.6.0
+
+### Compatibility with controller version 7.1 and Terraform provider version 3.1.x
+
+### Add support for GCP global VPC
+
+### Implemented support for GRO/GSO on this gateway.
+Enabled by default and enhances gateway performance. This setting can be used to turn it off.
+
 ## 1.5.2
 
 ### Add support for disable_route_propagation

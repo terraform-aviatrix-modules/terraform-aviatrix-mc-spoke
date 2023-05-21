@@ -563,3 +563,15 @@ variable "disable_route_propagation" {
   type        = bool
   default     = null
 }
+
+variable "enable_global_vpc" {
+  description = "Enables global VPC mode in GCP."
+  type        = bool
+  default     = null
+}
+
+variable "enable_gro_gso" {
+  description = "Enable GRO/GSO for this spoke gateway."
+  type        = bool
+  default     = null
+}
