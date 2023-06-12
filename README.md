@@ -7,7 +7,7 @@ China and government regions are supported in both AWS and Azure and auto detect
 ### Compatibility
 Module version | Terraform version | Controller version | Terraform provider version
 :--- | :--- | :--- | :---
-v1.6.1 | >= 1.2.0 | >= 7.1 | ~> 3.1.0
+v1.6.2 | >= 1.2.0 | >= 7.1 | ~> 3.1.0
 
 Check [release notes](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-spoke/blob/master/RELEASE_NOTES.md) for more details.
 Check [Compatibility list](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-spoke/blob/master/COMPATIBILITY.md) for older versions.
@@ -33,6 +33,7 @@ The following variables are optional:
 
 Key | Supported_CSP's |  Default value | Description
 :-- | --: | :-- | :--
+additional_gcp_subnets | <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-spoke/blob/master/img/gcp.png?raw=true" title="GCP"> | {} | A map of subnets to create in addition to the spoke gateway subnets.
 additional_group_mode_azs | <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-spoke/blob/master/img/aws.png?raw=true" title="AWS"> <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-spoke/blob/master/img/azure.png?raw=true" title="Azure"> <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-spoke/blob/master/img/gcp.png?raw=true" title="GCP"> <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-spoke/blob/master/img/oci.png?raw=true" title="OCI"> | [] | A list of az for additional group mode spokes, when deploying more than 2 spoke gateways (group_mode). Should contain az's for gateway 3-n.
 additional_group_mode_subnets | <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-spoke/blob/master/img/aws.png?raw=true" title="AWS"> <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-spoke/blob/master/img/azure.png?raw=true" title="Azure"> <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-spoke/blob/master/img/gcp.png?raw=true" title="GCP"> <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-spoke/blob/master/img/oci.png?raw=true" title="OCI"> | [] | A list of subnets for additional group mode spokes, when deploying more than 2 spoke gateways (group_mode). Should contain subnets for gateway 3-n.
 additional_group_mode_eips | <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-spoke/blob/master/img/aws.png?raw=true" title="AWS"> <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-spoke/blob/master/img/azure.png?raw=true" title="Azure"> <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-spoke/blob/master/img/gcp.png?raw=true" title="GCP"> <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-spoke/blob/master/img/oci.png?raw=true" title="OCI"> | [] | A list of EIP's for when deploying more than 2 spoke gateways (group_mode). Should contain EIP's for gateways 3-n. Required when allocate_new_eip is set to false.

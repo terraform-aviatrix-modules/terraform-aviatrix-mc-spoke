@@ -1,5 +1,13 @@
 # terraform-aviatrix-mc-spoke release notes
 
+## 1.6.2
+
+### Add support for adding multiple subnets to a VPC in GCP
+This feature allows you to create a VPC with additional subnets. The primary use case is to allow you to build global spoke VPC's with subnets in multiple regions, without having to resort to native GCP resources.
+
+### GCP Subnet naming convention change
+Previously, subnets in GCP were always named the same as the VPC. Since global VPC allows you to deploy in multiple regions, it seems more apptly to follow the gateway name for naming the subnet. Subnet names are now set using the optional `gw_name` variable. If you're not using this variable, they will remain using the VPC naming.
+
 ## 1.6.1
 
 ### Fix issue on non-aws clouds on destroy
