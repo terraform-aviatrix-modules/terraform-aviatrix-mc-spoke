@@ -575,3 +575,9 @@ variable "enable_gro_gso" {
   type        = bool
   default     = null
 }
+
+variable "additional_gcp_subnets" {
+  description = "Additional subnets to be created in GCP. Expects a map of maps with cidr and region."
+  type        = map(map(any))
+  default     = {}
+}

@@ -16,7 +16,7 @@ resource "aviatrix_vpc" "default" {
   dynamic "subnets" {
     for_each = local.cloud == "gcp" ? ["dummy"] : [] #Trick to make block conditional. Count not available on dynamic blocks.
     content {
-      name   = local.name
+      name   = local.gw_name
       cidr   = var.cidr
       region = var.region
     }
@@ -25,9 +25,18 @@ resource "aviatrix_vpc" "default" {
   dynamic "subnets" {
     for_each = local.cloud == "gcp" && length(var.ha_region) > 0 ? ["dummy"] : [] #Trick to make block conditional. Count not available on dynamic blocks.
     content {
-      name   = "${local.name}-ha"
+      name   = "${local.gw_name}-ha"
       cidr   = var.ha_cidr
       region = var.ha_region
+    }
+  }
+
+  dynamic "subnets" {
+    for_each = var.additional_gcp_subnets
+    content {
+      name   = subnets.key
+      cidr   = subnets.value.cidr
+      region = subnets.value.region
     }
   }
 }
@@ -149,6 +158,8 @@ resource "aviatrix_spoke_transit_attachment" "default" {
       aviatrix_spoke_gateway.default.ha_subnet, #Attachment needs to be replaced as well, if HA Subnet changes (due to toggling HA on or off)
     ]
   }
+
+  depends_on = [aviatrix_spoke_ha_gateway.additional]
 }
 
 resource "aviatrix_spoke_transit_attachment" "transit_gw_egress" {
@@ -165,6 +176,8 @@ resource "aviatrix_spoke_transit_attachment" "transit_gw_egress" {
       aviatrix_spoke_gateway.default.ha_subnet, #Attachment needs to be replaced as well, if HA Subnet changes (due to toggling HA on or off)
     ]
   }
+
+  depends_on = [aviatrix_spoke_ha_gateway.additional]
 }
 
 resource "aviatrix_segmentation_network_domain_association" "default" {
