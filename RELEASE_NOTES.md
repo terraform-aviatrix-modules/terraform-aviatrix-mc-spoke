@@ -1,5 +1,10 @@
 # terraform-aviatrix-mc-spoke release notes
 
+## 1.6.3
+
+### Add support for BGP attributes
+Added support for `enable_bgp_over_lan` and `bgp_lan_interfaces_count` attributes.
+
 ## 1.6.2
 
 ### Add support for adding multiple subnets to a VPC in GCP

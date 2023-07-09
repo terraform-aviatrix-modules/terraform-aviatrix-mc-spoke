@@ -67,13 +67,8 @@ resource "aviatrix_spoke_gateway" "default" {
   tags                                  = var.tags
   availability_domain                   = local.availability_domain
   fault_domain                          = local.fault_domain
-  enable_bgp                            = var.enable_bgp
-  spoke_bgp_manual_advertise_cidrs      = var.spoke_bgp_manual_advertise_cidrs
-  bgp_ecmp                              = var.bgp_ecmp
   enable_active_standby                 = var.enable_active_standby
   prepend_as_path                       = var.prepend_as_path
-  bgp_polling_time                      = var.bgp_polling_time
-  bgp_hold_time                         = var.bgp_hold_time
   enable_learned_cidrs_approval         = var.enable_learned_cidrs_approval
   learned_cidrs_approval_mode           = var.learned_cidrs_approval_mode
   approved_learned_cidrs                = var.approved_learned_cidrs
@@ -84,6 +79,15 @@ resource "aviatrix_spoke_gateway" "default" {
   disable_route_propagation             = var.disable_route_propagation
   enable_global_vpc                     = var.enable_global_vpc
   enable_gro_gso                        = var.enable_gro_gso
+
+  #BGP Settings
+  enable_bgp                       = var.enable_bgp
+  spoke_bgp_manual_advertise_cidrs = var.spoke_bgp_manual_advertise_cidrs
+  bgp_ecmp                         = var.bgp_ecmp
+  bgp_polling_time                 = var.bgp_polling_time
+  bgp_hold_time                    = var.bgp_hold_time
+  enable_bgp_over_lan              = var.enable_bgp_over_lan
+  bgp_lan_interfaces_count         = var.bgp_lan_interfaces_count
 
   #HA Settings - only apply when ha_gw is enabled and group mode is disabled (legacy behavior)
   ha_subnet              = local.ha_gw ? local.ha_subnet : null

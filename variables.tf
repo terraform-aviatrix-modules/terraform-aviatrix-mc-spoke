@@ -581,3 +581,15 @@ variable "additional_gcp_subnets" {
   type        = map(map(any))
   default     = {}
 }
+
+variable "enable_bgp_over_lan" {
+  description = "Pre-allocate a network interface(eth4) for \"BGP over LAN\" functionality. Must be enabled to create a BGP over LAN."
+  type        = bool
+  default     = null
+}
+
+variable "bgp_lan_interfaces_count" {
+  description = "Number of interfaces that will be created for BGP over LAN enabled Azure spoke."
+  type        = number
+  default     = null
+}
