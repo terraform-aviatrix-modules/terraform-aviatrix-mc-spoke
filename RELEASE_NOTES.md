@@ -1,5 +1,9 @@
 # terraform-aviatrix-mc-spoke release notes
 
+## 1.6.4
+
+### Add support for setting `enable_vpc_dns_server` attribute.
+
 ## 1.6.3
 
 ### Add support for BGP attributes
