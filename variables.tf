@@ -593,3 +593,9 @@ variable "bgp_lan_interfaces_count" {
   type        = number
   default     = null
 }
+
+variable "enable_vpc_dns_server" {
+  description = "Enable VPC DNS Server for Gateway."
+  type        = bool
+  default     = null
+}

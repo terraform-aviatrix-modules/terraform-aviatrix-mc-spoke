@@ -79,6 +79,7 @@ resource "aviatrix_spoke_gateway" "default" {
   disable_route_propagation             = var.disable_route_propagation
   enable_global_vpc                     = var.enable_global_vpc
   enable_gro_gso                        = var.enable_gro_gso
+  enable_vpc_dns_server                 = var.enable_vpc_dns_server
 
   #BGP Settings
   enable_bgp                       = var.enable_bgp
