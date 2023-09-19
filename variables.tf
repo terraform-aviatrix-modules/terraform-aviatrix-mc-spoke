@@ -13,8 +13,13 @@ variable "name" {
   type        = string
 
   validation {
-    condition     = length(var.name) <= 50
-    error_message = "Name is too long. Max length is 50 characters."
+    condition     = length(var.name) <= 30
+    error_message = "Name is too long. Max length is 30 characters."
+  }
+
+  validation {
+    condition     = can(regex("^[a-zA-Z0-9-_]*$", var.name))
+    error_message = "Only a-z, A-Z, 0-9 and hyphens and underscores are allowed."
   }
 }
 
@@ -38,6 +43,11 @@ variable "gw_name" {
 variable "region" {
   description = "The region to deploy this module in"
   type        = string
+
+  validation {
+    condition     = can(regex("^[a-zA-Z0-9-_]*$", var.region))
+    error_message = "Only a-z, A-Z, 0-9 and hyphens and underscores are allowed."
+  }
 }
 
 variable "ha_region" {
@@ -45,6 +55,11 @@ variable "ha_region" {
   type        = string
   default     = ""
   nullable    = false
+
+  validation {
+    condition     = can(regex("^[a-zA-Z0-9-_]*$", var.ha_region))
+    error_message = "Only a-z, A-Z, 0-9 and hyphens and underscores are allowed."
+  }
 }
 
 variable "cidr" {
@@ -54,7 +69,7 @@ variable "cidr" {
   nullable    = false
 
   validation {
-    condition     = var.cidr != "" ? can(cidrnetmask(var.cidr)) : true
+    condition     = var.cidr == "" || can(cidrnetmask(var.cidr))
     error_message = "This does not like a valid CIDR."
   }
 }
@@ -66,7 +81,7 @@ variable "ha_cidr" {
   nullable    = false
 
   validation {
-    condition     = var.ha_cidr != "" ? can(cidrnetmask(var.ha_cidr)) : true
+    condition     = var.ha_cidr == "" || can(cidrnetmask(var.ha_cidr))
     error_message = "This does not like a valid CIDR."
   }
 }
@@ -165,6 +180,11 @@ variable "network_domain" {
   type        = string
   default     = ""
   nullable    = false
+
+  validation {
+    condition     = can(regex("^[a-zA-Z0-9-_]*$", var.network_domain))
+    error_message = "Only a-z, A-Z, 0-9 and hyphens and underscores are allowed."
+  }
 }
 
 variable "single_az_ha" {
@@ -186,6 +206,11 @@ variable "customized_spoke_vpc_routes" {
   type        = string
   default     = ""
   nullable    = false
+
+  validation {
+    condition     = var.customized_spoke_vpc_routes == "" || alltrue([for v in split(",", var.customized_spoke_vpc_routes) : can(cidrnetmask(trimspace(v)))])
+    error_message = "All values in the string must be valid CIDR's and separated with comma's."
+  }
 }
 
 variable "filtered_spoke_vpc_routes" {
@@ -193,6 +218,11 @@ variable "filtered_spoke_vpc_routes" {
   type        = string
   default     = ""
   nullable    = false
+
+  validation {
+    condition     = var.filtered_spoke_vpc_routes == "" || alltrue([for v in split(",", var.filtered_spoke_vpc_routes) : can(cidrnetmask(trimspace(v)))])
+    error_message = "All values in the string must be valid CIDR's and separated with comma's."
+  }
 }
 
 variable "included_advertised_spoke_routes" {
@@ -200,6 +230,11 @@ variable "included_advertised_spoke_routes" {
   type        = string
   default     = ""
   nullable    = false
+
+  validation {
+    condition     = var.included_advertised_spoke_routes == "" || alltrue([for v in split(",", var.included_advertised_spoke_routes) : can(cidrnetmask(trimspace(v)))])
+    error_message = "All values in the string must be valid CIDR's and separated with comma's."
+  }
 }
 
 variable "subnet_pairs" {
@@ -286,7 +321,7 @@ variable "gw_subnet" {
   nullable    = false
 
   validation {
-    condition     = var.gw_subnet != "" ? can(cidrnetmask(var.gw_subnet)) : true
+    condition     = var.gw_subnet == "" || can(cidrnetmask(var.gw_subnet))
     error_message = "This does not like a valid CIDR."
   }
 }
@@ -298,7 +333,7 @@ variable "hagw_subnet" {
   nullable    = false
 
   validation {
-    condition     = var.hagw_subnet != "" ? can(cidrnetmask(var.hagw_subnet)) : true
+    condition     = var.hagw_subnet == "" || can(cidrnetmask(var.hagw_subnet))
     error_message = "This does not like a valid CIDR."
   }
 }
@@ -327,6 +362,11 @@ variable "spoke_bgp_manual_advertise_cidrs" {
   description = "Intended CIDR list to be advertised to external BGP router."
   type        = list(string)
   default     = null
+
+  validation {
+    condition     = var.spoke_bgp_manual_advertise_cidrs != null ? alltrue([for v in var.spoke_bgp_manual_advertise_cidrs : can(cidrnetmask(v))]) : true
+    error_message = "All values in this list must be valid CIDR's."
+  }
 }
 
 variable "bgp_ecmp" {
@@ -393,6 +433,11 @@ variable "approved_learned_cidrs" {
   description = "A list of approved learned CIDRs."
   type        = list(string)
   default     = null
+
+  validation {
+    condition     = var.approved_learned_cidrs != null ? alltrue([for v in var.approved_learned_cidrs : can(cidrnetmask(v))]) : true
+    error_message = "All values in this list must be valid CIDR's."
+  }
 }
 
 variable "local_as_number" {
@@ -508,6 +553,11 @@ variable "additional_group_mode_subnets" {
   description = "A list of subnets for when deploying more than 2 spoke gateways (group_mode). Should contain subnets for gateways 3-n. Mandatory when insane mode is used and deploying more than 2 gateways. Optional when existing_vpc is used."
   type        = list(string)
   default     = []
+
+  validation {
+    condition     = var.additional_group_mode_subnets == [] || alltrue([for v in var.additional_group_mode_subnets : can(cidrnetmask(v))])
+    error_message = "All values in this list must be valid CIDR's."
+  }
 }
 
 variable "additional_group_mode_azs" {
@@ -526,12 +576,22 @@ variable "eip" {
   description = "Required when allocate_new_eip is false. It uses the specified EIP for this gateway."
   type        = string
   default     = null
+
+  validation {
+    condition     = var.eip != null ? can(cidrnetmask(format("%s/32", var.eip))) : true
+    error_message = "The input string must be a valid IPv4 address."
+  }
 }
 
 variable "ha_eip" {
   description = "Required when allocate_new_eip is false. It uses the specified EIP for this gateway."
   type        = string
   default     = null
+
+  validation {
+    condition     = var.ha_eip != null ? can(cidrnetmask(format("%s/32", var.ha_eip))) : true
+    error_message = "The input string must be a valid IPv4 address."
+  }
 }
 
 variable "azure_eip_name_resource_group" {
@@ -550,6 +610,11 @@ variable "additional_group_mode_eips" {
   description = "A list of EIP's for when deploying more than 2 spoke gateways (group_mode). Should contain EIP's for gateways 3-n. Required when allocate_new_eip is set to false."
   type        = list(string)
   default     = []
+
+  validation {
+    condition     = var.additional_group_mode_eips == [] || alltrue([for v in var.additional_group_mode_eips : can(cidrnetmask(format("%s/32", v)))])
+    error_message = "All values in this list must be valid CIDR's."
+  }
 }
 
 variable "additional_group_mode_azure_eip_name_resource_groups" {
