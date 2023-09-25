@@ -1,5 +1,6 @@
 locals {
   cloud                 = lower(var.cloud)
+  gw_name               = coalesce(var.gw_name, var.name)
   cidr                  = var.use_existing_vpc ? "10.0.0.0/20" : var.cidr #Set dummy if existing VPC is used.
   cidrbits              = tonumber(split("/", local.cidr)[1])
   newbits               = 26 - local.cidrbits
@@ -86,16 +87,19 @@ locals {
     local.additional_group_mode_subnets
   )
 
-  group_mode_subnet_list_length = length(local.group_mode_subnet_list)
-
   #group mode AZ's
+  additional_group_mode_azs_prefix = {
+    azure = "",
+    aws   = var.region,
+  }
+
+  additional_group_mode_azs = [for i in var.additional_group_mode_azs : format("%s%s", lookup(local.additional_group_mode_azs_prefix, local.cloud, null), i)]
+
   group_mode_az_list = concat(
     [local.insane_mode_az],
     [local.ha_insane_mode_az],
-    var.additional_group_mode_azs
+    local.additional_group_mode_azs
   )
-
-  group_mode_az_list_length = length(local.group_mode_az_list)
 
   region = local.cloud == "gcp" ? "${var.region}-${local.az1}" : var.region
 

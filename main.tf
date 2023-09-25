@@ -45,7 +45,7 @@ resource "aviatrix_vpc" "default" {
 resource "aviatrix_spoke_gateway" "default" {
   cloud_type                            = local.cloud_type
   vpc_reg                               = local.region
-  gw_name                               = coalesce(var.gw_name, var.name)
+  gw_name                               = coalesce(local.gw_name, var.name)
   gw_size                               = local.instance_size
   vpc_id                                = var.use_existing_vpc ? var.vpc_id : aviatrix_vpc.default[0].vpc_id
   account_name                          = var.account
@@ -116,7 +116,7 @@ resource "aviatrix_spoke_ha_gateway" "hagw" {
   count = var.group_mode && var.spoke_gw_amount > 1 ? 1 : 0
 
   primary_gw_name               = aviatrix_spoke_gateway.default.id
-  gw_name                       = format("%s-hagw", var.gw_name)
+  gw_name                       = format("%s-hagw", local.gw_name)
   gw_size                       = local.instance_size
   subnet                        = local.ha_subnet
   zone                          = local.ha_zone
@@ -133,14 +133,14 @@ resource "aviatrix_spoke_ha_gateway" "additional" {
   count = var.group_mode ? max(var.spoke_gw_amount - 2, 0) : 0
 
   primary_gw_name               = aviatrix_spoke_gateway.default.id
-  gw_name                       = format("%s-%s", var.gw_name, count.index + 3)
+  gw_name                       = format("%s-%s", local.gw_name, count.index + 3)
   gw_size                       = local.instance_size
-  subnet                        = var.insane_mode || var.use_existing_vpc ? var.additional_group_mode_subnets[count.index] : local.group_mode_subnet_list[((count.index + 2) % local.group_mode_subnet_list_length)]
-  zone                          = [local.zone, local.ha_zone][count.index % 2]
+  subnet                        = var.insane_mode || var.use_existing_vpc ? var.additional_group_mode_subnets[count.index] : local.group_mode_subnet_list[((count.index + 2) % length(local.group_mode_subnet_list))]
+  zone                          = local.group_mode_az_list[(count.index + 2) % length(local.group_mode_az_list)]
   availability_domain           = [local.availability_domain, local.ha_availability_domain][count.index % 2]
   fault_domain                  = [local.fault_domain, local.ha_fault_domain][count.index % 2]
   insane_mode                   = var.insane_mode
-  insane_mode_az                = local.group_mode_az_list[(count.index + 2) % local.group_mode_az_list_length]
+  insane_mode_az                = local.cloud == "aws" ? local.group_mode_az_list[(count.index + 2) % length(local.group_mode_az_list)] : null
   eip                           = var.allocate_new_eip != null ? var.additional_group_mode_eips[count.index] : null
   azure_eip_name_resource_group = var.allocate_new_eip != null && local.cloud == "azure" ? var.additional_group_mode_azure_eip_name_resource_groups[count.index] : null
 
