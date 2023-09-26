@@ -136,7 +136,7 @@ resource "aviatrix_spoke_ha_gateway" "additional" {
   gw_name                       = format("%s-%s", local.gw_name, count.index + 3)
   gw_size                       = local.instance_size
   subnet                        = var.insane_mode || var.use_existing_vpc ? var.additional_group_mode_subnets[count.index] : local.group_mode_subnet_list[((count.index + 2) % length(local.group_mode_subnet_list))]
-  zone                          = local.group_mode_az_list[(count.index + 2) % length(local.group_mode_az_list)]
+  zone                          = local.cloud != "aws" ? local.group_mode_az_list[(count.index + 2) % length(local.group_mode_az_list)] : null
   availability_domain           = [local.availability_domain, local.ha_availability_domain][count.index % 2]
   fault_domain                  = [local.fault_domain, local.ha_fault_domain][count.index % 2]
   insane_mode                   = var.insane_mode
