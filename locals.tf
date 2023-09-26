@@ -91,6 +91,7 @@ locals {
   additional_group_mode_azs_prefix = {
     azure = "",
     aws   = var.region,
+    gcp   = format("%s-", var.region)
   }
 
   additional_group_mode_azs = [for i in var.additional_group_mode_azs : format("%s%s", lookup(local.additional_group_mode_azs_prefix, local.cloud, null), i)]
