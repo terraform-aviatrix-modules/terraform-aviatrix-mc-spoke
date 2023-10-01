@@ -5,7 +5,7 @@ In this example, the spoke_east module deploys a GCP VPC with multiple subnets i
 ```hcl
 module "spoke_east" {
   source  = "terraform-aviatrix-modules/mc-spoke/aviatrix"
-  version = "1.6.4"
+  version = "1.6.5"
 
   cloud             = "GCP"
   name              = "global-spoke-1"
@@ -25,7 +25,7 @@ module "spoke_east" {
 
 module "spoke_west" {
   source  = "terraform-aviatrix-modules/mc-spoke/aviatrix"
-  version = "1.6.4"
+  version = "1.6.5"
 
   cloud             = "GCP"
   name              = "west-spoke"

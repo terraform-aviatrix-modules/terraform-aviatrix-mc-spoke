@@ -140,7 +140,7 @@ resource "aws_route_table_association" "this" {
 #Create Aviatrix spoke resources
 module "spoke_aws_1" {
   source  = "terraform-aviatrix-modules/mc-spoke/aviatrix"
-  version = "1.6.4"
+  version = "1.6.5"
 
   cloud            = "AWS"
   name             = "App1"

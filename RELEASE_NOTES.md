@@ -1,5 +1,11 @@
 # terraform-aviatrix-mc-spoke release notes
 
+## 1.6.5
+
+### Improve group mode behavior in Azure and GCP
+
+### Refactored logic in locals and input validation
+
 ## 1.6.4
 
 ### Add support for setting `enable_vpc_dns_server` attribute.
