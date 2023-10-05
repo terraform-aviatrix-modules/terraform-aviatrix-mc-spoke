@@ -156,9 +156,9 @@ locals {
 
   instance_size = length(var.instance_size) > 0 ? var.instance_size : lookup(local.instance_size_map, local.cloud, null)
   instance_size_map = {
-    azure = "Standard_B1ms",
+    azure = "Standard_B2ms",
     aws   = "t3.medium",
-    gcp   = "n1-standard-1",
+    gcp   = "n1-highcpu-4",
     oci   = "VM.Standard2.2",
     ali   = "ecs.g5ne.large",
   }
