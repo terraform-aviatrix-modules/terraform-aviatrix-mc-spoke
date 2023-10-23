@@ -45,8 +45,8 @@ variable "region" {
   type        = string
 
   validation {
-    condition     = can(regex("^[a-zA-Z0-9-_ ]*$", var.region))
-    error_message = "Only a-z, A-Z, 0-9, spaces, hyphens and underscores are allowed."
+    condition     = can(regex("^[a-zA-Z0-9-_ ()]*$", var.region))
+    error_message = "Only a-z, A-Z, 0-9, spaces, hyphens, parentheses and underscores are allowed."
   }
 }
 
