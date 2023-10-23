@@ -1,5 +1,11 @@
 # terraform-aviatrix-mc-spoke release notes
 
+## 1.6.6
+
+### Fixed too agressive region validation in Alibaba
+
+### Included additional examples
+
 ## 1.6.5
 
 ### Improve group mode behavior in Azure and GCP
