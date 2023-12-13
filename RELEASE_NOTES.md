@@ -1,5 +1,10 @@
 # terraform-aviatrix-mc-spoke release notes
 
+## 1.6.7
+
+### Adjusted Azure example to contain GUID
+Thank you @Sevenlive for the PR.
+
 ## 1.6.6
 
 ### Fixed too agressive region validation in Alibaba
