@@ -664,3 +664,9 @@ variable "enable_vpc_dns_server" {
   type        = bool
   default     = null
 }
+
+variable "enable_active_standby_preemptive" {
+  description = "Enables Preemptive Mode for Active-Standby."
+  type        = bool
+  default     = null
+}

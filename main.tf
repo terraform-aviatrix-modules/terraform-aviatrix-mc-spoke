@@ -89,6 +89,7 @@ resource "aviatrix_spoke_gateway" "default" {
   bgp_hold_time                    = var.bgp_hold_time
   enable_bgp_over_lan              = var.enable_bgp_over_lan
   bgp_lan_interfaces_count         = var.bgp_lan_interfaces_count
+  enable_active_standby_preemptive = var.enable_active_standby_preemptive
 
   #HA Settings - only apply when ha_gw is enabled and group mode is disabled (legacy behavior)
   ha_subnet              = local.ha_gw ? local.ha_subnet : null
