@@ -1,13 +1,11 @@
 # terraform-aviatrix-mc-spoke release notes
 
-## 1.6.8
-
-### Added support for enable_active_standby_preemptive
-
 ## 1.6.7
 
 ### Adjusted Azure example to contain GUID
 Thank you @Sevenlive for the PR.
+
+### Added support for enable_active_standby_preemptive
 
 ## 1.6.6
 
