@@ -147,6 +147,18 @@ variable "transit_gw_egress" {
   nullable    = false
 }
 
+variable "tunnel_count" {
+  description = "The amount of tunnels for the spoke attachment"
+  type        = number
+  default     = null
+}
+
+variable "egress_tunnel_count" {
+  description = "The amount of tunnels for the egress spoke attachment"
+  type        = number
+  default     = null
+}
+
 variable "transit_gw_route_tables" {
   description = "Route tables to propagate routes to for transit_gw attachment"
   type        = list(string)

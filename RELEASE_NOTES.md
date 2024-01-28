@@ -1,5 +1,9 @@
 # terraform-aviatrix-mc-spoke release notes
 
+## 1.6.8
+
+### Add tunnel count for attachments.
+
 ## 1.6.7
 
 ### Adjusted Azure example to contain GUID

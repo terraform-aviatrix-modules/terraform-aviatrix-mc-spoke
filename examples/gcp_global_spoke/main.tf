@@ -1,6 +1,6 @@
 module "spoke_east" {
   source  = "terraform-aviatrix-modules/mc-spoke/aviatrix"
-  version = "1.6.7"
+  version = "1.6.8"
 
   cloud             = "GCP"
   name              = "global-spoke-1"
@@ -20,7 +20,7 @@ module "spoke_east" {
 
 module "spoke_west" {
   source  = "terraform-aviatrix-modules/mc-spoke/aviatrix"
-  version = "1.6.7"
+  version = "1.6.8"
 
   cloud             = "GCP"
   name              = "west-spoke"

@@ -158,6 +158,7 @@ resource "aviatrix_spoke_transit_attachment" "default" {
   enable_max_performance  = var.enable_max_performance
   spoke_prepend_as_path   = var.spoke_prepend_as_path
   transit_prepend_as_path = var.transit_prepend_as_path
+  tunnel_count            = var.tunnel_count
 
   lifecycle {
     replace_triggered_by = [
@@ -176,6 +177,7 @@ resource "aviatrix_spoke_transit_attachment" "transit_gw_egress" {
   enable_max_performance  = var.enable_max_performance
   spoke_prepend_as_path   = var.spoke_prepend_as_path
   transit_prepend_as_path = var.transit_prepend_as_path
+  tunnel_count            = var.egress_tunnel_count
 
   lifecycle {
     replace_triggered_by = [
