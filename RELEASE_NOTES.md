@@ -3,6 +3,7 @@
 ## 1.6.8
 
 ### Add tunnel count for attachments.
+### Fix input for ha_azure_eip_name_resource_group
 
 ## 1.6.7
 
