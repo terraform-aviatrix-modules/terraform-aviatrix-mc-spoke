@@ -110,7 +110,7 @@ resource "aviatrix_spoke_gateway" "default" {
   eip                              = var.eip
   ha_eip                           = local.ha_gw ? var.ha_eip : null
   azure_eip_name_resource_group    = var.azure_eip_name_resource_group
-  ha_azure_eip_name_resource_group = local.ha_gw ? var.azure_eip_name_resource_group : null
+  ha_azure_eip_name_resource_group = local.ha_gw ? var.ha_azure_eip_name_resource_group : null
 }
 
 resource "aviatrix_spoke_ha_gateway" "hagw" {
