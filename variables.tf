@@ -541,30 +541,35 @@ variable "enable_monitor_gateway_subnets" {
   description = "Enables Monitor Gateway Subnet feature in AWS"
   type        = bool
   default     = false
+  nullable    = false
 }
 
 variable "group_mode" {
   description = "Toggle to true if you are looking to use the new horizontal spoke gateway scaling."
   type        = bool
   default     = false
+  nullable    = false
 }
 
 variable "spoke_gw_amount" {
   description = "The amount of spoke gateways to be created. group_mode needs to be true."
   type        = number
   default     = 2
+  nullable    = false
 }
 
 variable "manage_ha_gateway" {
   description = "Determines if the aviatrix_spoke_gateway resource manages the HA gateway."
   type        = bool
   default     = true
+  nullable    = false
 }
 
 variable "additional_group_mode_subnets" {
   description = "A list of subnets for when deploying more than 2 spoke gateways (group_mode). Should contain subnets for gateways 3-n. Mandatory when insane mode is used and deploying more than 2 gateways. Optional when existing_vpc is used."
   type        = list(string)
   default     = []
+  nullable    = false
 
   validation {
     condition     = var.additional_group_mode_subnets == [] || alltrue([for v in var.additional_group_mode_subnets : can(cidrnetmask(v))])
@@ -576,6 +581,7 @@ variable "additional_group_mode_azs" {
   description = "A list of AZ's for when deploying more than 2 spoke gateways (group_mode). Should contain AZ's for gateways 3-n. If not set, az1 and az2 will be used for subnet creation."
   type        = list(string)
   default     = []
+  nullable    = false
 }
 
 variable "allocate_new_eip" {
@@ -622,6 +628,7 @@ variable "additional_group_mode_eips" {
   description = "A list of EIP's for when deploying more than 2 spoke gateways (group_mode). Should contain EIP's for gateways 3-n. Required when allocate_new_eip is set to false."
   type        = list(string)
   default     = []
+  nullable    = false
 
   validation {
     condition     = var.additional_group_mode_eips == [] || alltrue([for v in var.additional_group_mode_eips : can(cidrnetmask(format("%s/32", v)))])
@@ -633,6 +640,7 @@ variable "additional_group_mode_azure_eip_name_resource_groups" {
   description = "A list of Names of public IP Address resource and its resource group in Azure to be assigned to the Spoke Gateway instances. For when deploying more than 2 spoke gateways (group_mode). Should contain entries for gateways 3-n. Required when allocate_new_eip is set to false."
   type        = list(string)
   default     = []
+  nullable    = false
 }
 
 variable "disable_route_propagation" {
@@ -657,6 +665,7 @@ variable "additional_gcp_subnets" {
   description = "Additional subnets to be created in GCP. Expects a map of maps with cidr and region."
   type        = map(map(any))
   default     = {}
+  nullable    = false
 }
 
 variable "enable_bgp_over_lan" {
