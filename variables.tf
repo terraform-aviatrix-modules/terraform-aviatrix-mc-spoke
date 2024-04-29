@@ -431,13 +431,13 @@ variable "enable_learned_cidrs_approval" {
 }
 
 variable "learned_cidrs_approval_mode" {
-  description = "Learned CIDRs approval mode. Either \"gateway\" (approval on a per-gateway basis) or \"connection\" (approval on a per-connection basis)."
+  description = "Learned CIDRs approval mode. Only gateway mode is supported and only if BGP is enabled."
   type        = string
   default     = null
 
   validation {
-    condition     = var.learned_cidrs_approval_mode != null ? contains(["connection", "gateway"], lower(var.learned_cidrs_approval_mode)) : true
-    error_message = "Invalid approval mode. Choose connection or gateway."
+    condition     = var.learned_cidrs_approval_mode != null ? contains(["gateway"], lower(var.learned_cidrs_approval_mode)) : true
+    error_message = "Invalid approval mode. Choose gateway."
   }
 }
 
