@@ -5,7 +5,7 @@ In this example, the module does not only deploy the Aviatrix spoke gateways, bu
 ```hcl
 module "spoke_azure_1" {
   source  = "terraform-aviatrix-modules/mc-spoke/aviatrix"
-  version = "1.6.8"
+  version = "1.6.9"
 
   cloud           = "Azure"
   name            = "App1"
