@@ -94,7 +94,7 @@ module "vnet" {
 
 module "spoke1_azure" {
   source  = "terraform-aviatrix-modules/mc-spoke/aviatrix"
-  version = "1.6.9"
+  version = "1.6.10"
 
   cloud            = "Azure"
   name             = var.name

@@ -1,5 +1,13 @@
 # terraform-aviatrix-mc-spoke release notes
 
+## 1.6.10
+
+### Add support for enable_jumbo_frames
+
+## 1.6.9
+
+### Add support for learned_cidrs_approval_mode
+
 ## 1.6.8
 
 ### Add tunnel count for attachments.

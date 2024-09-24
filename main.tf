@@ -80,6 +80,7 @@ resource "aviatrix_spoke_gateway" "default" {
   enable_global_vpc                     = var.enable_global_vpc
   enable_gro_gso                        = var.enable_gro_gso
   enable_vpc_dns_server                 = var.enable_vpc_dns_server
+  enable_jumbo_frame                    = var.enable_jumbo_frame
 
   #BGP Settings
   enable_bgp                       = var.enable_bgp

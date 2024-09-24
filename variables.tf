@@ -691,3 +691,11 @@ variable "enable_active_standby_preemptive" {
   type        = bool
   default     = null
 }
+
+variable "enable_jumbo_frame" {
+  description = "Enable jumbo frames for this spoke gateway. Default value is true."
+  type        = bool
+  default     = null
+}
+
+
