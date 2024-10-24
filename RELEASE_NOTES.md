@@ -1,5 +1,9 @@
 # terraform-aviatrix-mc-spoke release notes
 
+## 1.7.0
+
+### Add support for Controller version 7.2 / Terraform provider version 3.2.x
+
 ## 1.6.10
 
 ### Add support for enable_jumbo_frames
