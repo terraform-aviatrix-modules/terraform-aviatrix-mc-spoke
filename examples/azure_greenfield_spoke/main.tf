@@ -1,6 +1,6 @@
 module "spoke_azure_1" {
   source  = "terraform-aviatrix-modules/mc-spoke/aviatrix"
-  version = "1.7.0"
+  version = "1.7.1"
 
   cloud          = "Azure"
   name           = "App1"

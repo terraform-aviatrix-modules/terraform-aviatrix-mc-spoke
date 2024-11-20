@@ -1,5 +1,9 @@
 # terraform-aviatrix-mc-spoke release notes
 
+## 1.7.1
+
+### Fix issue where gateways were rebuild on every apply in GCP.
+
 ## 1.7.0
 
 ### Add support for Controller version 7.2 / Terraform provider version 3.2.x
