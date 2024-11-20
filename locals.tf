@@ -123,13 +123,11 @@ locals {
   insane_mode_az = var.insane_mode ? lookup(local.insane_mode_az_map, local.cloud, null) : null
   insane_mode_az_map = {
     aws = local.cloud == "aws" ? "${var.region}${local.az1}" : null,
-    gcp = local.cloud == "gcp" ? "${var.region}${local.az1}" : null,
   }
 
   ha_insane_mode_az = var.insane_mode ? lookup(local.ha_insane_mode_az_map, local.cloud, null) : null
   ha_insane_mode_az_map = {
     aws = local.cloud == "aws" ? "${var.region}${local.az2}" : null,
-    gcp = local.cloud == "gcp" ? "${var.region}${local.az2}" : null,
   }
 
   is_china = can(regex("^cn-|^china ", lower(var.region))) && contains(["aws", "azure"], local.cloud)
