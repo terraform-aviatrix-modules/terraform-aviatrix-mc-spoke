@@ -238,7 +238,7 @@ variable "filtered_spoke_vpc_routes" {
 }
 
 variable "included_advertised_spoke_routes" {
-  description = "A list of comma separated CIDRs to be advertised to on-prem as Included CIDR List. When configured, it will replace all advertised routes from this VPC. Example: 10.4.0.0/116,10.5.0.0/16"
+  description = "A list of comma separated CIDRs to be advertised onto the network as Included CIDR List. When configured, it will replace all advertised routes from this VPC. Example: 10.4.0.0/116,10.5.0.0/16. Equivalent to \"Custom Spoke Adv CIDRs\" setting in the UI."
   type        = string
   default     = ""
   nullable    = false
