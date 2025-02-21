@@ -5,7 +5,7 @@ In this example, the module deploys the Aviatrix spoke gateways in group mode.
 ```hcl
 module "spoke_aws_1" {
   source  = "terraform-aviatrix-modules/mc-spoke/aviatrix"
-  version = "1.7.1"
+  version = "8.0.0"
 
   cloud          = "AWS"
   name           = "App1"
