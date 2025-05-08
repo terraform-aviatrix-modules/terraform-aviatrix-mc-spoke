@@ -37,12 +37,8 @@ jobs:
         run: |
           git diff versions.tf
 
-      - name: Commit changes (dry run)
+      - name: Commit changes
         run: |
           git add versions.tf
-          git commit -m "DRY RUN: Set QA provider version for testing"
-          echo "Dry run complete — commit created but not pushed."
-
-      - name: List branches (verification)
-        run: |
-          git branch
+          git commit -m "Set QA provider version for testing"
+          git push origin qa --force
