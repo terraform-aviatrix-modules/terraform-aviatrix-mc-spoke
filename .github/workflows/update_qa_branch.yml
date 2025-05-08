@@ -1,0 +1,48 @@
+name: Update QA Branch
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  update-qa:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout master branch
+        uses: actions/checkout@v4
+        with:
+          ref: master
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+
+      - name: Delete existing qa branch (if any)
+        run: |
+          git push origin --delete qa || echo "qa branch does not exist"
+
+      - name: Create new qa branch
+        run: |
+          git checkout -b qa
+
+      - name: Overwrite versions.tf with QA template
+        run: |
+          cp tools/qa/versions.tf versions.tf
+  
+      - name: Show diff
+        run: |
+          git diff versions.tf
+
+      - name: Commit changes (dry run)
+        run: |
+          git add versions.tf
+          git commit -m "DRY RUN: Set QA provider version for testing"
+          echo "Dry run complete — commit created but not pushed."
+
+      - name: List branches (verification)
+        run: |
+          git branch
