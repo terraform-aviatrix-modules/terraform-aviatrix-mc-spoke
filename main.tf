@@ -68,6 +68,8 @@ resource "aviatrix_spoke_gateway" "default" {
   availability_domain                   = local.availability_domain
   fault_domain                          = local.fault_domain
   enable_active_standby                 = var.enable_active_standby
+  ph2_encryption_policy                 = var.ph2_encryption_policy
+  ph2_pfs_policy                        = var.ph2_pfs_policy
   prepend_as_path                       = var.prepend_as_path
   enable_learned_cidrs_approval         = var.enable_learned_cidrs_approval
   learned_cidrs_approval_mode           = var.learned_cidrs_approval_mode

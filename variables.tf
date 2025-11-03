@@ -395,6 +395,18 @@ variable "enable_active_standby" {
   nullable    = false
 }
 
+variable "ph2_encryption_policy" {
+  description = "Phase 2 encryption policy. Config options are default/strong."
+  type        = string
+  default     = null
+}
+
+variable "ph2_pfs_policy" {
+  description = "Phase 2 Perfect Forward Secrecy (PFS) policy. Config Options are enable/disabled."
+  type        = string
+  default     = null
+}
+
 variable "prepend_as_path" {
   description = "List of AS numbers to populate BGP AS_PATH field when it advertises to VGW or peer devices."
   type        = list(number)
@@ -695,6 +707,18 @@ variable "enable_active_standby_preemptive" {
 variable "enable_jumbo_frame" {
   description = "Enable jumbo frames for this spoke gateway. Default value is true."
   type        = bool
+  default     = null
+}
+
+variable "enable_ipv6" {
+  description = "Enable IPv6 for the VPC."
+  type        = bool
+  default     = false
+}
+
+variable "vpc_ipv6_cidr" {
+  description = "IPv6 CIDR block for the VPC. Required when enable_ipv6 is true."
+  type        = string
   default     = null
 }
 
