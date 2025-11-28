@@ -699,15 +699,42 @@ variable "enable_jumbo_frame" {
 }
 
 variable "enable_ipv6" {
-  description = "Enable IPv6 for the VPC."
+  description = "Enable IPv6 for the VPC and spoke gateway."
   type        = bool
   default     = false
+  nullable    = false
 }
 
 variable "vpc_ipv6_cidr" {
-  description = "IPv6 CIDR block for the VPC. Required when enable_ipv6 is true."
+  description = "IPv6 CIDR block for the VPC."
   type        = string
   default     = null
+
+  validation {
+    condition     = var.vpc_ipv6_cidr == null || can(cidrhost(var.vpc_ipv6_cidr, 0))
+    error_message = "The vpc_ipv6_cidr must be a valid IPv6 CIDR block."
+  }
+
+  validation {
+    condition     = var.vpc_ipv6_cidr == null || can(regex("^([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}/[0-9]+$", var.vpc_ipv6_cidr)) || can(regex("^::1/[0-9]+$", var.vpc_ipv6_cidr)) || can(regex("^([0-9a-fA-F]{1,4}:)*:([0-9a-fA-F]{1,4}:)*[0-9a-fA-F]{1,4}/[0-9]+$", var.vpc_ipv6_cidr))
+    error_message = "The vpc_ipv6_cidr must be a valid IPv6 CIDR block format."
+  }
+}
+
+variable "subnet_ipv6_cidr" {
+  description = "IPv6 CIDR block for the subnet."
+  type        = string
+  default     = null
+
+  validation {
+    condition     = var.subnet_ipv6_cidr == null || can(cidrhost(var.subnet_ipv6_cidr, 0))
+    error_message = "The subnet_ipv6_cidr must be a valid IPv6 CIDR block."
+  }
+
+  validation {
+    condition     = var.subnet_ipv6_cidr == null || can(regex("^([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}/[0-9]+$", var.subnet_ipv6_cidr)) || can(regex("^::1/[0-9]+$", var.subnet_ipv6_cidr)) || can(regex("^([0-9a-fA-F]{1,4}:)*:([0-9a-fA-F]{1,4}:)*[0-9a-fA-F]{1,4}/[0-9]+$", var.subnet_ipv6_cidr))
+    error_message = "The subnet_ipv6_cidr must be a valid IPv6 CIDR block format."
+  }
 }
 
 

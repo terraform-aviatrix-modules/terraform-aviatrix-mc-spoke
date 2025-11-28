@@ -84,6 +84,7 @@ resource "aviatrix_spoke_gateway" "default" {
   enable_vpc_dns_server                 = var.enable_vpc_dns_server
   enable_jumbo_frame                    = var.enable_jumbo_frame
   enable_ipv6                           = var.enable_ipv6
+  subnet_ipv6_cidr                      = var.subnet_ipv6_cidr
 
   #BGP Settings
   enable_bgp                       = var.enable_bgp
