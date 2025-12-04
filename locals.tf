@@ -69,33 +69,25 @@ locals {
   ipv6_insane_mode_subnet    = (var.insane_mode) && local.ipv6_cidr != null ? cidrsubnet(local.ipv6_cidr, local.ipv6_newbits, local.ipv6_netnum - 2) : null
   ipv6_ha_insane_mode_subnet = (var.insane_mode) && local.ipv6_cidr != null ? cidrsubnet(local.ipv6_cidr, local.ipv6_newbits, local.ipv6_netnum - 1) : null
 
-  ipv6_subnet = var.enable_ipv6 ? (var.use_existing_vpc ?
-    var.ipv6_gw_subnet
-    : (
-      (var.insane_mode && contains(["aws", "azure", "oci"], local.cloud)) ?
-      local.ipv6_insane_mode_subnet
+  ipv6_subnet = (var.enable_ipv6 && contains(["aws", "azure"], local.cloud) ? #IPv6 only supported in AWS and Azure
+    (var.use_existing_vpc ?
+      var.ipv6_gw_subnet
       :
-      (local.cloud == "gcp" ?
-        aviatrix_vpc.default[0].subnets[local.subnet_map[local.cloud]].ipv6_cidr
-        :
-        aviatrix_vpc.default[0].public_subnets[local.subnet_map[local.cloud]].ipv6_cidr
+      (
+        var.insane_mode ? local.ipv6_insane_mode_subnet : null #If insane mode is set, use the calculated ipv6 subnet
       )
-    )
-  ) : null
+    ) : null
+  )
 
-  ipv6_ha_subnet = var.enable_ipv6 ? (var.use_existing_vpc ?
-    var.ipv6_hagw_subnet :
-    (
-      (var.insane_mode && contains(["aws", "azure", "oci"], local.cloud)) ?
-      local.ipv6_ha_insane_mode_subnet
+  ipv6_ha_subnet = (var.enable_ipv6 && contains(["aws", "azure"], local.cloud) ? #IPv6 only supported in AWS and Azure
+    (var.use_existing_vpc ?
+      var.ipv6_hagw_subnet
       :
-      (local.cloud == "gcp" ?
-        aviatrix_vpc.default[0].subnets[local.ha_subnet_map[local.cloud]].ipv6_cidr
-        :
-        aviatrix_vpc.default[0].public_subnets[local.ha_subnet_map[local.cloud]].ipv6_cidr
+      (
+        var.insane_mode ? local.ipv6_ha_insane_mode_subnet : null #If insane mode is set, use the calculated ipv6 subnet
       )
-    )
-  ) : null
+    ) : null
+  )
 
   # Auto disable AZ support for Gov, DOD and China regions in Azure
   az_support = local.is_gov || local.is_china ? false : var.az_support
