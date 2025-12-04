@@ -69,12 +69,16 @@ locals {
   ipv6_insane_mode_subnet    = (var.insane_mode) && local.ipv6_cidr != null ? cidrsubnet(local.ipv6_cidr, local.ipv6_newbits, local.ipv6_netnum - 2) : null
   ipv6_ha_insane_mode_subnet = (var.insane_mode) && local.ipv6_cidr != null ? cidrsubnet(local.ipv6_cidr, local.ipv6_newbits, local.ipv6_netnum - 1) : null
 
+
   ipv6_subnet = (var.enable_ipv6 && contains(["aws", "azure"], local.cloud) ? #IPv6 only supported in AWS and Azure
     (var.use_existing_vpc ?
       var.ipv6_gw_subnet
       :
       (
-        var.insane_mode ? local.ipv6_insane_mode_subnet : null #If insane mode is set, use the calculated ipv6 subnet
+        var.insane_mode ?
+        local.ipv6_insane_mode_subnet #If insane mode is set, use the calculated ipv6 insane mode subnet
+        :
+        aviatrix_vpc.default[0].public_subnets[local.subnet_map[local.cloud]].ipv6_cidr #Otherwise lookup the mapping from the created VPC
       )
     ) : null
   )
@@ -84,7 +88,9 @@ locals {
       var.ipv6_hagw_subnet
       :
       (
-        var.insane_mode ? local.ipv6_ha_insane_mode_subnet : null #If insane mode is set, use the calculated ipv6 subnet
+        var.insane_mode ? local.ipv6_ha_insane_mode_subnet #If insane mode is set, use the calculated ipv6 subnet
+        :
+        aviatrix_vpc.default[0].public_subnets[local.ha_subnet_map[local.cloud]].ipv6_cidr #Otherwise lookup the mapping from the created VPC
       )
     ) : null
   )
