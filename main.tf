@@ -13,7 +13,7 @@ resource "aviatrix_vpc" "default" {
   resource_group       = var.resource_group
   private_mode_subnets = var.private_mode_subnets
   enable_ipv6          = var.enable_ipv6
-  vpc_ipv6_cidr        = var.vpc_ipv6_cidr
+  vpc_ipv6_cidr        = var.ipv6_cidr
 
   dynamic "subnets" {
     for_each = local.cloud == "gcp" ? ["dummy"] : [] #Trick to make block conditional. Count not available on dynamic blocks.
@@ -83,8 +83,11 @@ resource "aviatrix_spoke_gateway" "default" {
   enable_gro_gso                        = var.enable_gro_gso
   enable_vpc_dns_server                 = var.enable_vpc_dns_server
   enable_jumbo_frame                    = var.enable_jumbo_frame
-  enable_ipv6                           = var.enable_ipv6
-  subnet_ipv6_cidr                      = var.subnet_ipv6_cidr
+
+  #IPv6 Settings
+  enable_ipv6         = var.enable_ipv6
+  subnet_ipv6_cidr    = local.ipv6_subnet
+  ha_subnet_ipv6_cidr = local.ipv6_ha_subnet
 
   #BGP Settings
   enable_bgp                       = var.enable_bgp

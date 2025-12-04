@@ -1,31 +1,33 @@
 locals {
-  cloud                 = lower(var.cloud)
-  gw_name               = coalesce(var.gw_name, var.name)
+  cloud             = lower(var.cloud)
+  gw_name           = coalesce(var.gw_name, var.name)
+  ha_gw             = var.group_mode ? false : var.ha_gw
+  manage_ha_gateway = var.group_mode ? false : var.manage_ha_gateway
+
+  ### Subnet Calculations ###
+  subnet_map = {
+    azure = 0,
+    aws   = 0,
+    gcp   = 0,
+    oci   = 0,
+    ali   = 0,
+  }
+
+  ha_subnet_map = {
+    azure = 0,
+    aws   = 1,
+    gcp   = length(var.ha_region) > 0 ? 1 : 0
+    oci   = 0,
+    ali   = 1,
+  }
+
+  #IPv4 subnet calculations
   cidr                  = var.use_existing_vpc ? "10.0.0.0/20" : var.cidr #Set dummy if existing VPC is used.
   cidrbits              = tonumber(split("/", local.cidr)[1])
   newbits               = 26 - local.cidrbits
   netnum                = pow(2, local.newbits)
   insane_mode_subnet    = var.insane_mode || var.private_mode_subnets ? cidrsubnet(local.cidr, local.newbits, local.netnum - 2) : null #Only calculate if insane_mode is true
   ha_insane_mode_subnet = var.insane_mode || var.private_mode_subnets ? cidrsubnet(local.cidr, local.newbits, local.netnum - 1) : null #Only calculate if insane_mode is true
-  ha_gw                 = var.group_mode ? false : var.ha_gw
-  manage_ha_gateway     = var.group_mode ? false : var.manage_ha_gateway
-
-  # Auto disable AZ support for Gov, DOD and China regions in Azure
-  az_support = local.is_gov || local.is_china ? false : var.az_support
-
-  az1 = length(var.az1) > 0 ? var.az1 : lookup(local.az1_map, local.cloud, null)
-  az1_map = {
-    azure = local.az_support ? "az-1" : null,
-    aws   = "a",
-    gcp   = "b",
-  }
-
-  az2 = length(var.az2) > 0 ? var.az2 : lookup(local.az2_map, local.cloud, null)
-  az2_map = {
-    azure = local.az_support ? "az-2" : null,
-    aws   = "b",
-    gcp   = "c",
-  }
 
   subnet = (var.use_existing_vpc ?
     var.gw_subnet
@@ -40,14 +42,6 @@ locals {
       )
     )
   )
-
-  subnet_map = {
-    azure = 0,
-    aws   = 0,
-    gcp   = 0,
-    oci   = 0,
-    ali   = 0,
-  }
 
   ha_subnet = (var.use_existing_vpc ?
     (contains(["azure", "oci"], local.cloud) && var.hagw_subnet == "" ? #If HAGW Subnet is not provided, use gw_subnet. This is acceptable for Azure and OCI, because a subnet can stretch AZ's/Fault domains.
@@ -67,12 +61,57 @@ locals {
     )
   )
 
-  ha_subnet_map = {
-    azure = 0,
-    aws   = 1,
-    gcp   = length(var.ha_region) > 0 ? 1 : 0
-    oci   = 0,
-    ali   = 1,
+  #IPv6 subnet calculations
+  ipv6_cidr                  = var.use_existing_vpc ? "1::1/120" : var.ipv6_cidr #Set dummy if existing VPC is used.
+  ipv6_cidrbits              = local.ipv6_cidr != null ? tonumber(split("/", local.ipv6_cidr)[1]) : null
+  ipv6_newbits               = local.ipv6_cidrbits != null ? 126 - local.ipv6_cidrbits : null
+  ipv6_netnum                = local.ipv6_newbits != null ? pow(2, local.ipv6_newbits) : null
+  ipv6_insane_mode_subnet    = (var.insane_mode) && local.ipv6_cidr != null ? cidrsubnet(local.ipv6_cidr, local.ipv6_newbits, local.ipv6_netnum - 2) : null
+  ipv6_ha_insane_mode_subnet = (var.insane_mode) && local.ipv6_cidr != null ? cidrsubnet(local.ipv6_cidr, local.ipv6_newbits, local.ipv6_netnum - 1) : null
+
+  ipv6_subnet = var.enable_ipv6 ? (var.use_existing_vpc ?
+    var.ipv6_gw_subnet
+    : (
+      (var.insane_mode && contains(["aws", "azure", "oci"], local.cloud)) ?
+      local.ipv6_insane_mode_subnet
+      :
+      (local.cloud == "gcp" ?
+        aviatrix_vpc.default[0].subnets[local.subnet_map[local.cloud]].ipv6_cidr
+        :
+        aviatrix_vpc.default[0].public_subnets[local.subnet_map[local.cloud]].ipv6_cidr
+      )
+    )
+  ) : null
+
+  ipv6_ha_subnet = var.enable_ipv6 ? (var.use_existing_vpc ?
+    var.ipv6_hagw_subnet :
+    (
+      (var.insane_mode && contains(["aws", "azure", "oci"], local.cloud)) ?
+      local.ipv6_ha_insane_mode_subnet
+      :
+      (local.cloud == "gcp" ?
+        aviatrix_vpc.default[0].subnets[local.ha_subnet_map[local.cloud]].ipv6_cidr
+        :
+        aviatrix_vpc.default[0].public_subnets[local.ha_subnet_map[local.cloud]].ipv6_cidr
+      )
+    )
+  ) : null
+
+  # Auto disable AZ support for Gov, DOD and China regions in Azure
+  az_support = local.is_gov || local.is_china ? false : var.az_support
+
+  az1 = length(var.az1) > 0 ? var.az1 : lookup(local.az1_map, local.cloud, null)
+  az1_map = {
+    azure = local.az_support ? "az-1" : null,
+    aws   = "a",
+    gcp   = "b",
+  }
+
+  az2 = length(var.az2) > 0 ? var.az2 : lookup(local.az2_map, local.cloud, null)
+  az2_map = {
+    azure = local.az_support ? "az-2" : null,
+    aws   = "b",
+    gcp   = "c",
   }
 
   #Group mode subnetting
