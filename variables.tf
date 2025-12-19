@@ -74,6 +74,17 @@ variable "cidr" {
   }
 }
 
+variable "ipv6_cidr" {
+  description = "The IPv6 CIDR range to be used for the VPC"
+  type        = string
+  default     = null
+
+  validation {
+    condition     = var.ipv6_cidr == null || can(cidrhost(var.ipv6_cidr, 0))
+    error_message = "The ipv6_cidr must be a valid IPv6 CIDR block."
+  }
+}
+
 variable "ha_cidr" {
   description = "CIDR of the HA GCP subnet"
   type        = string
@@ -696,6 +707,35 @@ variable "enable_jumbo_frame" {
   description = "Enable jumbo frames for this spoke gateway. Default value is true."
   type        = bool
   default     = null
+}
+
+variable "enable_ipv6" {
+  description = "Enable IPv6 for the VPC and transit gateway."
+  type        = bool
+  default     = false
+  nullable    = false
+}
+
+variable "ipv6_gw_subnet" {
+  description = "IPv6 CIDR block for the subnet."
+  type        = string
+  default     = null
+
+  validation {
+    condition     = var.ipv6_gw_subnet == null || can(cidrhost(var.ipv6_gw_subnet, 0))
+    error_message = "The ipv6_gw_subnet must be a valid IPv6 CIDR block."
+  }
+}
+
+variable "ipv6_hagw_subnet" {
+  description = "IPv6 CIDR block for the HA subnet."
+  type        = string
+  default     = null
+
+  validation {
+    condition     = var.ipv6_hagw_subnet == null || can(cidrhost(var.ipv6_hagw_subnet, 0))
+    error_message = "The ipv6_hagw_subnet must be a valid IPv6 CIDR block."
+  }
 }
 
 
