@@ -12,6 +12,8 @@ resource "aviatrix_vpc" "default" {
   subnet_size          = local.subnet_size
   resource_group       = var.resource_group
   private_mode_subnets = var.private_mode_subnets
+  enable_ipv6          = var.enable_ipv6
+  vpc_ipv6_cidr        = var.ipv6_cidr
 
   dynamic "subnets" {
     for_each = local.cloud == "gcp" ? ["dummy"] : [] #Trick to make block conditional. Count not available on dynamic blocks.
@@ -68,6 +70,8 @@ resource "aviatrix_spoke_gateway" "default" {
   availability_domain                   = local.availability_domain
   fault_domain                          = local.fault_domain
   enable_active_standby                 = var.enable_active_standby
+  tunnel_encryption_cipher              = var.tunnel_encryption_cipher
+  tunnel_forward_secrecy                = var.tunnel_forward_secrecy
   prepend_as_path                       = var.prepend_as_path
   enable_learned_cidrs_approval         = var.enable_learned_cidrs_approval
   learned_cidrs_approval_mode           = var.learned_cidrs_approval_mode
@@ -81,6 +85,11 @@ resource "aviatrix_spoke_gateway" "default" {
   enable_gro_gso                        = var.enable_gro_gso
   enable_vpc_dns_server                 = var.enable_vpc_dns_server
   enable_jumbo_frame                    = var.enable_jumbo_frame
+
+  #IPv6 Settings
+  enable_ipv6         = var.enable_ipv6
+  subnet_ipv6_cidr    = local.ipv6_subnet
+  ha_subnet_ipv6_cidr = local.ipv6_ha_subnet
 
   #BGP Settings
   enable_bgp                       = var.enable_bgp
