@@ -1,0 +1,44 @@
+name: Update Dev QA Branch
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  update-dev-qa:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout dev branch
+        uses: actions/checkout@v4
+        with:
+          ref: dev
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+
+      - name: Delete existing dev-qa branch (if any)
+        run: |
+          git push origin --delete dev-qa || echo "dev-qa branch does not exist"
+
+      - name: Create new dev-qa branch
+        run: |
+          git checkout -b dev-qa
+
+      - name: Overwrite versions.tf with QA template
+        run: |
+          cp tools/qa/versions.tf versions.tf
+
+      - name: Show diff
+        run: |
+          git diff versions.tf
+
+      - name: Commit changes
+        run: |
+          git add versions.tf
+          git commit -m "Set QA provider version for testing"
+          git push origin dev-qa --force

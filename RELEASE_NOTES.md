@@ -1,8 +1,5 @@
 # terraform-aviatrix-mc-spoke release notes
 
-## 8.0.1
-- Automatically disables az_support if region is Azure China.
-
 ## 8.0.0
 ### Version Alignment
 Starting with this release, this Terraform module will align its version with the Aviatrix Controller version. This means the module version has jumped from v1.7.1 to v8.0.0 to align with the Controller’s latest major version. This change makes it easier to determine which module version is compatible with which Controller version.
