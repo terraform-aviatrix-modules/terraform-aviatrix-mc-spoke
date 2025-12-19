@@ -719,17 +719,3 @@ variable "enable_jumbo_frame" {
   type        = bool
   default     = null
 }
-
-variable "enable_ipv6" {
-  description = "Enable IPv6 for the VPC."
-  type        = bool
-  default     = false
-}
-
-variable "vpc_ipv6_cidr" {
-  description = "IPv6 CIDR block for the VPC. Required when enable_ipv6 is true."
-  type        = string
-  default     = null
-}
-
-
