@@ -89,7 +89,7 @@ resource "aviatrix_spoke_gateway" "default" {
   #IPv6 Settings
   enable_ipv6         = var.enable_ipv6
   subnet_ipv6_cidr    = local.ipv6_subnet
-  ha_subnet_ipv6_cidr = local.ipv6_ha_subnet
+  ha_subnet_ipv6_cidr = local.ha_gw ? local.ipv6_ha_subnet : null
 
   #BGP Settings
   enable_bgp                       = var.enable_bgp
