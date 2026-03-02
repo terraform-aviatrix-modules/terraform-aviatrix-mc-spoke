@@ -70,27 +70,36 @@ locals {
   ipv6_ha_insane_mode_subnet = (var.insane_mode) && local.ipv6_cidr != null ? cidrsubnet(local.ipv6_cidr, local.ipv6_newbits, local.ipv6_netnum - 1) : null
 
 
-  ipv6_subnet = (var.enable_ipv6 && contains(["aws", "azure"], local.cloud) ? #IPv6 only supported in AWS and Azure
+  ipv6_subnet = (var.enable_ipv6 && contains(["aws", "azure", "gcp"], local.cloud) ? #IPv6 only supported in AWS, Azure and GCP
     (var.use_existing_vpc ?
       var.ipv6_gw_subnet
       :
       (
-        var.insane_mode ?
+        (var.insane_mode && contains(["aws", "azure"], local.cloud)) ?
         local.ipv6_insane_mode_subnet #If insane mode is set, use the calculated ipv6 insane mode subnet
         :
-        aviatrix_vpc.default[0].public_subnets[local.subnet_map[local.cloud]].ipv6_cidr #Otherwise lookup the mapping from the created VPC
+        (local.cloud == "gcp" ?
+          aviatrix_vpc.default[0].subnets[local.subnet_map[local.cloud]].ipv6_cidr
+          :
+          aviatrix_vpc.default[0].public_subnets[local.subnet_map[local.cloud]].ipv6_cidr
+        )
       )
     ) : null
   )
 
-  ipv6_ha_subnet = (var.enable_ipv6 && contains(["aws", "azure"], local.cloud) ? #IPv6 only supported in AWS and Azure
+  ipv6_ha_subnet = (var.enable_ipv6 && contains(["aws", "azure", "gcp"], local.cloud) ? #IPv6 only supported in AWS, Azure and GCP
     (var.use_existing_vpc ?
       var.ipv6_hagw_subnet
       :
       (
-        var.insane_mode ? local.ipv6_ha_insane_mode_subnet #If insane mode is set, use the calculated ipv6 subnet
+        (var.insane_mode && contains(["aws", "azure"], local.cloud)) ?
+        local.ipv6_ha_insane_mode_subnet #If insane mode is set, use the calculated ipv6 subnet
         :
-        aviatrix_vpc.default[0].public_subnets[local.ha_subnet_map[local.cloud]].ipv6_cidr #Otherwise lookup the mapping from the created VPC
+        (local.cloud == "gcp" ?
+          aviatrix_vpc.default[0].subnets[local.ha_subnet_map[local.cloud]].ipv6_cidr
+          :
+          aviatrix_vpc.default[0].public_subnets[local.ha_subnet_map[local.cloud]].ipv6_cidr
+        )
       )
     ) : null
   )
