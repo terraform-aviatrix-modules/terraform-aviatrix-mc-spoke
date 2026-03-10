@@ -2,6 +2,7 @@
 
 ## 8.2.1
 - Fix an issue where IPv6 ha subnet was not conditional on HA being enabled.
+- Fix an issue with subnet calculations causing an error in certain scenario's.
 
 ## 8.2.0
 - Add support for IPv6
