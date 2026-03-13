@@ -1,6 +1,7 @@
 name: Update Dev QA Branch
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - dev

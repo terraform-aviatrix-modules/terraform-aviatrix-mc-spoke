@@ -1,6 +1,7 @@
 name: Update QA Branch
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
@@ -32,7 +33,7 @@ jobs:
       - name: Overwrite versions.tf with QA template
         run: |
           cp tools/qa/versions.tf versions.tf
-  
+
       - name: Show diff
         run: |
           git diff versions.tf
