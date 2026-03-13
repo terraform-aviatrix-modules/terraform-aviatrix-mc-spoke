@@ -425,7 +425,7 @@ variable "tunnel_forward_secrecy" {
   nullable    = false
 
   validation {
-    condition     = contains(["enable", "disabled"], var.tunnel_forward_secrecy)
+    condition     = contains(["enable", "disable"], var.tunnel_forward_secrecy)
     error_message = "Invalid tunnel_forward_secrecy. Supported values are: enable, disabled."
   }
 }
