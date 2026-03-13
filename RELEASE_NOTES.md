@@ -1,5 +1,8 @@
 # terraform-aviatrix-mc-spoke release notes
 
+## 8.2.2
+- Fix an issue where validation of the `tunnel_forward_secrecy` was done incorrectly.
+
 ## 8.2.1
 - Fix an issue where IPv6 ha subnet was not conditional on HA being enabled.
 - Fix an issue with subnet calculations causing an error in certain scenario's.
