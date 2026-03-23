@@ -89,6 +89,7 @@ resource "aviatrix_spoke_gateway" "default" {
   enable_gro_gso                        = var.enable_gro_gso
   enable_vpc_dns_server                 = var.enable_vpc_dns_server
   enable_jumbo_frame                    = var.enable_jumbo_frame
+  private_route_table_config            = length(var.private_route_table_config) > 0 ? var.private_route_table_config : null
 
   #IPv6 Settings
   enable_ipv6         = var.enable_ipv6

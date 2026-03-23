@@ -795,4 +795,11 @@ variable "ipv6_hagw_subnet" {
   }
 }
 
+variable "private_route_table_config" {
+  description = "Configuration for the private route table."
+  type        = list(string)
+  default     = []
+  nullable    = false
+}
+
 
