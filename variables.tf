@@ -103,7 +103,7 @@ variable "ipv6_access_type" {
   default     = null
 
   validation {
-    condition     = lower(var.cloud) == "gcp" && (var.ipv6_access_type == null || contains(["INTERNAL", "EXTERNAL"], var.ipv6_access_type))
+    condition     = var.ipv6_access_type == null || contains(["INTERNAL", "EXTERNAL"], var.ipv6_access_type)
     error_message = "The ipv6_access_type must be either INTERNAL or EXTERNAL."
   }
 }
@@ -513,11 +513,6 @@ variable "approved_learned_cidrs" {
   description = "A list of approved learned CIDRs."
   type        = list(string)
   default     = null
-
-  validation {
-    condition     = var.approved_learned_cidrs != null ? alltrue([for v in var.approved_learned_cidrs : can(cidrnetmask(v))]) : true
-    error_message = "All values in this list must be valid CIDR's."
-  }
 }
 
 variable "local_as_number" {
