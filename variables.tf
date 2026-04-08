@@ -103,7 +103,7 @@ variable "ipv6_access_type" {
   default     = null
 
   validation {
-    condition     = lower(var.cloud) == "gcp" && (var.ipv6_access_type == null || contains(["INTERNAL", "EXTERNAL"], var.ipv6_access_type))
+    condition     = var.ipv6_access_type == null || contains(["INTERNAL", "EXTERNAL"], var.ipv6_access_type)
     error_message = "The ipv6_access_type must be either INTERNAL or EXTERNAL."
   }
 }
