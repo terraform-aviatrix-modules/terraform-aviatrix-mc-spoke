@@ -482,8 +482,8 @@ variable "approved_learned_cidrs" {
   default     = null
 
   validation {
-    condition     = var.approved_learned_cidrs != null ? alltrue([for v in var.approved_learned_cidrs : can(cidrnetmask(v))]) : true
-    error_message = "All values in this list must be valid CIDR's."
+    condition     = var.approved_learned_cidrs != null ? alltrue([for v in var.approved_learned_cidrs : can(cidrnetmask(trimspace(split(" ", v)[0])))]) : true
+    error_message = "All values in this list must be valid CIDR's. Optionally include ge/le range values (e.g. 10.0.0.0/8 ge 16 le 32)."
   }
 }
 
