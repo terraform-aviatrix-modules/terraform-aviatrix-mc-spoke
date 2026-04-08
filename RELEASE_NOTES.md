@@ -1,5 +1,8 @@
 # terraform-aviatrix-mc-spoke release notes
 
+## 8.1.0
+- Relaxed the variable constraints for `approved_learned_cidrs`, as it allows ge/le as part of the string value.
+
 ## 8.0.0
 ### Version Alignment
 Starting with this release, this Terraform module will align its version with the Aviatrix Controller version. This means the module version has jumped from v1.7.1 to v8.0.0 to align with the Controller’s latest major version. This change makes it easier to determine which module version is compatible with which Controller version.
