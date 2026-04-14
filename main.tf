@@ -14,31 +14,35 @@ resource "aviatrix_vpc" "default" {
   private_mode_subnets = var.private_mode_subnets
   enable_ipv6          = var.enable_ipv6
   vpc_ipv6_cidr        = var.ipv6_cidr
+  ipv6_access_type     = (var.enable_ipv6 && local.cloud == "gcp") ? var.ipv6_access_type : null
 
   dynamic "subnets" {
     for_each = local.cloud == "gcp" ? ["dummy"] : [] #Trick to make block conditional. Count not available on dynamic blocks.
     content {
-      name   = local.gw_name
-      cidr   = var.cidr
-      region = var.region
+      name             = local.gw_name
+      cidr             = var.cidr
+      region           = var.region
+      ipv6_access_type = var.enable_ipv6 ? var.subnet_ipv6_access_type : null
     }
   }
 
   dynamic "subnets" {
     for_each = local.cloud == "gcp" && length(var.ha_region) > 0 ? ["dummy"] : [] #Trick to make block conditional. Count not available on dynamic blocks.
     content {
-      name   = "${local.gw_name}-ha"
-      cidr   = var.ha_cidr
-      region = var.ha_region
+      name             = "${local.gw_name}-ha"
+      cidr             = var.ha_cidr
+      region           = var.ha_region
+      ipv6_access_type = var.enable_ipv6 ? var.ha_subnet_ipv6_access_type : null
     }
   }
 
   dynamic "subnets" {
     for_each = var.additional_gcp_subnets
     content {
-      name   = subnets.key
-      cidr   = subnets.value.cidr
-      region = subnets.value.region
+      name             = subnets.key
+      cidr             = subnets.value.cidr
+      region           = subnets.value.region
+      ipv6_access_type = var.enable_ipv6 ? subnets.value.ipv6_access_type : null
     }
   }
 }
@@ -85,6 +89,7 @@ resource "aviatrix_spoke_gateway" "default" {
   enable_gro_gso                        = var.enable_gro_gso
   enable_vpc_dns_server                 = var.enable_vpc_dns_server
   enable_jumbo_frame                    = var.enable_jumbo_frame
+  private_route_table_config            = length(var.private_route_table_config) > 0 ? var.private_route_table_config : null
 
   #IPv6 Settings
   enable_ipv6         = var.enable_ipv6

@@ -97,6 +97,39 @@ variable "ha_cidr" {
   }
 }
 
+variable "ipv6_access_type" {
+  description = "The IPv6 access type for the subnet"
+  type        = string
+  default     = null
+
+  validation {
+    condition     = var.ipv6_access_type == null || contains(["INTERNAL", "EXTERNAL"], var.ipv6_access_type)
+    error_message = "The ipv6_access_type must be either INTERNAL or EXTERNAL."
+  }
+}
+
+variable "ha_subnet_ipv6_access_type" {
+  description = "The IPv6 access type for the HA subnet"
+  type        = string
+  default     = null
+
+  validation {
+    condition     = var.ha_subnet_ipv6_access_type == null || contains(["INTERNAL", "EXTERNAL"], var.ha_subnet_ipv6_access_type)
+    error_message = "The ha_subnet_ipv6_access_type must be either INTERNAL or EXTERNAL."
+  }
+}
+
+variable "subnet_ipv6_access_type" {
+  description = "The IPv6 access type for the subnet"
+  type        = string
+  default     = null
+
+  validation {
+    condition     = var.subnet_ipv6_access_type == null || contains(["INTERNAL", "EXTERNAL"], var.subnet_ipv6_access_type)
+    error_message = "The subnet_ipv6_access_type must be either INTERNAL or EXTERNAL."
+  }
+}
+
 variable "account" {
   description = "The AWS account name, as known by the Aviatrix controller"
   type        = string
@@ -480,11 +513,6 @@ variable "approved_learned_cidrs" {
   description = "A list of approved learned CIDRs."
   type        = list(string)
   default     = null
-
-  validation {
-    condition     = var.approved_learned_cidrs != null ? alltrue([for v in var.approved_learned_cidrs : can(cidrnetmask(v))]) : true
-    error_message = "All values in this list must be valid CIDR's."
-  }
 }
 
 variable "local_as_number" {
@@ -760,6 +788,13 @@ variable "ipv6_hagw_subnet" {
     condition     = var.ipv6_hagw_subnet == null || can(cidrhost(var.ipv6_hagw_subnet, 0))
     error_message = "The ipv6_hagw_subnet must be a valid IPv6 CIDR block."
   }
+}
+
+variable "private_route_table_config" {
+  description = "Configuration for the private route table."
+  type        = list(string)
+  default     = []
+  nullable    = false
 }
 
 
