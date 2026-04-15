@@ -113,6 +113,7 @@ variable "ha_subnet_ipv6_access_type" {
   description = "The IPv6 access type for the HA subnet"
   type        = string
   default     = ""
+  nullable    = false
 
 
   validation {
