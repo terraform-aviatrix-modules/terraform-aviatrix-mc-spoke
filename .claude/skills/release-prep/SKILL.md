@@ -86,6 +86,43 @@ grep -r 'version =' examples/
 
 ---
 
+## Step 5a — Update external module references to latest compatible versions
+
+Some examples reference other Terraform modules (e.g. `mc-transit`, `mc-transit-peering`, `Azure/vnet/azurerm`). These should be updated to their latest compatible versions at release time.
+
+First, find all external module sources:
+
+```bash
+grep -rn 'source\s*=' examples/ | grep -v "mc-spoke" | sort -u
+```
+
+For each unique external module source, check its latest release on GitHub. The Aviatrix modules follow the pattern:
+- `terraform-aviatrix-modules/<module-name>` → `https://github.com/terraform-aviatrix-modules/terraform-aviatrix-<module-name>/releases/latest`
+- `Azure/vnet/azurerm` → `https://github.com/Azure/terraform-azurerm-vnet/releases/latest`
+
+**Compatibility check — do not blindly use the latest published release.** All Aviatrix modules from v8.0.0 onwards use a `>=` provider constraint, meaning they are forward-compatible with newer provider versions unless a new major version introduces breaking changes. This means an older module version (e.g. mc-transit 8.2.0) will generally work fine alongside a newer provider (e.g. 9.0.0). Use the following logic:
+
+- **Default:** use the latest **published** release of the referenced module. Because of forward compatibility, this is almost always correct.
+- **Only bump to an unreleased/upcoming version** if you know the referenced module's new version introduces features or changes that are specifically required by this example (e.g. the example demonstrates a new feature that only works with both modules at the new major version). Confirm with the team in that case.
+- **Never assume** that two modules releasing at the same major version number must reference each other at that version — that is only true if there is a functional dependency on the new features.
+- For **non-Aviatrix modules** (e.g. `Azure/vnet/azurerm`), compatibility is governed by the Terraform/AzureRM provider, not the Aviatrix controller — use the latest release unless there is a known breaking change.
+
+Then check the current pinned versions:
+```bash
+grep -rn 'version =' examples/ | grep -v '"<NEW_VERSION>"'  # replace with this module's new version
+```
+
+For each external module with a pinned version, update it to the correct compatible version. If a module has **no version pin**, add one.
+
+Update both `main.tf` **and** `README.md` (or `readme.md`) within each example directory, as both files typically contain the same module blocks.
+
+Verify all external module versions are up to date:
+```bash
+grep -rn 'source\s*=\|version\s*=' examples/ | grep -v "mc-spoke"
+```
+
+---
+
 ## Step 6 — Update COMPATIBILITY.md
 
 Add a new row at the **top** of the table (below the header) in `COMPATIBILITY.md`:

@@ -35,12 +35,15 @@ def parse_readme_variables(path):
     """
     Return dict of {var_name: description} from the optional variables table in README.md.
     Handles both plain names and markdown links: [name](url)
+    Also handles rows with a leading pipe: | name | ... | ... | ... |
     """
     text = open(path).read()
     readme_vars = {}
     for line in text.splitlines():
+        # Strip leading pipe and whitespace (mc-spoke uses | key | ... | format)
+        stripped = line.lstrip("| \t")
         # Match table rows: name | icons | default | description
-        m = re.match(r"^\[?(\w+)\]?(?:\([^)]*\))?\s*\|(.+)", line)
+        m = re.match(r"^\[?(\w+)\]?(?:\([^)]*\))?\s*\|(.+)", stripped)
         if not m:
             continue
         name = m.group(1)
@@ -60,7 +63,9 @@ def check_variable_coverage(tf_vars, readme_vars):
     """Every variable in variables.tf should appear in README.md."""
     # Required variables (cloud, name, region, account) live in a separate table
     # and don't appear in the optional table — skip them.
-    always_required = {"cloud", "name", "region", "account"}
+    # Required variables live in the required table, not the optional table — skip them.
+    # cidr and transit_gw are documented in the required table even though they have defaults.
+    always_required = {"cloud", "name", "region", "cidr", "account", "transit_gw"}
     # Variables intentionally omitted from README (e.g. hidden backward-compat flags)
     intentionally_undocumented = set()
     for name in sorted(tf_vars):
