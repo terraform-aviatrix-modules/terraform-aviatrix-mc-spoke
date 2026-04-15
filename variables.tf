@@ -101,7 +101,7 @@ variable "ipv6_access_type" {
   description = "The IPv6 access type for the subnet"
   type        = string
   default     = ""
-  nullable = false
+  nullable    = false
 
   validation {
     condition     = var.ipv6_access_type == "" || contains(["INTERNAL", "EXTERNAL"], var.ipv6_access_type)
@@ -125,7 +125,7 @@ variable "subnet_ipv6_access_type" {
   description = "The IPv6 access type for the subnet"
   type        = string
   default     = ""
-  nullable = false
+  nullable    = false
 
   validation {
     condition     = var.subnet_ipv6_access_type == "" || contains(["INTERNAL", "EXTERNAL"], var.subnet_ipv6_access_type)
