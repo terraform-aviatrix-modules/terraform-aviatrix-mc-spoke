@@ -100,10 +100,10 @@ variable "ha_cidr" {
 variable "ipv6_access_type" {
   description = "The IPv6 access type for the subnet, valid for GCP only"
   type        = string
-  default     = null
+  default     = ""
 
   validation {
-    condition     = lower(var.cloud) == "gcp" && (var.ipv6_access_type == null || contains(["INTERNAL", "EXTERNAL"], var.ipv6_access_type))
+    condition     = var.ipv6_access_type == "" || contains(["INTERNAL", "EXTERNAL"], var.ipv6_access_type)
     error_message = "The ipv6_access_type must be either INTERNAL or EXTERNAL."
   }
 }
@@ -111,10 +111,10 @@ variable "ipv6_access_type" {
 variable "ha_subnet_ipv6_access_type" {
   description = "The IPv6 access type for the HA subnet, valid for GCP only"
   type        = string
-  default     = null
+  default     = ""
 
   validation {
-    condition     = lower(var.cloud) == "gcp" && (var.ha_subnet_ipv6_access_type == null || contains(["INTERNAL", "EXTERNAL"], var.ha_subnet_ipv6_access_type))
+    condition     = var.ha_subnet_ipv6_access_type == "" || contains(["INTERNAL", "EXTERNAL"], var.ha_subnet_ipv6_access_type)
     error_message = "The ha_subnet_ipv6_access_type must be either INTERNAL or EXTERNAL."
   }
 }
@@ -122,10 +122,10 @@ variable "ha_subnet_ipv6_access_type" {
 variable "subnet_ipv6_access_type" {
   description = "The IPv6 access type for the subnet, valid for GCP only"
   type        = string
-  default     = null
+  default     = ""
 
   validation {
-    condition     = lower(var.cloud) == "gcp" && (var.subnet_ipv6_access_type == null || contains(["INTERNAL", "EXTERNAL"], var.subnet_ipv6_access_type))
+    condition     = var.subnet_ipv6_access_type == "" || contains(["INTERNAL", "EXTERNAL"], var.subnet_ipv6_access_type)
     error_message = "The subnet_ipv6_access_type must be either INTERNAL or EXTERNAL."
   }
 }
