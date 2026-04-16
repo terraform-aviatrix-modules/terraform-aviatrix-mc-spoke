@@ -1,0 +1,51 @@
+name: Create QA Release Tag
+
+on:
+  push:
+    tags:
+      - 'v[0-9]*'
+
+jobs:
+  create-qa-tag:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout tag
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+
+      - name: Create ephemeral branch
+        run: |
+          git checkout -b qa-tag-release-${{ github.ref_name }}
+
+      - name: Overwrite versions.tf with QA template
+        run: |
+          cp tools/qa/versions.tf versions.tf
+
+      - name: Show diff
+        run: |
+          git diff versions.tf
+
+      - name: Commit changes
+        run: |
+          git add versions.tf
+          git commit -m "Set QA provider version for testing"
+
+      - name: Create and push QA tag
+        run: |
+          git tag qa-${{ github.ref_name }}
+          git push origin qa-${{ github.ref_name }}
+
+      - name: Delete ephemeral branch
+        if: always()
+        run: |
+          git push origin --delete qa-tag-release-${{ github.ref_name }} || echo "Ephemeral branch cleanup skipped"
