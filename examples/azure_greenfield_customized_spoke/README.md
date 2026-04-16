@@ -47,6 +47,7 @@ resource "azurerm_route_table" "this" {
 
 module "vnet" {
   source              = "Azure/vnet/azurerm"
+  version             = "5.0.1"
   vnet_name           = var.name
   vnet_location       = var.region
   use_for_each        = true
@@ -94,7 +95,7 @@ module "vnet" {
 
 module "spoke1_azure" {
   source  = "terraform-aviatrix-modules/mc-spoke/aviatrix"
-  version = "8.2.2"
+  version = "9.0.0"
 
   cloud            = "Azure"
   name             = var.name

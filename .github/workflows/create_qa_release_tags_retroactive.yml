@@ -1,0 +1,49 @@
+name: Create QA Release Tags (Retroactive)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  create-qa-tags:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+
+      - name: Create QA tags for all v8+ releases
+        run: |
+          for tag in $(git tag | grep '^v[0-9]' | sort -V); do
+            major=$(echo "$tag" | sed 's/v\([0-9]*\).*/\1/')
+            if [ "$major" -lt 8 ]; then
+              continue
+            fi
+
+            qa_tag="qa-${tag}"
+
+            if git tag | grep -q "^${qa_tag}$"; then
+              echo "${qa_tag} already exists, skipping"
+              continue
+            fi
+
+            echo "Processing ${tag} -> ${qa_tag}"
+
+            git checkout -b qa-tag-release-${tag} ${tag}
+            cp tools/qa/versions.tf versions.tf
+            git diff versions.tf
+            git add versions.tf
+            git commit -m "Set QA provider version for testing"
+            git tag ${qa_tag}
+            git push origin ${qa_tag}
+            git checkout -
+            git branch -D qa-tag-release-${tag}
+          done
