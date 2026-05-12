@@ -2,6 +2,8 @@
 
 ## 9.0.0
 - Relaxed the variable constraints for `approved_learned_cidrs`, as it allows ge/le as part of the string value.
+- Added the `private_route_table_config` argument.
+- Added IPv6 Support for GCP
 
 ## 8.2.2
 - Fix an issue where validation of the `tunnel_forward_secrecy` was done incorrectly.
