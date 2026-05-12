@@ -3,6 +3,15 @@
 ## 9.0.0
 - Relaxed the variable constraints for `approved_learned_cidrs`, as it allows ge/le as part of the string value.
 
+### Add support for GCP IPv6 access type configuration
+Three new variables have been added to control IPv6 access type on GCP subnets:
+- `ipv6_access_type` - IPv6 access type for the primary gateway subnet (INTERNAL or EXTERNAL)
+- `subnet_ipv6_access_type` - IPv6 access type for the primary subnet
+- `ha_subnet_ipv6_access_type` - IPv6 access type for the HA subnet
+
+### Add support for private_route_table_config (Azure)
+A new variable `private_route_table_config` has been added to allow configuration of the private route table on Azure transit gateways.
+
 ## 8.2.2
 - Fix an issue where validation of the `tunnel_forward_secrecy` was done incorrectly.
 
