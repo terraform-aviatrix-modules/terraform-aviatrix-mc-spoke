@@ -573,23 +573,10 @@ variable "enable_preserve_as_path" {
   default     = null
 }
 
-variable "private_mode_lb_vpc_id" {
-  description = "VPC ID of Private Mode load balancer. Required when Private Mode is enabled on the Controller."
-  type        = string
-  default     = null
-}
-
 variable "enable_max_performance" {
   description = "Indicates whether the maximum amount of HPE tunnels will be created. Only valid when transit and spoke gateways are each launched in Insane Mode and in the same cloud type."
   type        = bool
   default     = null
-}
-
-variable "private_mode_subnets" {
-  description = "Switch to only launch private subnets. Only available when Private Mode is enabled on the Controller."
-  type        = bool
-  default     = false
-  nullable    = false
 }
 
 variable "spoke_prepend_as_path" {
