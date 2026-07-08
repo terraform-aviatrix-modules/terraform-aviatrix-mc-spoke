@@ -11,7 +11,6 @@ resource "aviatrix_vpc" "default" {
   num_of_subnet_pairs  = local.subnet_pairs
   subnet_size          = local.subnet_size
   resource_group       = var.resource_group
-  private_mode_subnets = var.private_mode_subnets
   enable_ipv6          = var.enable_ipv6
   vpc_ipv6_cidr        = var.ipv6_cidr
   ipv6_access_type     = (var.enable_ipv6 && local.cloud == "gcp") ? var.ipv6_access_type : null
@@ -114,11 +113,6 @@ resource "aviatrix_spoke_gateway" "default" {
   ha_fault_domain        = local.ha_gw ? local.ha_fault_domain : null
   ha_insane_mode_az      = local.ha_gw ? local.ha_insane_mode_az : null
   manage_ha_gateway      = local.manage_ha_gateway
-
-  #Private mode settings
-  private_mode_lb_vpc_id      = var.private_mode_lb_vpc_id
-  private_mode_subnet_zone    = var.private_mode_subnets && local.cloud == "aws" ? format("%s%s", var.region, local.az1) : null
-  ha_private_mode_subnet_zone = var.private_mode_subnets && local.cloud == "aws" && local.ha_gw ? format("%s%s", var.region, local.az2) : null
 
   #Custom EIP settings
   allocate_new_eip                 = var.allocate_new_eip

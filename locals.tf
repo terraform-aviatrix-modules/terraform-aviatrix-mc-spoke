@@ -26,13 +26,13 @@ locals {
   cidrbits              = tonumber(split("/", local.cidr)[1])
   newbits               = 26 - local.cidrbits
   netnum                = pow(2, local.newbits)
-  insane_mode_subnet    = var.insane_mode || var.private_mode_subnets ? cidrsubnet(local.cidr, local.newbits, local.netnum - 2) : null #Only calculate if insane_mode is true
-  ha_insane_mode_subnet = var.insane_mode || var.private_mode_subnets ? cidrsubnet(local.cidr, local.newbits, local.netnum - 1) : null #Only calculate if insane_mode is true
+  insane_mode_subnet    = var.insane_mode ? cidrsubnet(local.cidr, local.newbits, local.netnum - 2) : null #Only calculate if insane_mode is true
+  ha_insane_mode_subnet = var.insane_mode ? cidrsubnet(local.cidr, local.newbits, local.netnum - 1) : null #Only calculate if insane_mode is true
 
   subnet = (var.use_existing_vpc ?
     var.gw_subnet
     :
-    ((var.insane_mode && contains(["aws", "azure", "oci"], local.cloud)) || (var.private_mode_subnets && contains(["aws", "azure"], local.cloud)) ?
+    (var.insane_mode && contains(["aws", "azure", "oci"], local.cloud) ?
       local.insane_mode_subnet
       :
       (local.cloud == "gcp" ?
@@ -50,7 +50,7 @@ locals {
       var.hagw_subnet
     )
     :
-    ((var.insane_mode && contains(["aws", "azure", "oci"], local.cloud)) || (var.private_mode_subnets && contains(["aws", "azure"], local.cloud)) ?
+    (var.insane_mode && contains(["aws", "azure", "oci"], local.cloud) ?
       local.ha_insane_mode_subnet
       :
       (local.cloud == "gcp" ?
