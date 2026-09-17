@@ -1,6 +1,6 @@
 module "spoke_east" {
   source  = "terraform-aviatrix-modules/mc-spoke/aviatrix"
-  version = "9.0.0"
+  version = "10.1.0"
 
   cloud             = "GCP"
   name              = "global-spoke-1"
@@ -20,7 +20,7 @@ module "spoke_east" {
 
 module "spoke_west" {
   source  = "terraform-aviatrix-modules/mc-spoke/aviatrix"
-  version = "9.0.0"
+  version = "10.1.0"
 
   cloud             = "GCP"
   name              = "west-spoke"
@@ -37,7 +37,7 @@ module "spoke_west" {
 
 module "transit_gcp_east" {
   source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
-  version = "9.0.0"
+  version = "10.1.0"
 
   cloud   = "gcp"
   name    = "transit-us-east"
@@ -48,7 +48,7 @@ module "transit_gcp_east" {
 
 module "transit_gcp_west" {
   source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
-  version = "9.0.0"
+  version = "10.1.0"
 
   cloud   = "gcp"
   name    = "transit-us-west"

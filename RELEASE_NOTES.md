@@ -1,5 +1,17 @@
 # terraform-aviatrix-mc-spoke release notes
 
+## 10.1.0
+### Support for controller/provider 10.1
+This release aligns the module with Aviatrix Controller version 10.1 and Aviatrix Terraform provider version 10.1.0.
+
+### Add support for private subnet routing configuration
+This module adds support for private subnet routing behavior via the following variables:
+- `private_vpc_default_route` - programs the default route in the VPC private route table.
+- `private_route_table_config` - configures the private route table on Azure spoke gateways.
+
+### Remove deprecated private mode support
+This release removes the deprecated private mode configuration and related logic from the module. 
+
 ## 9.0.0
 - Relaxed the variable constraints for `approved_learned_cidrs`, as it allows ge/le as part of the string value.
 
