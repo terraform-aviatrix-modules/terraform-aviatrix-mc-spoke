@@ -6,6 +6,9 @@
 *.tfstate.*
 *.hcl
 
+# Terraform test files, otherwise swallowed by the *.hcl rule above
+!*.tftest.hcl
+
 # Crash log files
 crash.log
 
